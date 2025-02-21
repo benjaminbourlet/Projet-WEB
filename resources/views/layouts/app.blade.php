@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
 </head>
-<body class="bg-gray-100">
+<body">
     <div class="container mx-auto p-4">
         @yield('content') 
     </div>
