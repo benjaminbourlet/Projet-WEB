@@ -29,6 +29,10 @@
         });
     });
 </script>
+
+
+
+<body class="bg-white">
     
     <div class="container mx-auto pt-20 text-center">
         <div class="relative w-2/3 mx-auto flex items-center">
