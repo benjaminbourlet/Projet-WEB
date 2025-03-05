@@ -14,10 +14,11 @@
 
 
     <nav class="bg-[#5A8E95] border-gray-200 ">
-        <div class="max-w-100 flex flex-wrap items-center justify-between mx-6 py-4">
+        <div class="max-w-100 h-20 flex flex-wrap items-center justify-between mx-6 py-0">
             <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="images/Logo_white_mode.png" class="h-8 m-2" alt="Cesi ton stage Logo" width="40" height="50" />
+                <img src="images/Logo_white_mode.png" class="" alt="Cesi ton stage Logo" width="100" height="100" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap ">Cesi ton stage</span>
+                <!--<span class="self-center text-2xl font-semibold whitespace-nowrap ">Cesi ton stage</span>-->
                 <!-- on utilise span car nous cherchons à stylisé une texte un texte et non pas à l'afficher en tant que block -->
                 <!-- whitespace-nowrap : Cet utilitaire de classe Tailwind CSS empêche le texte de se retourner à la ligne. -->
 
@@ -28,7 +29,7 @@
                     <!-- aria-expanded="false" : Cet attribut ARIA (Accessible Rich Internet Applications) indique l'état étendu du menu associé. Valeur "false" signifie que le menu est actuellement replié. -->
                     <!-- data-dropdown-toggle="user-dropdown": Cet attribut de données personnalisé indique que ce bouton doit basculer (ouvrir/fermer) un menu déroulant avec l'identifiant "user-dropdown". -->
                     <!-- data-dropdown-placement="bottom": Cet attribut de données personnalisé indique que le menu déroulant doit être placé en bas du bouton. -->
-                    <img class="w-8 h-8 rounded-full" src="images/icon_login.svg" alt="user photo">
+                    <img class="rounded-full" src="images/icon_login.jpeg" alt="user photo" width="50" height="50">
                 </button>
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm :bg-gray-700" id="user-dropdown">
@@ -58,18 +59,18 @@
                 </button>
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-                <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  ">
+                <ul class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  ">
                     <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 ">Accueil</a>
+                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0 ">Accueil</a>
                     </li>
                     <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 ">Offres</a>
+                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0 ">Offres</a>
                     </li>
                     <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 ">Entreprises</a>
+                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0 ">Entreprises</a>
                     </li>
                     <li>
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 ">Avis</a>
+                        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0 ">Avis</a>
                     </li>
                 </ul>
             </div>
