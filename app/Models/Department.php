@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sector extends Model
+class Department extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,9 @@ class Sector extends Model
         'name',
     ];
     
-    public function companies()
+    public function offers()
     {
-        return $this->belongsToMany(Company::class, 'companies_sectors', 'sector_id', 'company_id');
+        return $this->belongsToMany(Offer::class, 'offers_departments', 'department_id', 'offer_id');
     }
     
 }

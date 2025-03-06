@@ -17,7 +17,7 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('users_classes');
+        Schema::dropIfExists('companies_sectors');
     }
 };
 

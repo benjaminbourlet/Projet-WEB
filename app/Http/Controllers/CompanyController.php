@@ -18,7 +18,7 @@ class CompanyController extends Controller
     public function show()
     {
         $this->authorize('search_company');
-        $companies = Company::paginate(10);
+        $companies = Company::paginate(9);
         return view('companies.list', compact('companies'));
     }
 
@@ -131,7 +131,7 @@ class CompanyController extends Controller
             if ($company->logo_path) {
                 Storage::disk('public')->delete($company->logo_path);
             }
-            $company->logo_path = $request->file('logo')->store('logos', 'public');
+            $company->logo_path = $request->file('logo')->store('images', 'public');
         }
 
         // Mise à jour des informations de l'entreprise
@@ -157,6 +157,7 @@ class CompanyController extends Controller
 
     public function deleteCompany($id)
     {
+        $this->authorize('delete_company');
         $company = Company::findOrFail($id);
         // On effectue une suppression douce
         $company->delete();

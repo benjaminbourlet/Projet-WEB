@@ -9,11 +9,11 @@ return new class extends Migration {
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->date('postulation_date');
             $table->string('cv', 255)->nullable();
             $table->text('cover_letter');
             $table->foreignId('offer_id')->constrained('offers');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('status_id')->constrained('statuses');
             $table->timestamps();
             $table->softDeletes();
         });

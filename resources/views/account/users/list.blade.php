@@ -4,8 +4,8 @@
 
 @include('partials.header')
 
-@section('content')
-    <div class="container mx-auto p-4">
+<main class="flex-grow container mx-auto p-4 flex gap-6">
+<div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold">{{ $role }}s</h1>
 
         <div class="mt-4 flex space-x-2">
@@ -77,4 +77,6 @@
             {{ $users->links() }}
         </div>
     </div>
-@endsection
+</main>
+
+@include('partials.footer')

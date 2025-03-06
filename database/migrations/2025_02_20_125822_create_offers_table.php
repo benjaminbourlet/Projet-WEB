@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('salary')->nullable();
-            $table->date('publication_date');
             $table->foreignId('company_id')->constrained('companies');
             $table->timestamps();
             $table->softDeletes();

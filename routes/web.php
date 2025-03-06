@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\OfferController;
+
 
 // Authentification
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -36,6 +38,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/companies/{id}/delete', [CompanyController::class, 'deleteCompany'])->name('company_delete');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/offers', [OfferController::class, 'show'])->name(name: 'offer_list');
+    Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
+    Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
+    Route::get('/offers/{id}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
+    Route::get('/offers/{id}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
+    Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
+    Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
+});
 
 // Gestion des utilisateurs (Étudiants & Pilotes)
 Route::middleware('auth')->group(function () {

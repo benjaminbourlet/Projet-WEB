@@ -8,6 +8,9 @@ use App\Models\City;
 use App\Models\Region;
 use App\Models\Classe;
 use App\Models\Sector;
+use App\Models\Department;
+use App\Models\Skill;
+use App\Models\Status;
 use App\Models\Postal_Code;
 
 
@@ -250,23 +253,18 @@ class DatabaseSeeder extends Seeder
             'Automobile',
             'Bâtiment et construction',
             'Banque et services financiers',
-            'Commerce de détail',
-            'Communication et médias',
+            'Communication',
             'Édition et impression',
-            'Énergie et ressources naturelles',
             'Éducation et formation',
             'Environnement',
             'Industrie pharmaceutique',
             'Informatique et technologies',
-            'Investissement et capital-risque',
             'Logistique et transport',
-            'Marketing et publicité',
-            'Mode et textile',
+            'Marketing',
             'Santé et services médicaux',
             'Sécurité et défense',
             'Services à la personne',
             'Services juridiques',
-            'Télécommunications',
             'Tourisme et hôtellerie',
             'Restauration',
             'Immobilier',
@@ -274,7 +272,6 @@ class DatabaseSeeder extends Seeder
             'Arts, culture et divertissement',
             'Sport et loisirs',
             'Biotechnologie',
-            'Mines et métallurgie',
             'Aéronautique et spatial',
             'Technologies de l\'information',
             'Services de nettoyage et entretien',
@@ -285,8 +282,135 @@ class DatabaseSeeder extends Seeder
         foreach ($sectors as $sector) {
             Sector::create(['name' => $sector]);
         }
-        
 
+        
+        $departements = [
+            'Informatique',
+            'Ressources Humaines',
+            'Finance',
+            'Marketing',
+            'Ventes',
+            'Support Client',
+            'Logistique',
+            'Production',
+            'Recherche et Développement',
+            'Qualité',
+            'Juridique',
+            'Communication',
+            'Achats',
+            'Gestion de Projet',
+            'Administration'
+        ];
+        
+        foreach ($departements as $departement) {
+            Department::create(['name' => $departement]);
+        }
+
+        $skills = [
+            // Soft Skills
+            'Communication',
+            'Leadership',
+            'Travail d’équipe',
+            'Gestion du temps',
+            'Créativité',
+            'Résolution de problèmes',
+            'Adaptabilité',
+            'Esprit critique',
+            'Empathie',
+            'Négociation',
+            'Prise de décision',
+            'Gestion du stress',
+            'Intelligence émotionnelle',
+            'Capacité d’apprentissage',
+            'Éthique professionnelle',
+        
+            // Informatique & Développement
+            'PHP',
+            'Laravel',
+            'JavaScript',
+            'React.js',
+            'Node.js',
+            'Python',
+            'Django',
+            'Machine Learning',
+            'Cybersécurité',
+            'Cloud Computing',
+            'DevOps',
+            'Big Data',
+            'Blockchain',
+            'SQL',
+            'NoSQL',
+            'Docker',
+            'Git',
+        
+            // Marketing & Communication
+            'SEO',
+            'Google Ads',
+            'Copywriting',
+            'Community Management',
+            'Publicité digitale',
+            'Stratégie de marque',
+            'Relations publiques',
+            'Content Marketing',
+            'Growth Hacking',
+        
+            // Design & Créativité
+            'Adobe Photoshop',
+            'Adobe Illustrator',
+            'UI/UX Design',
+            'Figma',
+            'Motion Design',
+            'Montage vidéo',
+            'Photographie',
+            'Storytelling',
+        
+            // Finance & Gestion
+            'Analyse financière',
+            'Gestion de budget',
+            'Comptabilité',
+            'Investissement',
+            'Cryptomonnaies',
+            'Gestion de projet',
+            'Lean Management',
+            'Scrum',
+            'Six Sigma',
+        
+            // Sciences & Ingénierie
+            'Mathématiques appliquées',
+            'Physique quantique',
+            'Chimie organique',
+            'Robotique',
+            'Énergie renouvelable',
+            'Génie civil',
+            'Automatisation industrielle',
+            'Impression 3D',
+        
+            // Santé & Bien-être
+            'Médecine du travail',
+        
+            // Langues & Culture
+            'Anglais',
+            'Espagnol',
+            'Allemand',
+            'Mandarin',
+            'Langue des signes',
+        ];
+        
+        foreach ($skills as $skill) {
+            Skill::create(['name' => $skill]);
+        }
+        
+        $statuses = [
+           'En attente',
+           'En cours de traitement',
+           'Entretien programmé',
+           'Acceptée',
+           'Refusée',
+        ];
+        
+        foreach ($statuses as $status) {
+            Status::create(['name' => $status]);
+        }
 
         // Appel du seeder pour les permissions
         $this->call(PermissionSeeder::class);

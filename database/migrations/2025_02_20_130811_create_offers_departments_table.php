@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('offers_sectors', function (Blueprint $table) {
-            $table->foreignId('sector_id')->constrained('sectors')->onDelete('cascade');
+        Schema::create('offers_departments', function (Blueprint $table) {
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
             $table->foreignId('offer_id')->constrained('offers')->onDelete('cascade');
-            $table->primary(['sector_id', 'offer_id']);
+            $table->primary(['department_id', 'offer_id']);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('users_classes');
+        Schema::dropIfExists('offers_departments');
     }
 };
 

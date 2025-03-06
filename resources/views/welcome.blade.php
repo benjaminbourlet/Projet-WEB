@@ -4,6 +4,7 @@
 
 @include('partials.header')
 
+
 <body class="bg-white">
     
     <div class="container mx-auto pt-20 text-center">
@@ -17,5 +18,10 @@
 
     <h1 class="text-4xl font-bold text-black text-center pt-20"> Stage - Entreprise à la une </h1>
     
+
+    
 </body>
+
+@include('partials.footer')
+
 </html>
