@@ -69,7 +69,7 @@
         <div class="mb-4 flex justify-between">
             <!-- Bouton Modifier -->
             <a href="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]">
                 Modifier
             </a>
 
@@ -77,7 +77,7 @@
                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                <button type="submit" class="bg-[#8C3740] text-white px-4 py-2 rounded-lg hover:bg-[#70383E]">
                     Supprimer
                 </button>
             </form>
