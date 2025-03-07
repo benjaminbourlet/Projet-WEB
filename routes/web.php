@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{id}/edit', [CompanyController::class, 'showCompanyUpdate'])->name('company_edit');
     Route::post('/companies/{id}/update', [CompanyController::class, 'updateCompany'])->name('company_update');
     Route::delete('/companies/{id}/delete', [CompanyController::class, 'deleteCompany'])->name('company_delete');
+    Route::get('/company', [CompanyController::class, 'search'])->name('company.search');
+
+
 });
 
 Route::middleware('auth')->group(function () {
