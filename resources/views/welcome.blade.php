@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cesi ton stage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.5.3/flowbite.min.js"></script>
 </head>
 <body class="bg-white">
     @include('partials.header')
@@ -36,7 +37,7 @@
     
     <div class="container mx-auto pt-20 text-center">
         <div class="relative w-2/3 mx-auto flex items-center">
-            <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
+            <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full">
                 <img src="{{ asset('images/loupe_recherche.png') }}" alt="Recherche" class="w-8 h-8">
             </button>
             <input type="text" class="w-full pl-16 p-4 border-2 border-black rounded-full text-lg" placeholder="Rechercher...">

@@ -4,42 +4,56 @@
     <nav class="bg-[#5A8E95] border-gray-200">
         <div class="max-w-100 h-20 flex justify-between items-center mx-6 py-0">
             <!-- Logo + Texte -->
-            <div class="flex items-center space-x-3 rtl:space-x-reverse">
-            <a href="{{ route('home') }}">
-                <button>
-                    <img src="{{ asset('storage/images/Logo.png') }}" alt="Logo" class="w-18 h-16">
-                </button>
-            </a>
-            <span class="self-center text-2xl font-semibold whitespace-nowrap">Cesi ton stage</span>
+            <div class="flex items-center self-center space-x-3 rtl:space-x-reverse z-10">
+                <a href="{{ route('home') }}">
+                    <button>
+                        <img src="{{ asset('storage/images/Logo.png') }}" alt="Logo" width="80" height="80">
+                    </button>
+                </a>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap">Cesi ton stage</span>
             </div>
 
             <!-- Menu central -->
-            <div class="flex-grow flex justify-center hidden md:flex">
+            <div class="flex justify-between hidden md:flex md:w-auto " id="navbar-user">
                 <ul class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  ">
-                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
+                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Acceuil</a></li>
                     <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
-                    <li><a href="{{ route('company_list') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
+                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
                     <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
                 </ul>
             </div>
 
+            <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                    <!-- Contenu du modal -->
+                    <div class="relative bg-[#5A8E95] rounded-lg shadow">
+                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="popup-modal">
+                            <img src="{{ asset('storage/images/icon_cross.svg') }}" alt="close_menu" width="20" height="20">
+                        </button>
+                        <div class="py-6 px-6 lg:px-8">
+                            <div class="items-center justify-between bg-white md:flex md:w-auto md:order-1" id="navbar-user">
+                                <ul class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
             <!-- User Account à droite -->
             <div class="flex items-center space-x-3">
                 @auth
-                <!-- Affiche la photo de profil si l'utilisateur est connecté -->
-                <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                    <img class="rounded-full" src="{{ asset('storage/' . auth()->user()->pp_path) }}" alt="user photo" width="50" height="50">
-                </button>
-                @else
-                <!-- Affiche l'icône de connexion si l'utilisateur n'est pas connecté -->
                 <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                     <img class="rounded-full" src="storage/images/icon_login.jpeg" alt="user photo" width="50" height="50">
                 </button>
-                @endauth
-                
+                <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm overflow-hidden" id="user-dropdown">
                     <ul class="py-2" aria-labelledby="user-menu-button">
-                        @auth
                         <li><a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a></li>
                         <li><a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a></li>
                         <hr class="border-gray-200">
@@ -58,18 +72,26 @@
                             @csrf
                             <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</button>
                         </form>
-                        @else
-                        <li><a href="{{ route('login') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign in</a></li>
-                        @endauth
                     </ul>
                 </div>
-                <button data-collapse-toggle="navbar-user" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 " aria-controls="navbar-user" aria-expanded="false">
+                @else
+                <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm overflow-hidden" id="user-dropdown">
+                    <ul class="py-2" aria-labelledby="user-menu-button">
+                        <li><a href="{{ route('login') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign in</a></li>
+                    </ul>
+                </div>
+                @endauth
+
+                <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                    <img class="rounded-full" src="storage/images/icon_login.jpeg" alt="user photo" width="50" height="50">
+                </button>
+
+                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="btn md:hidden">
                     <img src="{{ asset('storage/images/burger_menu.svg') }}" alt="Menu burger" width="35" height="35">
-                </button>   
+                </button>
+           
             </div>
 
         </div>
     </nav>
 </body>
-
-</html>
