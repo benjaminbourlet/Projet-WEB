@@ -27,6 +27,7 @@
     </script>
 </head>
 <body>
+    @include('partials.header')
     <div class="bg-gray-500 rounded-lg m-10">
         <div class="grid md:grid-cols-2 grid-cols-1">
             <!-- lg : Coté gauche // sm : en haut -->
@@ -105,6 +106,9 @@
         </div>
 
     </div>
+
+    
+    @include('partials.footer')
     
 </body>
 </html>
