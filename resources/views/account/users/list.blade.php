@@ -21,7 +21,7 @@
                     <h2 class="text-lg font-bold">Filtrer par Promo</h2>
                     <ul class="mt-2">
                         @foreach ($classes as $class)
-                            <li>
+                            <li class="h-full w-full">
                                 <a href="{{ route('students_list', ['class_id' => $class->id]) }}"
                                     class="text-blue-500 hover:underline">
                                     {{ $class->name }}
@@ -41,14 +41,16 @@
 
         <div class="mt-4 space-y-4">
             @foreach ($users as $user)
-                <div class="bg-white p-4 shadow-md rounded-lg flex items-center justify-between border border-gray-200">
+                <div class="bg-white shadow-md rounded-tr-2xl rounded-bl-2xl flex items-center justify-between border border-gray-200">
                     <a href="{{ route('user_info', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
-                        class="flex items-center space-x-4">
+                        class="flex items-center justify-between space-x-4 h-full w-full p-4">
                         <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-12 h-12 rounded-full" alt="Avatar">
-                        <div>
+                        <div class="flex gap-4 items-center h-full w-full">
                             <p><strong>Id :</strong> {{ $user->id }}</p>
-                            <p><strong>Nom :</strong> {{ $user->name }}</p>
-                            <p><strong>Prénom :</strong> {{ $user->first_name }}</p>
+                            <div>
+                                <p><strong>Nom :</strong> {{ $user->name }}</p>
+                                <p><strong>Prénom :</strong> {{ $user->first_name }}</p>
+                            </div>
                             <p><strong>Email :</strong> {{ $user->email }}</p>
 
                             @if ($role === 'Etudiant')
@@ -58,14 +60,18 @@
                                     {{ $user->classesPilots->isNotEmpty() ? $user->classesPilots->pluck('name')->implode(', ') : 'Aucune classe' }}
                                 </p>
                             @endif
-
-                            <p><strong>Région :</strong> {{ optional($user->city->region)->name ?? 'Non défini' }}</p>
-                            <p><strong>Ville :</strong> {{ $user->city->name }}</p>
                             
                             <!-- Date de naissance -->
                             <p><strong>Date de naissance :</strong> {{ \Carbon\Carbon::parse($user->birthdate)->format('d/m/Y') ?? 'Non défini' }}</p>
 
-                            <p><strong>Statut :</strong> {{ $role }}</p>
+                            
+                            <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
+                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');"
+                                class="ml-auto">
+                                @csrf
+                                @method('DELETE')
+                                <button class="px-3 pt-1.5 pb-1.5 bg-red-500 rounded-lg">X</button>
+                            </form>
                         </div>
                     </a>
                 </div>
