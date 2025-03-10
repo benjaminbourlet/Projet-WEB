@@ -10,7 +10,9 @@
                         <img src="{{ asset('storage/images/Logo.png') }}" alt="Logo" width="80" height="80">
                     </button>
                 </a>
+                <a href="{{ route('home') }}">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap">Cesi ton stage</span>
+                </a>
             </div>
 
             <!-- Menu central -->
@@ -32,11 +34,11 @@
                         </button>
                         <div class="py-6 px-6 lg:px-8">
                             <div class="items-center justify-between bg-white md:flex md:w-auto md:order-1" id="navbar-user">
-                                <ul class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
-                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
-                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
-                                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
+                                <ul class="flex flex-col font-medium text-2xl text-center p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+                                    <li><a href="#" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-200 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-200 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-200 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
+                                    <li><a href="#" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-200 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
                                 </ul>
                             </div>
                         </div>
