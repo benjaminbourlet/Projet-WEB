@@ -28,10 +28,10 @@
 </head>
 <body>
     @include('partials.header')
-    <div class="bg-gray-500 rounded-lg m-10">
+    <div class="bg-gray-700 rounded-lg m-10">
         <div class="grid md:grid-cols-2 grid-cols-1">
             <!-- lg : Coté gauche // sm : en haut -->
-            <div class="bg-blue-500 p-4 rounded-lg">
+            <div class="bg-[#5A8E95] p-4 rounded-lg">
 
                 <!-- Début du formulaire d'inscription -->
                 <!-- Nom (student) -->
@@ -86,21 +86,21 @@
             </div>
 
             <!-- lg : Coté droite // sm : en bas -->
-            <div class="bg-gray-500 p-4 rounded-lg">
+            <div class="bg-gray-700 p-4 rounded-lg">
                 <!-- Email -->
-                <label for="email" class="block text-black font-medium">Email</label>
+                <label for="email" class="block text-white font-medium">Email</label>
                 <input type="email" name="email" id="email" class="mt-2 p-2 bg-gray-200 rounded-full w-full">
 
                 <!-- Mot de passe -->
-                <label for="password" class="block text-black font-medium mt-4">Mot de passe</label>
+                <label for="password" class="block text-white font-medium mt-4">Mot de passe</label>
                 <input type="password" name="password" id="password" class="mt-2 p-2 bg-gray-200 rounded-full w-full">
 
                 <!-- Confirmation du mot de passe -->
-                <label for="password_confirmation" class="block text-black font-medium mt-4">Confirmation du mot de passe</label>
+                <label for="password_confirmation" class="block text-white font-medium mt-4">Confirmation du mot de passe</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" class="mt-2 p-2 bg-gray-200 rounded-full w-full">
 
                 <!-- Bouton d'inscription (student) -->
-                <button class="bg-blue-500 text-white mt-12 p-2 rounded-full w-full">Ajouter l'étudiant</button>
+                <button class="bg-[#5A8E95] text-white mt-12 p-2 rounded-full w-full">Ajouter l'étudiant</button>
 
             </div>
         </div>
