@@ -19,7 +19,9 @@ class CompanyController extends Controller
     {
         $this->authorize('search_company');
         $companies = Company::paginate(9);
-        return view('companies.list', compact('companies'));
+        $cities = City::all();
+        $sectors = Sector::all();
+        return view('companies.list', compact('companies','sectors','cities'));
     }
 
     public function showCompanyRegister()
@@ -163,5 +165,35 @@ class CompanyController extends Controller
         $company->delete();
 
         return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
+    }
+
+    public function search(Request $request)
+    {
+        $query = Company::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        // Filtre par secteur (relation many-to-many)
+        if ($request->filled('sector')) {
+            $query->whereHas('sectors', function ($q) use ($request) {
+                $q->where('sectors.id', $request->sector);
+            });
+        }
+
+        // Filtre par ville (relation one-to-many)
+        if ($request->filled('city')) {
+            $query->where('city_id', $request->city);
+        }
+
+        $companies = $query->paginate(10);
+
+        // Envoyer les données des filtres
+        $sectors = Sector::all();
+        $cities = City::all();
+
+        return view('companies.list', compact('companies', 'sectors', 'cities'));
     }
 }

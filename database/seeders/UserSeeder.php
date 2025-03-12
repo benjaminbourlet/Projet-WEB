@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'pp_path' => "images/profile_picture.jpg",
                 'classe_id' => rand(1, 14),
                 'city_id' => rand(1, 60), // Génération aléatoire d'un city_id entre 1 et 14
-                'birthdate' => $faker->date(), // Génération d'une date de naissance
+                'birthdate' => $faker->dateTimeBetween('2000-01-01', '2006-12-31')->format('Y-m-d'),
             ]);
 
             // Assigner le rôle "Etudiant" à cet utilisateur
@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
                 'password' => bcrypt("AaBb123._!"), // Mot de passe sécurisé
                 'pp_path' => "images/profile_picture.jpg",
                 'city_id' => rand(1, 14), // Génération aléatoire d'un city_id entre 1 et 14
-                'birthdate' => $faker->date(), // Génération d'une date de naissance
+                'birthdate' => $faker->dateTimeBetween('1975-01-01', '1996-12-31')->format('Y-m-d'),
             ]);
 
             // Assigner le rôle "Etudiant" à cet utilisateur
