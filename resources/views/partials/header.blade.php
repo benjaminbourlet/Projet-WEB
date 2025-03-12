@@ -63,7 +63,7 @@
                 </button>
                 @else
                 <!-- Affiche l'icône de connexion si l'utilisateur n'est pas connecté -->
-                <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-black" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                     <img class="rounded-full" src="storage/images/icon_login.jpeg" alt="user photo" width="50" height="50">
                 </button>
                 @endauth

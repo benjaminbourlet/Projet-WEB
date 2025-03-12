@@ -10,7 +10,7 @@
 
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
+    <div class="container mx-auto">
         @yield('content') 
     </div>
 </body>
