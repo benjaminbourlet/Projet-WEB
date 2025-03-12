@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Ignorer les fichiers .DS_Store générés par macOS
+.DS_Store
