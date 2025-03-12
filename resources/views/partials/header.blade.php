@@ -19,7 +19,7 @@
                     <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="w-18 h-16">
                 </button>
             </a>
-            <span class="self-center text-2xl font-semibold whitespace-nowrap">Cesi ton stage</span>
+            <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage_Finder</span>
             </div>
 
             <!-- Menu central -->
