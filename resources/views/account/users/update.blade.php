@@ -24,7 +24,7 @@
             </div>
             <div>
                 <label class="block font-bold">Nom :</label>
-                <input type="text" name="name" value="{{ $user->name }}" class="border p-1.5 w-full bg-[#D9D9D9] rounded-lg text-lg"">
+                <input type="text" name="name" value="{{ $user->name }}" class="border p-1.5 w-full bg-[#D9D9D9] rounded-lg text-lg">
             </div>
             <div>
                 <label class="block font-bold">Prénom :</label>
