@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ApplicationController;
+
 
 
 // Authentification
@@ -19,12 +21,12 @@ Route::get('/', function () {
 })->name('home');
 
 // Dashboard
-Route::get('/account/dashboard', function () {
+Route::get('/dashboard/{id}', function () {
     return view('account/dashboard');
 })->middleware('auth')->name('dashboard');
 
 // Profil utilisateur
-Route::get('/account/profile', [ProfileController::class, 'show'])
+Route::get('/profile/{id}', [ProfileController::class, 'show'])
     ->middleware('auth')
     ->name('profile');
 
@@ -51,15 +53,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
 });
 
-// Gestion des utilisateurs (Étudiants & Pilotes)
 Route::middleware('auth')->group(function () {
-    Route::get('/account/students', [UserManagementController::class, 'show'])->name('students_list');
-    Route::get('/account/pilots', [UserManagementController::class, 'show'])->name('pilots_list');
-    Route::get('/account/{role}/register', [UserManagementController::class, 'showUserRegister'])->name('user_register');
-    Route::post('/account/users/register', [UserManagementController::class, 'userRegister'])->name('userRegister');
-    Route::get('/account/{role}/{id}', [UserManagementController::class, 'showUserInfo'])->name('user_info');
-    Route::get('/account/{role}/{id}/edit', [UserManagementController::class, 'showUserUpdate'])->name('user_edit');
-    Route::post('/account/users/{id}/update', [UserManagementController::class, 'updateUser'])->name('user_update');
-    Route::delete('/account/users/{id}/delete', [UserManagementController::class, 'deleteUser'])->name('user_delete');
+    Route::get('/offers/{offer_id}/apply', [ApplicationController::class, 'showApplicationRegister'])->name('offer_apply');
+    Route::post('/offers/{offer_id}/apply', [ApplicationController::class, 'applicationRegister'])->name('applicationRegister');
+    Route::get('/my_applications/{user_id}', [ApplicationController::class, 'show'])->name('applications_show');
+    Route::get('/my_applications/{user_id}/{offer_id}', [ApplicationController::class, 'showApplicationInfo'])->name('applications_info');
+    Route::get('/students/{user_id}/applications/{offer_id}', [ApplicationController::class, 'showApplicationInfo'])->name('applications_info_user');
+    Route::get('/students/{user_id}/applications/{offer_id}/edit', [ApplicationController::class, 'showApplicationUpdate'])->name('applications_edit');
+    Route::post('/students/{user_id}/applications/{offer_id}/edit', [ApplicationController::class, 'updateApplication'])->name('applications_update');
+
 });
 
+// Gestion des utilisateurs (Étudiants & Pilotes)
+Route::middleware('auth')->group(function () {
+    Route::get('/students', [UserController::class, 'show'])->name('students_list');
+    Route::get('/pilots', [UserController::class, 'show'])->name('pilots_list');
+    Route::get('/{role}/register', [UserController::class, 'showUserRegister'])->name('user_register');
+    Route::post('/users/register', [UserController::class, 'userRegister'])->name('userRegister');
+    Route::get('/{role}/{id}', [UserController::class, 'showUserInfo'])->name('user_info');
+    Route::get('/{role}/{id}/edit', [UserController::class, 'showUserUpdate'])->name('user_edit');
+    Route::post('/users/{id}/update', [UserController::class, 'updateUser'])->name('user_update');
+    Route::delete('/users/{id}/delete', [UserController::class, 'deleteUser'])->name('user_delete');
+});

@@ -49,4 +49,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Classe::class, 'users_classes', 'user_id', 'classe_id');
     }
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class, 'applications', 'user_id', 'offer_id');
+    }
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
+    }
+
 }

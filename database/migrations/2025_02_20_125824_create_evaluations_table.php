@@ -8,11 +8,11 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('evaluations', function (Blueprint $table) {
-            $table->id();
             $table->integer('grade');
             $table->string('comment')->nullable();
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('user_id')->constrained('users');
+            $table->primary(['user_id', 'company_id']);
             $table->timestamps();
             $table->softDeletes();
         });
