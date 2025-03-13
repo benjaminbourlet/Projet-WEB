@@ -10,7 +10,7 @@
             <div class="max-w-md mx-auto mt-6 p-6">
 
                 <div class="container mx-auto p-4">
-                    <h1 class="text-2xl font-bold">Profil de {{ $user->name }}</h1>
+                    <h1 class="text-2xl font-bold text-center">Profil de {{ $user->name }}</h1>
 
                     <div class="mt-4">
                         <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-32 h-32 rounded-full mx-auto"
@@ -78,13 +78,14 @@
                 <!-- Boutons de modification et de suppression -->
                 <div class="mb-4 flex justify-between">
                     <!-- Bouton Modifier -->
-                    <a href="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
-                        class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]">
-                        Modifier
-                    </a>
+                    <form action="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}" method="GET" class="flex-grow mr-1">
+                        <button class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]" type="submit">
+                            Modifier
+                        </button>
+                    </form>
 
                     <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
-                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
+                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?'); class="flex-grow mr-1"">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-[#8C3740] text-white px-4 py-2 rounded-lg hover:bg-[#70383E]">
@@ -124,7 +125,7 @@
 
             @endif
         </div>
-
+    </div>
 
 </main>
 
