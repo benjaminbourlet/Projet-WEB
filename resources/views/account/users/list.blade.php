@@ -44,15 +44,9 @@
                 <div class="bg-white shadow-md rounded-tr-2xl rounded-bl-2xl flex items-center justify-between border border-gray-200">
                     <a href="{{ route('user_info', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
                         class="flex items-center justify-between space-x-4 h-full w-full p-4">
-                        class="flex items-center justify-between space-x-4 h-full w-full p-4">
                         <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-12 h-12 rounded-full" alt="Avatar">
                         <div class="flex gap-4 items-center h-full w-full">
-                        <div class="flex gap-4 items-center h-full w-full">
                             <p><strong>Id :</strong> {{ $user->id }}</p>
-                            <div>
-                                <p><strong>Nom :</strong> {{ $user->name }}</p>
-                                <p><strong>Prénom :</strong> {{ $user->first_name }}</p>
-                            </div>
                             <div>
                                 <p><strong>Nom :</strong> {{ $user->name }}</p>
                                 <p><strong>Prénom :</strong> {{ $user->first_name }}</p>
@@ -79,13 +73,6 @@
                                 <button class="px-3 pt-1.5 pb-1.5 bg-red-500 rounded-lg">X</button>
                             </form>
                             
-                            <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
-                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');"
-                                class="ml-auto">
-                                @csrf
-                                @method('DELETE')
-                                <button class="px-3 pt-1.5 pb-1.5 bg-red-500 rounded-lg">X</button>
-                            </form>
                         </div>
                     </a>
                 </div>
