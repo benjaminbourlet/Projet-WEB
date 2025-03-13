@@ -122,10 +122,33 @@
                     @endif
                 </div>
                 <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}"
-                class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
+                    class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
+
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">Dernières offres ajoutés à la wishlist</h2>
+
+                    @if ($user->wishlists->isEmpty())
+                        <p>Aucun ajout récent dans la wishlist.</p>
+                    @else
+                        <ul>
+                            @foreach ($user->wishlists as $wishlist)
+                                <li class="border-b py-2">
+                                <strong>Offre :</strong> {{ $wishlist->title ?? 'Non défini' }} <br>
+                                <span class="text-gray-500 text-sm">
+                                        Ajouté le {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
+                    class="text-blue-500 hover:underline">Voir la wishlist</a>
 
             @endif
         </div>
+
+
 
 
 </main>
