@@ -24,7 +24,12 @@
                 <tbody>
                     @foreach ($applications as $application)
                         <tr class="border">
-                            <td class="border p-2">{{ $application->offer->title }}</td>
+                            <td class="border p-2">
+                                <a href="{{ route('offer_info', ['id' => $application->offer->id]) }}"
+                                    >
+                                    {{ $application->offer->title }}
+                                </a>
+                            </td>
                             <td class="border p-2">{{ $application->created_at->format('d/m/Y') }}</td>
                             <td class="border p-2">{{ $application->status->name }}</td>
                             <td class="border p-2">
@@ -35,7 +40,6 @@
                     @endforeach
                 </tbody>
             </table>
-
             <div class="mt-4">
                 {{ $applications->links() }}
             </div>

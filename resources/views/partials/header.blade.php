@@ -103,8 +103,11 @@
                             @endrole
 
                             @role('Admin|Etudiant')
-                            <li><a href="{{ route('applications_show', ['user_id' => Auth::user()->id]) }}"
+                            <li><a href="{{ route('applications_list', ['user_id' => Auth::user()->id]) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes candidatures</a>
+                            </li>
+                            <li><a href="{{ route('wishlists_list', ['user_id' => Auth::user()->id]) }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ma wishlist</a>
                             </li>
                             @endrole
 

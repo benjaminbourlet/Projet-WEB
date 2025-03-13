@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\WishlistController;
 
 
 
@@ -39,8 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/companies/{id}/update', [CompanyController::class, 'updateCompany'])->name('company_update');
     Route::delete('/companies/{id}/delete', [CompanyController::class, 'deleteCompany'])->name('company_delete');
     Route::get('/company', [CompanyController::class, 'search'])->name('company.search');
+});
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist/{user_id}', [WishlistController::class, 'index'])->name('wishlists_list');
+    Route::get('/students/{user_id}/wishlist', [WishlistController::class, 'index'])->name('wishlist_list_user');
+    Route::post('/wishlist/{user_id}/add/{offer_id}', [WishlistController::class, 'addToWishlist'])->name('wishlist_add');
+    Route::post('/wishlist/{user_id}/remove/{offer_id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist_remove');
 });
 
 Route::middleware('auth')->group(function () {
@@ -56,7 +62,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/offers/{offer_id}/apply', [ApplicationController::class, 'showApplicationRegister'])->name('offer_apply');
     Route::post('/offers/{offer_id}/apply', [ApplicationController::class, 'applicationRegister'])->name('applicationRegister');
-    Route::get('/my_applications/{user_id}', [ApplicationController::class, 'show'])->name('applications_show');
+    Route::get('/my_applications/{user_id}', [ApplicationController::class, 'show'])->name('applications_list');
+    Route::get('/students/{user_id}/applications', [ApplicationController::class, 'show'])->name('applications_list_user');
     Route::get('/my_applications/{user_id}/{offer_id}', [ApplicationController::class, 'showApplicationInfo'])->name('applications_info');
     Route::get('/students/{user_id}/applications/{offer_id}', [ApplicationController::class, 'showApplicationInfo'])->name('applications_info_user');
     Route::get('/students/{user_id}/applications/{offer_id}/edit', [ApplicationController::class, 'showApplicationUpdate'])->name('applications_edit');
