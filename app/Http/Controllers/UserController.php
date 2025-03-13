@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Classe;
 use App\Models\City;
 
-class UserManagementController extends Controller
+class UserController extends Controller
 {
 
     use AuthorizesRequests;
@@ -26,13 +26,13 @@ class UserManagementController extends Controller
         }
         return $request->classe_id ? Classe::findOrFail($request->classe_id) : null;
     }
-
     public function show(Request $request)
     {
         $role = $this->getRole($request->route()->getName());
         $this->authorize($role === 'Etudiant' ? 'search_student' : 'search_pilot');
 
-        $classes = auth()->user()->hasRole('Admin') ? Classe::all() : auth()->user()->classesPilots;
+        $classes = auth()->user()->hasRole('Admin') ? Classe::all() : auth()->user()->classesPilots; //()->pluck('id');
+
         $users = User::role($role)
             ->when($request->class_id, fn($query) => $query->where('classe_id', $request->class_id))
             ->paginate(10);
@@ -52,37 +52,37 @@ class UserManagementController extends Controller
         ]);
     }
 
-        public function userRegister(Request $request)
-        {
-            $role = $request->role;
-            $this->authorize($role === 'Etudiant' ? 'create_student' : 'create_pilot');
+    public function userRegister(Request $request)
+    {
+        $role = $request->role;
+        $this->authorize($role === 'Etudiant' ? 'create_student' : 'create_pilot');
 
-            $data = $request->validate([
-                'name' => 'required|string|max:255',
-                'first_name' => 'required|string|max:50',
-                'email' => 'required|email|unique:users|max:255',
-                'password' => 'required|string|min:6|confirmed|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/',
-                'pp' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'birthdate' => 'required|date|before:today|after:1900-01-01',
-                'city_id' => 'required|exists:cities,id',
-                'classe_id' => 'nullable|exists:classes,id',
-                'new_classe' => 'nullable|string|max:50|unique:classes,name',
-            ]);
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:50',
+            'email' => 'required|email|unique:users|max:255',
+            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/',
+            'pp' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'birthdate' => 'required|date|before:today|after:1900-01-01',
+            'city_id' => 'required|exists:cities,id',
+            'classe_id' => 'nullable|exists:classes,id',
+            'new_classe' => 'nullable|string|max:50|unique:classes,name',
+        ]);
 
-            $classe = $this->getOrCreateClasse($request);
-            $data['classe_id'] = $role === 'Etudiant' ? optional($classe)->id : null;
-            $data['pp_path'] = $request->file('pp') ? $request->file('pp')->store('images', 'public') : 'images/profile_picture.jpg';
-            $data['password'] = Hash::make($data['password']);
+        $classe = $this->getOrCreateClasse($request);
+        $data['classe_id'] = $role === 'Etudiant' ? optional($classe)->id : null;
+        $data['pp_path'] = $request->file('pp') ? $request->file('pp')->store('images', 'public') : 'images/profile_picture.jpg';
+        $data['password'] = Hash::make($data['password']);
 
-            $user = User::create($data);
-            $user->assignRole($role);
+        $user = User::create($data);
+        $user->assignRole($role);
 
-            if ($role === 'Pilote' && $request->has('classesPilots')) {
-                $user->classesPilots()->attach($request->classesPilots);
-            }
-
-            return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+        if ($role === 'Pilote' && $request->has('classesPilots')) {
+            $user->classesPilots()->attach($request->classesPilots);
         }
+
+        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+    }
 
     public function showUserInfo($role, $id)
     {
@@ -96,6 +96,7 @@ class UserManagementController extends Controller
             'role' => $role,
             'cities' => City::all(),
             'classes' => Classe::all(),
+            'applications' => $user->applications()->orderBy('created_at', 'desc')->take(3)->get(),
         ]);
     }
 
@@ -151,7 +152,7 @@ class UserManagementController extends Controller
 
     public function deleteUser($id)
     {
-        
+
         $user = User::findOrFail($id);
         $role = $user->hasRole('Etudiant') ? 'Etudiant' : 'Pilote';
 
