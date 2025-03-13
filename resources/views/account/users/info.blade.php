@@ -10,7 +10,7 @@
             <div class="max-w-md mx-auto mt-6 p-6">
 
                 <div class="container mx-auto p-4">
-                    <h1 class="text-2xl font-bold text-center">Profil de {{ $user->name }}</h1>
+                    <h1 class="text-2xl font-bold">Profil de {{ $user->name }}</h1>
 
                     <div class="mt-4">
                         <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-32 h-32 rounded-full mx-auto"
@@ -78,14 +78,13 @@
                 <!-- Boutons de modification et de suppression -->
                 <div class="mb-4 flex justify-between">
                     <!-- Bouton Modifier -->
-                    <form action="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}" method="GET" class="flex-grow mr-1">
-                        <button class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]" type="submit">
-                            Modifier
-                        </button>
-                    </form>
+                    <a href="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
+                        class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]">
+                        Modifier
+                    </a>
 
                     <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
-                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?'); class="flex-grow mr-1"">
+                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-[#8C3740] text-white px-4 py-2 rounded-lg hover:bg-[#70383E]">
@@ -122,10 +121,35 @@
                         </ul>
                     @endif
                 </div>
+                <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}"
+                    class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
+
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">Dernières offres ajoutés à la wishlist</h2>
+
+                    @if ($user->wishlists->isEmpty())
+                        <p>Aucun ajout récent dans la wishlist.</p>
+                    @else
+                        <ul>
+                            @foreach ($user->wishlists as $wishlist)
+                                <li class="border-b py-2">
+                                <strong>Offre :</strong> {{ $wishlist->title ?? 'Non défini' }} <br>
+                                <span class="text-gray-500 text-sm">
+                                        Ajouté le {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
+                    class="text-blue-500 hover:underline">Voir la wishlist</a>
 
             @endif
         </div>
-    </div>
+
+
+
 
 </main>
 

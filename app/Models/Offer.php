@@ -37,4 +37,9 @@ class Offer extends Model
         return $this->belongsToMany(User::class, 'applications', 'offer_id', 'user_id');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'offer_id', 'user_id')->withTimestamps();
+    }
+    
 }

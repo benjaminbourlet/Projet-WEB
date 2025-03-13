@@ -63,6 +63,8 @@
             </div>
             @endrole
 
+            <a href="{{ url()->previous() }}" class="mt-4 inline-block text-blue-500 hover:underline">Retour</a>
+
             @role('Admin|Pilote')
             <div class="flex gap-6">
                 <!-- Boutons de modification et de suppression -->

@@ -58,4 +58,9 @@ class User extends Authenticatable
         return $this->hasMany(Application::class, 'user_id');
     }
 
+    public function wishlists()
+    {
+        return $this->belongsToMany(Offer::class, 'wishlists', 'user_id', 'offer_id')->withTimestamps();
+    }
+
 }

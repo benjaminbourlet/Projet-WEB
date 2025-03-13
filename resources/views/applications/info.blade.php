@@ -16,10 +16,10 @@
             </a>
         </p>
         <p><strong>Lettre de motivation :</strong> {{ $application->cover_letter }}</p>
-
-        <a href="{{ route('applications_show', ['user_id' => $user->id]) }} " class="mt-4 inline-block text-blue-500 hover:underline">Retour à la liste</a>
-
+        
+        @role('Admin')
         <a href="{{ route('applications_edit', ['user_id' => $user->id, 'offer_id' => $application->offer->id]) }} " class="mt-4 inline-block text-blue-500 hover:underline">Modifie le statut</a>
+        @endrole
 
     </div>
 </main>
