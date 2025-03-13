@@ -109,11 +109,14 @@
                             @endrole
 
                             <hr class="border-gray-200">
-                            <form method="POST" action="{{ route('logout') }}">
+                            <li>
+                            <a href="#" onclick="document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Déconnexion
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                 @csrf
-                                <button type="submit"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</button>
                             </form>
+                            </li>
                         </ul>
                     </div>
                 @else
