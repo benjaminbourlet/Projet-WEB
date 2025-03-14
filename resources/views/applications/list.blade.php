@@ -25,8 +25,8 @@
                     @foreach ($applications as $application)
                         <tr class="border">
                             <td class="border p-2">
-                                <a href="{{ route('offer_info', ['id' => $application->offer->id]) }}"
-                                    >
+                                <a
+                                    href="{{ route('offer_info', ['id' => $application->offer->id, 'title' => Str::slug($application->offer->title)]) }}">
                                     {{ $application->offer->title }}
                                 </a>
                             </td>

@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/offers', [OfferController::class, 'show'])->name(name: 'offer_list');
     Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
     Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
-    Route::get('/offers/{id}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
+    Route::get('/offers/{id}/{title}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
     Route::get('/offers/{id}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
     Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
     Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
