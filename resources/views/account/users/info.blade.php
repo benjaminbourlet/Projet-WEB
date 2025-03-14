@@ -78,10 +78,11 @@
                 <!-- Boutons de modification et de suppression -->
                 <div class="mb-4 flex justify-between">
                     <!-- Bouton Modifier -->
-                    <a href="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
-                        class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]">
-                        Modifier
-                    </a>
+                    <form action="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}" method="GET" class="flex-grow mr-1">
+                        <button class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]" type="submit">
+                            Modifier
+                        </button>
+                    </form>
 
                     <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
                         onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
