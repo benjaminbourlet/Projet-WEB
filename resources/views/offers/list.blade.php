@@ -50,7 +50,8 @@
             @foreach ($offers as $offer)
                 <div
                     class="bg-white p-4 shadow-md rounded-lg border border-gray-200 hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-                    <a href="{{ route('offer_info', ['id' => $offer->id]) }}" class="block space-y-2">
+                    <a href="{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}"
+                        class="block space-y-2">
                         <p class="text-lg font-semibold">{{ $offer->title }}</p>
                         <p class="text-sm text-black">Entreprise : {{ $offer->company->name }}</p>
 
