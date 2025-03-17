@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-        
+
 
         <div class="container mx-auto p-4">
             <h1 class="text-2xl font-bold">Profil de {{ $company->name }}</h1>
@@ -65,6 +65,18 @@
                 <a href="{{ route('company_edit', $company->id) }}"
                     class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                     Modifier
+                </a>
+
+                <!-- Bouton Modifier -->
+                <a href="{{ route('evaluations_create', $company->id) }}"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    Doner un avis
+                </a>
+
+                <!-- Bouton Modifier -->
+                <a href="{{ route('evaluations_company_list', $company->id) }}"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    Afficher les avis
                 </a>
 
             </div>
