@@ -20,7 +20,7 @@
                     @foreach ($wishlists as $offer)
                         <li class="p-4 hover:bg-gray-50">
                             <h5 class="text-lg font-semibold">
-                                <a href="{{ route('offer_info', ['id' => $offer->id]) }}">
+                                <a href="{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}">
                                     {{ $offer->title }}</a>
                             </h5>
                             <p class="text-gray-600">{{ $offer->description }}</p>
