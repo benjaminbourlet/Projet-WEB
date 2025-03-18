@@ -9,6 +9,7 @@ use App\Models\Region;
 use App\Models\Classe;
 use App\Models\Sector;
 use App\Models\Department;
+use App\Models\Offer;
 use App\Models\Skill;
 use App\Models\Status;
 use App\Models\Postal_Code;
@@ -34,6 +35,10 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             CompanySeeder::class,
-            CompanySectorSeeder::class,]);
+            CompanySectorSeeder::class,
+            OfferSeeder::class,
+            OffersSkillSeeder::class,
+            OffersDepartmentSeeder::class,
+        ]);
     }
 }
