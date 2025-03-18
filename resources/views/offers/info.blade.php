@@ -31,11 +31,6 @@
             </div>
 
             <div class="mb-4">
-                <label class="block font-bold">Description :</label>
-                <p class="border p-2 w-full bg-gray-100">{{ $offer->description ?? 'Non renseigné' }}</p>
-            </div>
-
-            <div class="mb-4">
                 <label class="block font-bold">Entreprise :</label>
                 <p class="border p-2 w-full bg-gray-100">{{ $offer->company->name ?? 'Non défini' }}</p>
             </div>
