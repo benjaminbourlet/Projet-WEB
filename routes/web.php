@@ -19,9 +19,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Accueil
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [CompanyController::class, 'companyCarrousel'])->name('home');
 
 // Dashboard
 Route::get('/dashboard/{id}', function () {
