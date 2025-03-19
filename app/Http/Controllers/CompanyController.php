@@ -15,6 +15,17 @@ class CompanyController extends Controller
 {
     use AuthorizesRequests;
 
+    public function companyCarrousel()
+    {
+        $topCompanies = Company::withCount('offers') // Compte les offres liées à chaque entreprise
+            ->orderByDesc('offers_count') // Trie par le plus grand nombre d'offres
+            ->take(5) // Garde seulement les 5 premières
+            ->get();
+
+        return view('welcome', compact('topCompanies'));
+    }
+
+
     public function show()
     {
         $this->authorize('search_company');

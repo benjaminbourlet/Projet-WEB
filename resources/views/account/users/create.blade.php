@@ -70,11 +70,13 @@
             @elseif ($role === 'Pilote')
                 <div>
                     <label for="classesPilots" class="block text-sm font-medium text-gray-700">Classes (Sélection multiple)</label>
-                    <select id="classesPilots" name="classesPilots[]" multiple class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    <select id="classesPilots" name="classesPilots[]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">Sélectionnez une/des classe(s)</option>
                         @foreach($classes as $classe)
                             <option value="{{ $classe->id }}">{{ $classe->name }}</option>
                         @endforeach
                     </select>
+                    <div id="selected-classesPilots" class="mt-2 flex flex-wrap gap-2"></div>
                 </div>
             @endif
 

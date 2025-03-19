@@ -5,7 +5,7 @@
 @include('partials.header')
 
 <main class="flex-grow container mx-auto p-4 flex gap-6">
-<div class="container mx-auto p-4">
+    <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold">{{ $role }}s</h1>
 
         <div class="mt-4 flex space-x-2">
@@ -39,12 +39,14 @@
             @endif
         </div>
 
-        <div class="mt-4 space-y-4">
+        <div class="flex flex-col mt-4 space-y-4">
             @foreach ($users as $user)
-                <div class="bg-white shadow-md rounded-tr-2xl rounded-bl-2xl flex items-center justify-between border border-gray-200">
+                <div
+                    class="bg-white shadow-md rounded-tr-2xl rounded-bl-2xl flex items-center justify-between border border-gray-200">
                     <a href="{{ route('user_info', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
                         class="flex items-center justify-between space-x-4 h-full w-full p-4">
-                        <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-12 h-12 rounded-full" alt="Avatar">
+                        <img src="{{ asset('storage/' . $user->pp_path) }}" class="w-12 h-12 rounded-full"
+                            alt="Avatar">
                         <div class="flex gap-4 items-center h-full w-full">
                             <p><strong>Id :</strong> {{ $user->id }}</p>
                             <div>
@@ -54,17 +56,19 @@
                             <p><strong>Email :</strong> {{ $user->email }}</p>
 
                             @if ($role === 'Etudiant')
-                                <p><strong>Promo :</strong> {{ $user->classe ? $user->classe->name : 'Aucune classe' }}</p>
+                                <p><strong>Promo :</strong> {{ $user->classe ? $user->classe->name : 'Aucune classe' }}
+                                </p>
                             @else
-                                <p><strong>Classes :</strong> 
+                                <p><strong>Classes :</strong>
                                     {{ $user->classesPilots->isNotEmpty() ? $user->classesPilots->pluck('name')->implode(', ') : 'Aucune classe' }}
                                 </p>
                             @endif
-                            
-                            <!-- Date de naissance -->
-                            <p><strong>Date de naissance :</strong> {{ \Carbon\Carbon::parse($user->birthdate)->format('d/m/Y') ?? 'Non défini' }}</p>
 
-                            
+                            <!-- Date de naissance -->
+                            <p><strong>Date de naissance :</strong>
+                                {{ \Carbon\Carbon::parse($user->birthdate)->format('d/m/Y') ?? 'Non défini' }}</p>
+
+
                             <form action="{{ route('user_delete', ['id' => $user->id]) }}" method="POST"
                                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');"
                                 class="ml-auto">

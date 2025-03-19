@@ -46,14 +46,18 @@
                 <label for="start_date" class="block text-gray-700">Date de début</label>
                 <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required
                     class="w-full mt-1 p-2 border rounded-md">
-                @error('start_date')  <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                @error('start_date')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
                 <label for="end_date" class="block text-gray-700">Date de fin</label>
                 <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required
                     class="w-full mt-1 p-2 border rounded-md">
-                @error('end_dates')          <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                @error('end_dates')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
@@ -62,45 +66,48 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
                     required>
                     <option value="">Sélectionnez une entreprise</option>
-                    @foreach($companies as $company)
+                    @foreach ($companies as $company)
                         <option value="{{ $company->id }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
-                @error('company_id') 
+                @error('company_id')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
+            <!-- Sélection des départements -->
             <div class="mb-4">
-                <label for="departments" class="block text-sm font-medium text-gray-700">Departements</label>
-                <select id="departments" name="departments[]" multiple
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
-                    @foreach($departments as $department)
+                <label for="departments" class="block text-sm font-medium text-gray-700">Départements</label>
+                <select id="departments"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                    <option value="">Sélectionnez un département</option>
+                    @foreach ($departments as $department)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                     @endforeach
                 </select>
-                @error('departments')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <div id="selected-departments" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
 
+            <!-- Sélection des compétences -->
             <div class="mb-4">
                 <label for="skills" class="block text-sm font-medium text-gray-700">Compétences</label>
-                <select id="skills" name="skills[]" multiple
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
-                    @foreach($skills as $skill)
+                <select id="skills"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                    <option value="">Sélectionnez une compétence</option>
+                    @foreach ($skills as $skill)
                         <option value="{{ $skill->id }}">{{ $skill->name }}</option>
                     @endforeach
                 </select>
-                @error('skills')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <div id="selected-skills" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
+
+
+
 
             <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mt-4">
                 Créer l'offre
             </button>
 
         </form>
-    </div>
+   </div>
 @endsection

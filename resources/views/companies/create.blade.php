@@ -94,16 +94,15 @@
             </div>
 
             <div class="mb-4">
-                <label for="sectors" class="block text-sm font-medium text-gray-700">Secteurs</label>
-                <select id="sectors" name="sectors[]" multiple
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
-                    @foreach($sectors as $sector)
+                <label for="sectors" class="block text-sm font-medium text-gray-700">secteur</label>
+                <select id="sectors"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                    <option value="">Sélectionnez un secteur</option>
+                    @foreach ($sectors as $sector)
                         <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                     @endforeach
                 </select>
-                @error('sectors')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <div id="selected-sectors" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
 
             <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mt-4">
