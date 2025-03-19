@@ -1,4 +1,6 @@
+@extends('layouts.app')
 
+<body>
     <footer>
         <div class="bg-[#5A8E95] w-full flex flex-wrap items-center justify-between px-6">
             <div class="w-full lg:w-auto flex flex-row lg:flex-col items-center justify-center lg:justify-start">
@@ -111,13 +113,13 @@
         <!-- Social media links -->
         <div class="w-full flex flex-wrap items-center justify-between">
             <div class="flex items-center space-x-4">
-                <span class="block  text-white font-bold text-lg sm:text-center pl-4 pr-1">Nous suivre sur :</span>
+                <span class="block text-sm text-white font-bold sm:text-center pl-4 pr-1">Nous suivre sur :</span>
                 <a href="https://github.com/benjaminbourlet/Projet-WEB.git"><img src="{{ asset('storage/images/logo_github.svg') }}" width="30" height="30"></a>
                     <a href="https://x.com/MrBeast" ><img src="{{ asset('storage/images/logo_twitter.svg') }}" width="30" height="30"></a>
                 <a href="https://www.instagram.com/benjamiin_brl/"><img src="{{ asset('storage/images/logo_instagram.svg') }}" width="30" height="30"></a>
                 <a href="https://www.linkedin.com/in/benjamin-bourlet-422b4032a/"><img src="{{ asset('storage/images/logo_linkedin.svg') }}" width="30" height="30"></a>
             </div>
-            <span class="block text-white text-lg sm:text-center p-4"> Nous sommes un groupe en CPI A2 du CESI ™ . All Rights Reserved.</span>
+            <span class="block text-sm text-white sm:text-center p-4"> Nous sommes un groupe en CPI A2 du CESI ™ . All Rights Reserved.</span>
         </div>
     </footer>
     

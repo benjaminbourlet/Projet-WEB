@@ -76,6 +76,7 @@
                                 @method('DELETE')
                                 <button class="px-3 pt-1.5 pb-1.5 bg-red-500 rounded-lg">X</button>
                             </form>
+                            
                         </div>
                     </a>
                 </div>

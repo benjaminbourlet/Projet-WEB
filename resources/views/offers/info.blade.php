@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-        
+
 
         <div class="container mx-auto p-4">
             <h1 class="text-2xl font-bold">Information sur {{ $offer->title }}</h1>
@@ -31,11 +31,6 @@
             </div>
 
             <div class="mb-4">
-                <label class="block font-bold">Description :</label>
-                <p class="border p-2 w-full bg-gray-100">{{ $offer->description ?? 'Non renseigné' }}</p>
-            </div>
-
-            <div class="mb-4">
                 <label class="block font-bold">Entreprise :</label>
                 <p class="border p-2 w-full bg-gray-100">{{ $offer->company->name ?? 'Non défini' }}</p>
             </div>
@@ -53,29 +48,41 @@
                     {{ $offer->skills->isNotEmpty() ? $offer->skills->pluck('name')->implode(', ') : 'Aucune compétences' }}
                 </p>
             </div>
-        @role('Admin|Pilote')
-        <div class="flex gap-6">
-            <!-- Boutons de modification et de suppression -->
-            <div class="mb-4 flex justify-between">
-                <!-- Bouton Modifier -->
-                <a href="{{ route('offer_edit', $offer->id) }}"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                    Modifier
+
+            @role('Admin|Etudiant')
+            <div class="flex gap-6">
+                <a href="{{ route('offer_apply', ['offer_id' => $offer->id]) }}"
+                    class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+                    Candidater
                 </a>
-
             </div>
+            @endrole
 
-            <!-- Bouton Supprimer -->
-            <form action="{{ route('offer_delete', ['id' => $offer->id]) }}" method="POST"
-                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-                    Supprimer
-                </button>
-            </form>
+            <a href="{{ url()->previous() }}" class="mt-4 inline-block text-blue-500 hover:underline">Retour</a>
+
+            @role('Admin|Pilote')
+            <div class="flex gap-6">
+                <!-- Boutons de modification et de suppression -->
+                <div class="mb-4 flex justify-between">
+                    <!-- Bouton Modifier -->
+                    <a href="{{ route('offer_edit', $offer->id) }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Modifier
+                    </a>
+
+                </div>
+
+                <!-- Bouton Supprimer -->
+                <form action="{{ route('offer_delete', ['id' => $offer->id]) }}" method="POST"
+                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+            @endrole
         </div>
-        @endrole
-    </div>
 
 @endsection

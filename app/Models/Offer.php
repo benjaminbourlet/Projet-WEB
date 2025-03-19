@@ -24,7 +24,6 @@ class Offer extends Model
     {
         return $this->belongsToMany(Department::class, 'offers_departments', 'offer_id', 'department_id');
     }
-    
     public function skills()
     {
         return $this->belongsToMany(Skill::class, 'offers_skills', 'offer_id', 'skill_id');
@@ -33,4 +32,14 @@ class Offer extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'applications', 'offer_id', 'user_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'offer_id', 'user_id')->withTimestamps();
+    }
+    
 }

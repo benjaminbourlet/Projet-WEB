@@ -24,14 +24,27 @@ class Company extends Model
     /**
      * Relation avec la ville
      */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
+    /**
+     * Relation avec les secteurs
+     */
     public function sectors()
     {
         return $this->belongsToMany(Sector::class, 'companies_sectors', 'company_id', 'sector_id');
     }
-    public function city()
+
+    /**
+     * Relation avec les évaluations des utilisateurs
+     */
+    public function evaluations()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsToMany(User::class, 'evaluations', 'company_id', 'user_id')
+                    ->withPivot('grade', 'comment', 'created_at')
+                    ->withTimestamps();
     }
     public function offers()
     {

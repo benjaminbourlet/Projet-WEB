@@ -77,6 +77,12 @@
             </div>
         </div>
     </div>
+
+    <h1 class="text-4xl font-bold text-black text-center pt-20"> Stage - Entreprise à la une </h1>
+    
+    @include('partials.footer') 
 </body>
 
-@include('partials.footer')
+
+
+</html>

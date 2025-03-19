@@ -12,5 +12,15 @@ class Status extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function users()
+    {
+        return $this->morphedByMany(User::class, 'statusable');
+    }
+
+    public function offers()
+    {
+        return $this->morphedByMany(Offer::class, 'statusable');
+    }
     
 }
