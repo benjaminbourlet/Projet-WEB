@@ -28,6 +28,13 @@ class Company extends Model
     {
         return $this->belongsTo(City::class);
     }
+    /**
+     * Fonction pour le carroussel des entreprises
+     */
+    public function offers()
+    {
+        return $this->hasMany(Offer::class, 'company_id');
+    }
 
     /**
      * Relation avec les secteurs
