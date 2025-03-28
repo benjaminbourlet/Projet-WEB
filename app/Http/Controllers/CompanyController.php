@@ -6,25 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Models\Region;
 use App\Models\City;
 use App\Models\Sector;
-
 
 class CompanyController extends Controller
 {
     use AuthorizesRequests;
-
-    public function companyCarrousel()
-    {
-        $topCompanies = Company::withCount('offers') // Compte les offres liées à chaque entreprise
-            ->orderByDesc('offers_count') // Trie par le plus grand nombre d'offres
-            ->take(5) // Garde seulement les 5 premières
-            ->get();
-
-        return view('welcome', compact('topCompanies'));
-    }
-
+    
     public function show()
     {
         $this->authorize('search_company');
@@ -245,4 +233,14 @@ class CompanyController extends Controller
 
         return view('companies.list', compact('companies', 'sectors', 'cities'));
     }
+
+    public function showOffers($company_id)
+    {
+        $company = Company::findOrFail($company_id);
+
+        $offers = $company->offers()->paginate(10);
+
+        return view('companies.offers', compact('offers', 'company'));
+    }
+
 }

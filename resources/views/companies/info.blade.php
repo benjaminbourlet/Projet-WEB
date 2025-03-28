@@ -57,6 +57,19 @@
             </div>
         </div>
 
+        <!-- Bouton Modifier -->
+        <a href="{{ route('evaluations_create', $company->id) }}"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+            Doner un avis
+        </a>
+
+        <!-- Bouton Modifier -->
+        <a href="{{ route('evaluations_company_list', $company->id) }}"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+            Afficher les avis
+        </a>
+
+
         @role('Admin|Pilote')
         <div class="flex gap-6">
             <!-- Boutons de modification et de suppression -->
@@ -65,18 +78,6 @@
                 <a href="{{ route('company_edit', $company->id) }}"
                     class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                     Modifier
-                </a>
-
-                <!-- Bouton Modifier -->
-                <a href="{{ route('evaluations_create', $company->id) }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Doner un avis
-                </a>
-
-                <!-- Bouton Modifier -->
-                <a href="{{ route('evaluations_company_list', $company->id) }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Afficher les avis
                 </a>
 
             </div>
@@ -93,5 +94,32 @@
         </div>
         @endrole
     </div>
+
+    <div class="w-2/3">
+        <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Dernières Offres</h2>
+            @if ($company->offers->isEmpty())
+                <p>Aucune offre récente.</p>
+            @else
+                <ul>
+                    @foreach ($company->offers->take(3) as $offer)
+                        <li class="border-b py-2">
+                            <strong>Offre :</strong> {{ $offer->title ?? 'Non défini' }} <br>
+                            <span class="text-gray-500 text-sm">Déposée le
+                                {{ optional($offer->created_at)->format('d/m/Y') }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            <div class="mb-4 flex justify-between">
+                <!-- Bouton Modifier -->
+                <a href="{{ route('company_offers', $company->id) }}"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                    Liste des offres
+                </a>
+
+            </div>
+        </div>
 
 @endsection
