@@ -128,11 +128,16 @@ class ApplicationController extends Controller
         // Recherche de la candidature spécifique pour un utilisateur et une offre.
         $application = Application::where('user_id', $user_id)
             ->where('offer_id', $offer_id); // Recherche une candidature spécifique.
+            ->first();
 
         // Validation des données envoyées dans la requête.
         $request->validate([
             'status_id' => 'required|exists:statuses,id', // Vérifie que le statut existe dans la base de données.
         ]);
+    // Vérifier si la candidature existe
+    if (!$application) {
+        return redirect()->back()->with('error', 'Candidature introuvable.');
+    }
 
         // Mise à jour du statut de la candidature.
         $application->update([
