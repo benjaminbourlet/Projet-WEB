@@ -5,6 +5,7 @@
 @include('partials.header')
 
 @section('content')
+<main>
 <div class="container">
     <h1 class="mb-4">Tableau de Bord</h1>
 
@@ -42,5 +43,6 @@
         </div>
     </div>
 </div>
-
+</main>
+@include('partials.footer')
 @endsection
