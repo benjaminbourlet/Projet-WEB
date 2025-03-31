@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('applications', function (Blueprint $table) {
-            $table->string('cv', 255)->nullable();
-            $table->text('cover_letter');
+            $table->string('cv', 255);
+            $table->text('cover_letter')->nullable();
             $table->foreignId('offer_id')->constrained('offers');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('status_id')->constrained('statuses');

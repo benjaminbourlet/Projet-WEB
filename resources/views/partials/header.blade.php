@@ -10,7 +10,7 @@
                     <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="w-18 h-16">
                 </button>
             </a>
-            <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage_Finder</span>
+            <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage Finder</span>
             </div>
 
             <!-- Menu central -->
@@ -19,7 +19,7 @@
                 <li><a href="/" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
                     <li><a href="{{ route('offer_list') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
                     <li><a href="{{ route('company_list') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
-                    <li><a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
+                    <li><a href="{{ route('evaluations_all') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
                 </ul>
             </div>
 

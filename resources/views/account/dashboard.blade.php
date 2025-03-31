@@ -1,40 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'Tableau de bord')
+@section('title', 'Dashboard')
+
+@include('partials.header')
 
 @section('content')
-<div class="text-center mt-10">
-    <h1 class="text-3xl font-bold">Bienvenue, {{ auth()->user()->first_name }}</h1>
-    <form method="POST" action="{{ route('logout') }}" class="mt-4">
-    @csrf
-    <button type="submit" class="bg-red-500 text-white p-2 rounded-md">Déconnexion</button>
-</form>
+<div class="container">
+    <h1 class="mb-4">Tableau de Bord</h1>
 
-<div class="mt-6">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-black bg-success mb-3">
+                <div class="card-header">Nombre de candidatures</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ $totalApplications }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 
-@role('Etudiant')
+    <h2 class="mt-4">Compétences les plus demandées</h2>
+    <ul class="list-group">
+        @foreach($topSkills as $skill)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ $skill->name }}
+                <span class="badge bg-primary rounded-pill">{{ $skill->count }}</span>
+            </li>
+        @endforeach
+    </ul>
 
-<p> Je suis etudiant </p>
-
-@endrole
-
-@role('Pilote')
-
-<p> Je suis pilote </p>
-
-@endrole
-
-@role('Admin')
-
-<p> Je suis admin </p>
-
-@endrole
-
-
-</div>
-
-<div class="mt-6">
-        <a href="{{ route('home') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">Retour</a>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <canvas id="applicationsChart"
+                data-accepted="{{ $acceptedApplications }}"
+                data-rejected="{{ $rejectedApplications }}"
+                data-pending="{{ $pendingApplications }}"
+                data-traitement="{{ $traitementApplications }}"
+                data-interview="{{ $interviewApplications }}"
+                width="50" height="50">
+            </canvas>
+        </div>
     </div>
 </div>
+
 @endsection

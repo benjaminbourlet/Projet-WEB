@@ -7,6 +7,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB; 
 
 class EvaluationController extends Controller
 {
@@ -61,7 +62,23 @@ class EvaluationController extends Controller
     
         return view('evaluations.list', compact('evaluations', 'company'));
     }
+
+    public function showAllEvaluations()
+    {
+        $evaluations = DB::table('evaluations')
+            ->join('companies', 'evaluations.company_id', '=', 'companies.id')
+            ->join('users', 'evaluations.user_id', '=', 'users.id')
+            ->select(
+                'evaluations.grade',
+                'evaluations.comment',
+                'evaluations.created_at',
+                'companies.name as company_name',
+                'users.name as user_name'
+            )
+            ->paginate(10); // Paginer les résultats
     
+        return view('evaluations.all', compact('evaluations'));
+    }
 
     /**
      * Supprimer une évaluation (Soft Delete).

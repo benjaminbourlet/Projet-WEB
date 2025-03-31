@@ -98,59 +98,41 @@
         </div>
         <div class="w-2/3">
             @if ($user->hasRole('Etudiant'))
-
                 <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-xl font-bold mb-4">Dernières Candidatures</h2>
-
                     @if ($user->applications->isEmpty())
                         <p>Aucune candidature récente.</p>
                     @else
                         <ul>
-                            @foreach ($user->applications as $application)
+                            @foreach ($user->applications->take(3) as $application)
                                 <li class="border-b py-2">
                                     <strong>Offre :</strong> {{ $application->offer->title ?? 'Non défini' }} <br>
                                     <p><strong>Statut :</strong> {{ $application->status->name ?? 'Non défini' }}</p>
-                                    <span class="text-gray-500 text-sm">
-                                        Déposée le {{ \Carbon\Carbon::parse($application->created_at)->format('d/m/Y') }}
-                                    </span>
+                                    <span class="text-gray-500 text-sm">Déposée le {{ optional($application->created_at)->format('d/m/Y') }}</span>
                                 </li>
-                                <td class="border p-2">
-                                    <a href="{{ route('applications_info_user', ['user_id' => $user->id, 'offer_id' => $application->offer_id]) }}"
-                                        class="text-blue-500 hover:underline">Voir</a>
-                                </td>
                             @endforeach
                         </ul>
                     @endif
                 </div>
-                <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}"
-                    class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
-
+                <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}" class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
                 <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
-                    <h2 class="text-xl font-bold mb-4">Dernières offres ajoutés à la wishlist</h2>
-
+                    <h2 class="text-xl font-bold mb-4">Dernières offres ajoutées à la wishlist</h2>
                     @if ($user->wishlists->isEmpty())
                         <p>Aucun ajout récent dans la wishlist.</p>
                     @else
                         <ul>
-                            @foreach ($user->wishlists as $wishlist)
+                            @foreach ($user->wishlists->take(3) as $wishlist)
                                 <li class="border-b py-2">
-                                <strong>Offre :</strong> {{ $wishlist->title ?? 'Non défini' }} <br>
-                                <span class="text-gray-500 text-sm">
-                                        Ajouté le {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}
-                                    </span>
+                                    <strong>Offre :</strong> {{ $wishlist->title ?? 'Non défini' }} <br>
+                                    <span class="text-gray-500 text-sm">Ajouté le {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     @endif
                 </div>
-                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
-                    class="text-blue-500 hover:underline">Voir la wishlist</a>
-
+                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}" class="text-blue-500 hover:underline">Voir la wishlist</a>
             @endif
         </div>
-
-
-
 
 </main>
 

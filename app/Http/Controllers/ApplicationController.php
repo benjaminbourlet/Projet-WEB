@@ -106,14 +106,19 @@ class ApplicationController extends Controller
 
     public function showApplicationUpdate($user_id, $offer_id)
     {
-
         if (!auth()->user()->hasRole('Admin')) {
             return redirect()->route('home')->with('error', 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
         }
 
+        // Recherche spécifique à l'utilisateur et à l'offre
         $application = Application::where('user_id', $user_id)
             ->where('offer_id', $offer_id)
             ->first();
+
+        // Vérification que la candidature existe
+        if (!$application) {
+            return redirect()->back()->with('error', 'Candidature introuvable.');
+        }
 
         $statuses = Status::all();
 
@@ -136,14 +141,13 @@ class ApplicationController extends Controller
         'status_id' => 'required|exists:statuses,id',
     ]);
 
-    // Mise à jour du statut
-    $application->update([
-        'status_id' => $request->status_id, 
-    ]);
+        // Mise à jour du statut de la candidature spécifique
+        $application->update([
+            'status_id' => $request->status_id,
+        ]);
 
-    //A modif!!
-    return redirect()->route('applications_info', ['user_id'=>$user_id,'offer_id'=>$offer_id])->with('success', 'Statut de la candidature mis à jour avec succès.');
-}
-
+        return redirect()->route('applications_info', ['user_id' => $user_id, 'offer_id' => $offer_id])
+            ->with('success', 'Statut de la candidature mis à jour avec succès.');
+    }
 
 }
