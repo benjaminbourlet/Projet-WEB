@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 <body>
-    <nav class="bg-[#5A8E95] border-gray-200">
+    <nav class="bg-[#5A8E95] mb-10 ">
         <div class="max-w-100 h-20 flex justify-between items-center mx-6 py-0">
             <!-- Logo + Texte -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -154,6 +154,3 @@
 
         </div>
     </nav>
-</body>
-
-</html>

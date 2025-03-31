@@ -4,7 +4,7 @@
 
 @include('partials.header')
 
-<body class="bg-white">
+<main class="bg-white">
 
     <div class="container mx-auto pt-20 text-center bg-100">
         <div class="relative w-2/3 mx-auto flex items-center">
@@ -98,8 +98,6 @@
     </div>
 
 
-</body>
+</main>
 
 @include('partials.footer')
-
-</html>
