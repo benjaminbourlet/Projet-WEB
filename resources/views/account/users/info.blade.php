@@ -78,7 +78,9 @@
                 <!-- Boutons de modification et de suppression -->
                 <div class="mb-4 flex justify-between">
                     <!-- Bouton Modifier -->
-                    <form action="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}" method="GET" class="flex-grow mr-1">
+                    <form
+                        action="{{ route('user_edit', ['role' => $role === 'Etudiant' ? 'students' : 'pilots', 'id' => $user->id]) }}"
+                        method="GET" class="flex-grow mr-1">
                         <button class="bg-[#3D9DA9] text-white px-4 py-2 rounded-lg hover:bg-[#3D8A8F]" type="submit">
                             Modifier
                         </button>
@@ -108,13 +110,15 @@
                                 <li class="border-b py-2">
                                     <strong>Offre :</strong> {{ $application->offer->title ?? 'Non défini' }} <br>
                                     <p><strong>Statut :</strong> {{ $application->status->name ?? 'Non défini' }}</p>
-                                    <span class="text-gray-500 text-sm">Déposée le {{ optional($application->created_at)->format('d/m/Y') }}</span>
+                                    <span class="text-gray-500 text-sm">Déposée le
+                                        {{ optional($application->created_at)->format('d/m/Y') }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     @endif
                 </div>
-                <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}" class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
+                <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}"
+                    class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
                 <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-xl font-bold mb-4">Dernières offres ajoutées à la wishlist</h2>
                     @if ($user->wishlists->isEmpty())
@@ -124,13 +128,40 @@
                             @foreach ($user->wishlists->take(3) as $wishlist)
                                 <li class="border-b py-2">
                                     <strong>Offre :</strong> {{ $wishlist->title ?? 'Non défini' }} <br>
-                                    <span class="text-gray-500 text-sm">Ajouté le {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}</span>
+                                    <span class="text-gray-500 text-sm">Ajouté le
+                                        {{ optional($wishlist->pivot->created_at)->format('d/m/Y') ?? 'Date inconnue' }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     @endif
                 </div>
-                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}" class="text-blue-500 hover:underline">Voir la wishlist</a>
+                <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
+                    class="text-blue-500 hover:underline">Voir la wishlist</a>
+
+                <div class="container">
+                    <h1 class="mb-4">Statistiques</h1>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-black bg-success mb-3">
+                                <div class="card-header">Nombre de candidatures</div>
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ $totalApplications }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <canvas id="applicationsChart" data-accepted="{{ $acceptedApplications }}"
+                                data-rejected="{{ $rejectedApplications }}" data-pending="{{ $pendingApplications }}"
+                                data-traitement="{{ $traitementApplications }}"
+                                data-interview="{{ $interviewApplications }}" width="50" height="50">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
             @endif
         </div>
 

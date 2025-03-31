@@ -72,6 +72,7 @@
                     <a href="{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}"
                         class="block space-y-2">
                         <p class="text-lg font-semibold">{{ $offer->title }}</p>
+                        <p class="text-xs text-gray-500">Publié le {{ $offer->created_at->format('d/m/Y') }}</p>
                         <p class="text-sm text-black">Entreprise : {{ $offer->company->name }}</p>
 
                         <!-- Affichage dynamique des compétences -->

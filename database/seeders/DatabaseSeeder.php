@@ -39,6 +39,9 @@ class DatabaseSeeder extends Seeder
             OfferSeeder::class,
             OffersSkillSeeder::class,
             OffersDepartmentSeeder::class,
+            ApplicationSeeder::class,
+            WishlistSeeder::class,
+            EvaluationSeeder::class,
         ]);
     }
 }
