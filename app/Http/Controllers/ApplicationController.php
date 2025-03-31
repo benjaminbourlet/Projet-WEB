@@ -62,6 +62,7 @@ class ApplicationController extends Controller
 
     public function showApplicationInfo($user_id, $offer_id)
     {
+        
         $user = User::findOrFail($user_id);
 
         // Vérifier si l'utilisateur est admin ou pilote
@@ -125,15 +126,20 @@ class ApplicationController extends Controller
     }
 
     public function updateApplication(Request $request, $user_id, $offer_id)
-    {
-        // Vérifier que la requête récupère bien UNE SEULE candidature
-        $application = Application::where('user_id', $user_id)
-            ->where('offer_id', $offer_id);
+{
+    // Trouver la candidature
+    $application = Application::where('user_id', $user_id)
+        ->where('offer_id', $offer_id)
+        ->first();
+    // Vérifier si la candidature existe
+    if (!$application) {
+        return redirect()->back()->with('error', 'Candidature introuvable.');
+    }
 
-        // Vérification des données envoyées
-        $request->validate([
-            'status_id' => 'required|exists:statuses,id',
-        ]);
+    // Validation des données
+    $request->validate([
+        'status_id' => 'required|exists:statuses,id',
+    ]);
 
         // Mise à jour du statut de la candidature spécifique
         $application->update([

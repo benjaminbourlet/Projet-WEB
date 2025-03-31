@@ -95,12 +95,13 @@
 
             <div class="mb-4">
                 <label for="sectors" class="block text-sm font-medium text-gray-700">Secteurs</label>
-                <select id="sectors" name="sectors[]" multiple
+                <select id="sectors" name="sectors[]"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
                     @foreach($sectors as $sector)
                         <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                     @endforeach
                 </select>
+                <div id="selected-sectors" class="mt-2 flex flex-wrap gap-2"></div>
                 @error('sectors')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror

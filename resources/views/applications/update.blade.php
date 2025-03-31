@@ -19,7 +19,11 @@
                 <label class="block font-bold">Statut :</label>
                 <select name="status_id" class="border p-2 w-full">
                     <option value="">Sélectionnez un statut</option>
+<<<<<<< HEAD
+                    @foreach ($statuses as $status)
+=======
                     @foreach($statuses as $status)
+>>>>>>> Macbook-Diego/feature
                         <option value="{{ $status->id }}" {{ $application->status_id == $status->id ? 'selected' : '' }}>
                             {{ $status->name }}
                         </option>

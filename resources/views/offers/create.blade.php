@@ -73,12 +73,13 @@
 
             <div class="mb-4">
                 <label for="departments" class="block text-sm font-medium text-gray-700">Departements</label>
-                <select id="departments" name="departments[]" multiple
+                <select id="departments" name="departments[]"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
                     @foreach($departments as $department)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                     @endforeach
                 </select>
+                <div id="selected-departments" class="mt-2 flex flex-wrap gap-2"></div>
                 @error('departments')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -86,12 +87,13 @@
 
             <div class="mb-4">
                 <label for="skills" class="block text-sm font-medium text-gray-700">Compétences</label>
-                <select id="skills" name="skills[]" multiple
+                <select id="skills" name="skills[]"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
                     @foreach($skills as $skill)
                         <option value="{{ $skill->id }}">{{ $skill->name }}</option>
                     @endforeach
                 </select>
+                <div id="selected-skills" class="mt-2 flex flex-wrap gap-2"></div>
                 @error('skills')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
