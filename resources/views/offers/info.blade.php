@@ -51,7 +51,7 @@
 
             @role('Admin|Etudiant')
             <div class="flex gap-6">
-                <a href="{{ route('offer_apply', ['offer_id' => $offer->id]) }}"
+                <a href="{{ route('offer_apply', [$offer->id, 'title' => Str::slug($offer->title)]) }}"
                     class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
                     Candidater
                 </a>
@@ -65,7 +65,7 @@
                 <!-- Boutons de modification et de suppression -->
                 <div class="mb-4 flex justify-between">
                     <!-- Bouton Modifier -->
-                    <a href="{{ route('offer_edit', $offer->id) }}"
+                    <a href="{{ route('offer_edit', [$offer->id, 'title' => Str::slug($offer->title)]) }}"
                         class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                         Modifier
                     </a>

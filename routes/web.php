@@ -21,6 +21,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Accueil
 Route::get('/', [HomeController::class, 'homeControl'])->name('home');
 
+Route::get('/mentions-legales', function () {
+    return view('legal_mention');
+})->name('mentions-legales');
+
+
 // Dashboard
 use App\Http\Controllers\DashboardController;
 
@@ -33,9 +38,19 @@ Route::get('/profile/{id}', [ProfileController::class, 'show'])
     ->middleware('auth')
     ->name('profile');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/offers', [OfferController::class, 'show'])->name('offer_list');
+    Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
+    Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
+    Route::get('/offers/{id}/{title}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
+    Route::get('/offers/{id}/{title}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
+    Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
+    Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/evaluations/{#}', [EvaluationController::class, '#'])->name('evaluate_list');
-    Route::get('/companies/{company_id}/evaluate', [EvaluationController::class, 'showEvaluationsCreate'])->name('evaluations_create');
+    Route::get('/companies/{company_id}/evaluate',[EvaluationController::class, 'showEvaluationsCreate'])->name('evaluations_create');
     Route::post('/companies/{company_id}/evaluate/create', [EvaluationController::class, 'evaluationsCreate'])->name('evaluationsCreate');
     Route::get('/companies/{company_id}/evaluations', [EvaluationController::class, 'showEvaluationsCompany'])->name('evaluations_company_list');
     Route::get('/my_evaluations/{user_id}', [EvaluationController::class, 'index'])->name('evaluations_user_list');
@@ -56,7 +71,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/offers/{offer_id}/apply', [ApplicationController::class, 'showApplicationRegister'])->name('offer_apply');
+    Route::get('/offers/{offer_id}/{title}/apply', [ApplicationController::class, 'showApplicationRegister'])->name('offer_apply');
     Route::post('/offers/{offer_id}/apply/create', [ApplicationController::class, 'applicationRegister'])->name('applicationRegister');
     Route::get('/my_applications/{user_id}', [ApplicationController::class, 'show'])->name('applications_list');
     Route::get('/students/{user_id}/applications', [ApplicationController::class, 'show'])->name('applications_list_user');
@@ -72,16 +87,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/{user_id}/wishlist', [WishlistController::class, 'index'])->name('wishlists_list_user');
     Route::post('/wishlist/{user_id}/add/{offer_id}', [WishlistController::class, 'addToWishlist'])->name('wishlist_add');
     Route::post('/wishlist/{user_id}/remove/{offer_id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist_remove');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/offers', [OfferController::class, 'show'])->name('offer_list');
-    Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
-    Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
-    Route::get('/offers/{id}/{title}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
-    Route::get('/offers/{id}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
-    Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
-    Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
 });
 
 // Gestion des utilisateurs (Étudiants & Pilotes)

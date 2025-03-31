@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\User;
+use App\Models\Application;
 use App\Models\Classe;
 use App\Models\City;
 
@@ -89,6 +90,35 @@ class UserController extends Controller
         $role = $role === 'students' ? 'Etudiant' : 'Pilote';
         $user = User::findOrFail($id);
 
+        // Nombre total de candidatures de l'utilisateur
+        $totalApplications = Application::where('user_id', $id)->count();
+
+        // Candidatures acceptées, refusées et en attente de l'utilisateur via la relation statusable
+        $acceptedApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Acceptée');
+            })->count();
+
+        $rejectedApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Refusée');
+            })->count();
+
+        $pendingApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'En attente');
+            })->count();
+
+        $traitementApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'En cours de traitement');
+            })->count();
+
+        $interviewApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Entretien programmé');
+            })->count();
+
         $this->authorize($role === 'Etudiant' ? 'view_student_stats' : 'edit_pilot');
 
         return view('account.users.info', [
@@ -97,6 +127,12 @@ class UserController extends Controller
             'cities' => City::all(),
             'classes' => Classe::all(),
             'applications' => $user->applications()->orderBy('created_at', 'desc')->take(3)->get(),
+            'totalApplications' => $totalApplications,
+            'acceptedApplications' => $acceptedApplications,
+            'rejectedApplications' => $rejectedApplications,
+            'pendingApplications' => $pendingApplications,
+            'traitementApplications' => $traitementApplications,
+            'interviewApplications' => $interviewApplications,
         ]);
     }
 

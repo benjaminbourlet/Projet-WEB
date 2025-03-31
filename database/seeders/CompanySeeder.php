@@ -19,7 +19,7 @@ class CompanySeeder extends Seeder
         $faker = Faker::create();
 
         // Création de 30 entreprises
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 35) as $index) {
             Company::create([
                 'name' => $faker->company,
                 'description' => $faker->paragraph,
