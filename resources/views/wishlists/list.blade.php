@@ -13,7 +13,7 @@
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
 
         <!-- Filtres -->
-        <div class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5">
+        <div class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5" @click.stop>
             <div class="mb-4">
                 <label class="block font-semibold">Dates</label>
                 <select class="w-full bg-teal-600 p-2 rounded">
@@ -48,10 +48,8 @@
             @if ($wishlists->count() > 0)
             <div>
                 @foreach ($wishlists as $offer)
-                <div class="bg-white shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all"
-                :class="{'bg-gray-300': selectedOffer?.id === Number({{ $offer->id }})}"
-                @click="selectedOffer = {{ json_encode($offer) }}">
-                <div class="flex items-center">
+                <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
+                    <div class="flex items-center">
                         @if (auth()->user()->wishlists->contains($offer->id))
                         <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="mt-4 flex items-center h-auto">
                             @csrf
@@ -101,42 +99,82 @@
             @endif
         </div>
         <!-- Détails de l'offre -->
-        <div class="w-full md:w-1/3 bg-gray-100 p-4 rounded-lg" x-show="selectedOffer" x-transition>
-            <template x-if="selectedOffer">
-                <div>
-                    <h2 class="text-xl font-bold mb-2" x-text="selectedOffer.title"></h2>
-                    <p class="text-gray-700"><strong>Entreprise :</strong> <span x-text="selectedOffer.company.name"></span></p>
-                    <p class="text-gray-700"><strong>Dates :</strong>
-                        <span x-text="new Date(selectedOffer.start_date).toLocaleDateString()"></span>
-                        -
-                        <span x-text="new Date(selectedOffer.end_date).toLocaleDateString()"></span>
-                    </p>
-                    <p class="text-gray-700 mt-2" x-text="selectedOffer.description"></p>
-                    <div class="mt-4">
-                        <a :href="'/offers/' + selectedOffer.id + '/apply'"
-                            class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F]">
-                            Candidater
-                        </a>
+        <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-screen md:overflow-auto fixed bottom-0 w-full md:w-1/2"
+            x-show="selectedOffer" x-transition @click.stop>
+            <div class="flex flex-col">
+                <h2 class="text-2xl text-center text-white font-bold mb-2" x-text="selectedOffer.title"></h2>
+                <span class="h-[1px] bg-white w-full"></span>
+                <div class="flex mx-2">
+                    <div class="flex flex-grow items-center justify-between">
+                        <!-- Nom de l'entreprise -->
+                        <h6 class="text-white text-center flex-1" x-text="selectedOffer.company.name"></h6>
+                        <!-- Séparateur vertical -->
+                        <span class="mx-2 w-[1px] bg-white self-stretch"></span>
+                        <!-- Date de stage -->
+                        <p class="text-white mx-2 text-center flex-1 inline-block">
+                            <span x-text="new Date(selectedOffer.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })"></span>
+                            -
+                            <span x-text="new Date(selectedOffer.end_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })"></span>
+                        </p>
                     </div>
                 </div>
+                <span class="h-[1px] bg-white w-full mb-2"></span>
+                <div class="mt-4 text-center"> <!-- Bouton Postuler -->
+                    <a :href="'/offers/' + selectedOffer.id + '/apply'"
+                        class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F] border border-white">
+                        Postuler maintenant
+                    </a>
+                </div>
+                <h6 class="text-white mt-2 text-lg"><strong>Détails :</strong></h6>
+                <div class="flex justify-center flex-col md:flex-row px-4 gap-4">
+                    <div class="flex items-center"> <!-- Localisation du stage -->
+                        <!-- Icône de localisation -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-6 h-6">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 10.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 5.5 12 5.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+                        </svg>
+                        <p class="text-white text-lg" x-text="selectedOffer.company.city.name"></p>
+                    </div> <!-- Fin de la localisation du stage -->
+                    <div class="flex items-center"> <!-- Salaire du stage -->
+                        <p class="text-white">
+                            <span class="font-bold">Salaire :</span>
+                            <span x-text="selectedOffer.salary"></span>
+                            <span>€</span>
+                        </p>
+                    </div>
+                </div>
+                <div class=" px-4"> <!-- Description de l'offre -->
+                    <p class="text-white"><strong>Description :</strong></p>
+                    <p class="text-white px-4" x-text="selectedOffer.description"></p>
+                </div> <!-- Fin de la description de l'offre -->
+                <div class="px-4"> <!-- Compétences requises -->
+                    <label class="block font-bold text-white">Compétences :</label>
+                    <div class="flex flex-wrap gap-2 mt-2 justify-center items-center">
+                        <!-- Affiche les compétences de l'offre -->
+                        <template x-for="skill in selectedOffer.skills" :key="skill.id">
+                            <p class="inline-block bg-[#387077] text-white text-sm px-4 py-1.5 rounded-full border border-white">
+                                <span x-text="skill.name"></span>
+                            </p>
+                        </template>
+                    </div>
+                </div> <!-- Fin des compétences requises -->
+            </div>
             </template>
         </div>
 
     </div>
 
     <!-- Débug -->
-    <div class="text-sm text-red-500" x-text="JSON.stringify(selectedOffer)"></div>
-    <div>
-    <!-- Affiche la valeur et le type de selectedOffer.id -->
-    <div class="text-sm text-blue-500">
-        selectedOffer.id: <span x-text="typeof selectedOffer?.id"></span> - <span x-text="selectedOffer?.id"></span>
+    <div class="text-sm text-red-500" x-text="JSON.stringify(selectedOffer)" @click.stop></div>
+    <div @click.stop>
+        <!-- Affiche la valeur et le type de selectedOffer.id -->
+        <div class="text-sm text-blue-500">
+            selectedOffer.id: <span x-text="typeof selectedOffer?.id"></span> - <span x-text="selectedOffer?.id"></span>
+        </div>
+        <!-- Affiche la valeur et le type de $offer->id -->
+        <div class="text-sm text-green-500">
+            $offer->id: <span x-text="'number'"></span> - <span>{{ $offer->id }}</span>
+        </div>
     </div>
-
-    <!-- Affiche la valeur et le type de $offer->id -->
-    <div class="text-sm text-green-500">
-        $offer->id: <span x-text="'number'"></span> - <span>{{ $offer->id }}</span>
-    </div>
-</div>
 
 </main>
 
