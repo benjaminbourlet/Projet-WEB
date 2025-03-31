@@ -6,20 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Validation\Rule;
 use App\Models\City;
 use App\Models\Sector;
+use App\Models\Skill;
+use App\Models\Offer;
 
 class CompanyController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function show()
     {
         $this->authorize('search_company');
         $companies = Company::paginate(9);
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
-        return view('companies.list', compact('companies','sectors','cities'));
+        return view('companies.list', compact('companies', 'sectors', 'cities'));
     }
 
     public function showCompanyRegister()
@@ -48,7 +51,7 @@ class CompanyController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string',
-            'siret' => 'required|string|max:14',
+            'siret' => 'required|string|size:14|unique:companies,siret',
             'sectors' => 'nullable|array', // Ajouter la validation pour le tableau des secteurs
             'sectors.*' => 'exists:sectors,id', // Vérifier que chaque secteur existe dans la table 'sectors'
         ]);
@@ -82,25 +85,46 @@ class CompanyController extends Controller
 
     public function showCompanyInfo($id)
     {
-
         $company = Company::findOrFail($id);
-
         $cities = City::all();
-
-        return view('companies.info', compact('company', 'cities'));
+    
+        // 🔥 Récupérer les 5 compétences les plus demandées
+        $topSkills = Skill::select('skills.name')
+            ->join('offers_skills', 'skills.id', '=', 'offers_skills.skill_id')
+            ->join('offers', 'offers_skills.offer_id', '=', 'offers.id')
+            ->where('offers.company_id', $id)
+            ->groupBy('skills.name')
+            ->orderByDesc(\DB::raw('COUNT(skills.id)'))
+            ->limit(5)
+            ->pluck('skills.name')
+            ->toArray();
+    
+        // 💰 Calculer le salaire moyen des offres
+        $averageSalary = round(Offer::where('company_id', $id)
+            ->whereNotNull('salary')
+            ->avg('salary') ?? 0);
+    
+        // 📆 Calculer la durée moyenne des offres en jours
+        $averageDuration = round(Offer::where('company_id', $id)
+            ->whereNotNull('start_date')
+            ->whereNotNull('end_date')
+            ->selectRaw('AVG(DATEDIFF(end_date, start_date)) as avg_duration')
+            ->value('avg_duration') ?? 0);
+    
+        return view('companies.info', compact('company', 'cities', 'topSkills', 'averageSalary', 'averageDuration'));
     }
+    
 
     public function showCompanyUpdate($id)
     {
 
         $this->authorize('edit_company');
         $company = Company::findOrFail($id);
-
+        
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
-
         return view('companies.update', compact('company', 'cities', 'sectors'));
-    }
+    }    
 
     public function updateCompany(Request $request, $id)
     {
@@ -119,7 +143,12 @@ class CompanyController extends Controller
                 'regex:/^(?:\+33|0)[1-9](?:\d{2}){4}$/',
             ],
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'siret' => 'required|string|max:14',
+            'siret' => [
+                'required',
+                'string',
+                'size:14',
+                Rule::unique('companies', 'siret')->ignore($company->id), // $companyId est l'ID de l'entreprise en cours d'édition
+            ],
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string',
             'sectors' => 'nullable|array', // Vérification du tableau des secteurs
@@ -165,35 +194,39 @@ class CompanyController extends Controller
         return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
     }
 
-    private function getCompanyBySectorId($query, $request) {
+    private function getCompanyBySectorId($query, $request)
+    {
         if ($request->filled('sector')) {
             $sectors = explode(',', $request->sector);
-                foreach ($sectors as $sectorId) {
-                    $query->whereHas('sectors', function ($q) use ($sectorId) {
-                        $q->where('sectors.id', $sectorId);
-                    });
-                }
+            foreach ($sectors as $sectorId) {
+                $query->whereHas('sectors', function ($q) use ($sectorId) {
+                    $q->where('sectors.id', $sectorId);
+                });
+            }
         }
         return $query;
 
     }
 
-    private function getCompanyByCityId($query, $request){
+    private function getCompanyByCityId($query, $request)
+    {
         if ($request->filled('city')) {
             $query->where('city_id', $request->city);
         }
         return $query;
     }
 
-    private function getCompanyByName($query, $request){
+    private function getCompanyByName($query, $request)
+    {
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%");
         }
         return $query;
     }
-    
-    private function sortCompanyResults($query, $request){
+
+    private function sortCompanyResults($query, $request)
+    {
         if ($request->filled('sort')) {
             switch ($request->sort) {
                 case 'name_asc':

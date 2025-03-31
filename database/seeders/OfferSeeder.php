@@ -4,41 +4,33 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Offer;
+use App\Models\Company;
+use Faker\Factory as Faker;
 
 class OfferSeeder extends Seeder
 {
-    public function run(): void
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
     {
-        $offers = [
-            // 3 premières offres de tests
-            ['title' => 'Stage en élevage de lapin des eaux', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio.', 'start_date' => '2025-04-07', 'end_date' => '2025-07-31', 'salary' => 1000, 'company_id' => 3],
-            ['title' => 'Stage en élevage de lapin des montagnes', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio.', 'start_date' => '2025-04-07', 'end_date' => '2025-07-31', 'salary' => 1500, 'company_id' => 5],
-            ['title' => 'Stage en élevage de lapin des plaines', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio. Donec nec nunc nec odio.', 'start_date' => '2025-04-07', 'end_date' => '2025-07-31', 'salary' => 500, 'company_id' => 1],
-        ];
-        $locations = ['forêt', 'marais', 'prairie', 'montagne', 'caverne', 'ferme', 'village', 'rivière', 'lac', 'plaine'];
-        $company_ids = range(1, 10);
-        $salaries = [500, 1000, 1500, 2000, 2500];
+        $faker = Faker::create();
 
-        for ($i = 4; $i <= 100; $i++) {
-            $title = "Stage en élevage de lapin " . $locations[array_rand($locations)];
-            $description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut nunc nec odio.";
-            $start_date = '2025-04-07';
-            $end_date = '2025-07-31';
-            $salary = $salaries[array_rand($salaries)];
-            $company_id = $company_ids[array_rand($company_ids)];
+        // Récupération des ID des entreprises existantes
+        $companyIds = Company::pluck('id')->toArray();
 
-            $offers[] = [
-                'title' => $title,
-                'description' => $description,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
-                'salary' => $salary,
-                'company_id' => $company_id,
-            ];
-        }
-
-        foreach ($offers as $offer) {
-            Offer::create($offer);
+        // Création de 50 offres aléatoires
+        foreach (range(1, 115) as $index) {
+            Offer::create([
+                'title' => $faker->jobTitle,
+                'description' => $faker->paragraph,
+                'start_date' => $startDate = $faker->dateTimeBetween('now', '+1 month'),
+                'end_date' => $faker->dateTimeBetween($startDate->format('Y-m-d') . ' +1 month', $startDate->format('Y-m-d') . ' +6 months'),
+                'salary' => $faker->numberBetween(600, 2500),
+                'company_id' => $faker->randomElement($companyIds),
+            ]);
         }
     }
 }

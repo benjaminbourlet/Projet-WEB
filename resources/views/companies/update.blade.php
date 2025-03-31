@@ -7,6 +7,17 @@
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold">Profil de {{ $company->name }}</h1>
 
+        <!-- Affichage des erreurs globaux -->
+        @if ($errors->any())
+            <div class="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded-md">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="mt-4">
             <img src="{{ asset('storage/' . $company->logo_path) }}" class="w-32 h-32 rounded-full mx-auto" alt="Logo">
         </div>
@@ -17,22 +28,34 @@
 
             <div class="mb-4">
                 <label class="block font-bold">Nom de l'entreprise :</label>
-                <input type="text" name="name" value="{{ $company->name }}" class="border p-2 w-full">
+                <input type="text" name="name" value="{{ old('name', $company->name) }}" class="border p-2 w-full @error('name') border-red-500 @enderror">
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
                 <label class="block font-bold">Numéro de téléphone :</label>
-                <input type="text" name="siret" value="{{ $company->siret }}" class="border p-2 w-full">
+                <input type="text" name="siret" value="{{ old('siret', $company->siret) }}" class="border p-2 w-full @error('siret') border-red-500 @enderror">
+                @error('siret')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
                 <label class="block font-bold">Email :</label>
-                <input type="email" name="email" value="{{ $company->email }}" class="border p-2 w-full">
+                <input type="email" name="email" value="{{ old('email', $company->email) }}" class="border p-2 w-full @error('email') border-red-500 @enderror">
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
                 <label class="block font-bold">Numéro de téléphone :</label>
-                <input type="text" name="tel_number" value="{{ $company->tel_number }}" class="border p-2 w-full">
+                <input type="text" name="tel_number" value="{{ old('tel_number', $company->tel_number) }}" class="border p-2 w-full @error('tel_number') border-red-500 @enderror">
+                @error('tel_number')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
             
             <div class="mb-4">
@@ -46,7 +69,10 @@
 
             <div class="mb-4">
                 <label class="block font-bold">Adresse :</label>
-                <input type="text" name="address" value="{{ $company->address }}" class="border p-2 w-full">
+                <input type="text" name="address" value="{{ old('address', $company->address) }}" class="border p-2 w-full @error('address') border-red-500 @enderror">
+                @error('address')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
@@ -58,32 +84,40 @@
 
             <div class="mb-4">
                 <label class="block font-bold">Ville :</label>
-                <select name="city_id" class="border p-2 w-full">
+                <select name="city_id" class="border p-2 w-full @error('city_id') border-red-500 @enderror">
                     <option value="">Sélectionnez une ville</option>
                     @foreach($cities as $city)
-                        <option value="{{ $city->id }}" {{ $company->city_id == $city->id ? 'selected' : '' }}>
+                        <option value="{{ $city->id }}" {{ old('city_id', $company->city_id) == $city->id ? 'selected' : '' }}>
                             {{ $city->name }}
                         </option>
                     @endforeach
                 </select>
+                @error('city_id')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
-            <div>
-                    <label for="sectors" class="block text-sm font-medium text-gray-700">Secteurs (Sélection
-                        multiple)</label>
-                    <select id="sectors" name="sectors[]" multiple
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        @foreach($sectors as $sector)
-                        <option value="{{ $sector->id }}" {{ in_array($sector->id, $company->sectors->pluck('id')->toArray()) ? 'selected' : '' }}>
-                        {{ $sector->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="mb-4">
+                <label for="sectors" class="block text-sm font-medium text-gray-700">Secteurs (Sélection
+                    multiple)</label>
+                <select id="sectors" name="sectors[]" multiple
+                    @foreach($sectors as $sector)
+                        <option value="{{ $sector->id }}" {{ in_array($sector->id, old('sectors', $company->sectors->pluck('id')->toArray())) ? 'selected' : '' }}>
+                            {{ $sector->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('sectors')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div class="mb-4">
                 <label class="block font-bold">Logo de l'entreprise :</label>
                 <input type="file" name="logo" class="border p-2 w-full">
+                @error('logo')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">

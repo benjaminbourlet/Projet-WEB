@@ -5,21 +5,30 @@
         <div class="max-w-100 h-20 flex justify-between items-center mx-6 py-0">
             <!-- Logo + Texte -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
-            <a href="{{ route('home') }}">
-                <button>
-                    <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="w-18 h-16">
-                </button>
-            </a>
-            <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage Finder</span>
+                <a href="{{ route('home') }}">
+                    <button>
+                        <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="w-18 h-16">
+                    </button>
+                </a>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage Finder</span>
             </div>
 
             <!-- Menu central -->
             <div class="items-center justify-between hidden md:flex md:w-auto " id="navbar-user">
-                <ul class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  ">
-                <li><a href="/" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a></li>
-                    <li><a href="{{ route('offer_list') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a></li>
-                    <li><a href="{{ route('company_list') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a></li>
-                    <li><a href="{{ route('evaluations_all') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a></li>
+                <ul
+                    class="flex flex-col font-medium text-2xl p-4 md:p-0 mt-4 border md:space-x-20 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  ">
+                    <li><a href="/"
+                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Accueil</a>
+                    </li>
+                    <li><a href="{{ route('offer_list') }}"
+                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Offres</a>
+                    </li>
+                    <li><a href="{{ route('company_list') }}"
+                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Entreprises</a>
+                    </li>
+                    <li><a href="{{ route('evaluations_all') }}"
+                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-white md:p-0">Avis</a>
+                    </li>
                 </ul>
             </div>
 
@@ -70,10 +79,13 @@
                             width="50" height="50">
                     </button>
                 @else
-                <!-- Affiche l'icône de connexion si l'utilisateur n'est pas connecté -->
-                <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-black" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                    <img class="rounded-full" src="storage/images/icon_login.jpeg" alt="user photo" width="50" height="50">
-                </button>
+                    <!-- Affiche l'icône de connexion si l'utilisateur n'est pas connecté -->
+                    <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-black"
+                        id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                        data-dropdown-placement="bottom">
+                        <img class="rounded-full" src="storage/images/icon_login.jpeg" alt="user photo" width="50"
+                            height="50">
+                    </button>
                 @endauth
                 <!-- Dropdown menu -->
                 @auth
@@ -113,12 +125,13 @@
 
                             <hr class="border-gray-200">
                             <li>
-                            <a href="#" onclick="document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Déconnexion
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                @csrf
-                            </form>
+                                <a href="#" onclick="document.getElementById('logout-form').submit();"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Déconnexion
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                    @csrf
+                                </form>
                             </li>
                         </ul>
                     </div>

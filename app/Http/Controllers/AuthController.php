@@ -1,45 +1,48 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // Déclare l'espace de noms du contrôleur.
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request; // Importation de la classe Request pour gérer les requêtes HTTP.
+use Illuminate\Support\Facades\Auth; // Importation de la classe Auth pour gérer l'authentification des utilisateurs.
+use Illuminate\Validation\ValidationException; // Importation de la classe ValidationException pour gérer les erreurs de validation.
 
 class AuthController extends Controller
 {
-    // Afficher la page de login
+    // Affiche la page de connexion.
     public function showLogin()
     {
-        return view('auth.login');
+        return view('auth.login'); // Retourne la vue du formulaire de connexion.
     }
 
-    // Traiter la connexion
+    // Gère la connexion de l'utilisateur.
     public function login(Request $request)
     {
+        // Validation des champs du formulaire.
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required|email', // L'email est requis et doit être valide.
+            'password' => 'required', // Le mot de passe est requis.
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
-            return redirect()->route('home');
+        // Vérifie les identifiants et tente d'authentifier l'utilisateur.
+        if (Auth::attempt($request->only('email', 'password'))) { 
+            $request->session()->regenerate(); // Régénère la session pour éviter les attaques de session fixation.
+            return redirect()->route('home'); // Redirige l'utilisateur vers la page d'accueil après connexion réussie.
         }
 
+        // Si l'authentification échoue, retourne une erreur de validation.
         throw ValidationException::withMessages([
-            'email' => 'Les identifiants sont incorrects.',
+            'email' => 'Les identifiants sont incorrects.', // Message d'erreur affiché à l'utilisateur.
         ]);
     }
 
-    // Déconnexion
+    // Gère la déconnexion de l'utilisateur.
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('home');
+        Auth::logout(); // Déconnecte l'utilisateur.
+
+        $request->session()->invalidate(); // Invalide la session actuelle.
+        $request->session()->regenerateToken(); // Régénère un nouveau jeton CSRF pour plus de sécurité.
+
+        return redirect()->route('home'); // Redirige l'utilisateur vers la page d'accueil après déconnexion.
     }
 }

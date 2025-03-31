@@ -198,12 +198,12 @@ class OfferController extends Controller
         return redirect()->route('offer_list')->with('success', 'Offre mise à jour avec succès');
     }
 
-    public function deleteCompany($id)
+    public function deleteOffer($id)
     {
-        $company = Company::findOrFail($id);
+        $offer = Offer::findOrFail($id);
         // On effectue une suppression douce
-        $company->delete();
+        $offer->delete();
 
-        return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
+        return redirect()->route('offer_list')->with('success', 'Offre supprimée avec succès');
     }
 }
