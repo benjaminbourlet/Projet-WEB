@@ -17,13 +17,13 @@
             <div class="mb-4">
                 <label class="block font-bold">Statut :</label>
                 <select name="status_id" class="border p-2 w-full">
-    <option value="">Sélectionnez un statut</option>
-    @foreach($statuses as $status)
-        <option value="{{ $status->id }}" {{ $application->status_id == $status->id ? 'selected' : '' }}>
-            {{ $status->name }}
-        </option>
-    @endforeach
-</select>
+                    <option value="">Sélectionnez un statut</option>
+                    @foreach ($statuses as $status)
+                        <option value="{{ $status->id }}" {{ $application->status_id == $status->id ? 'selected' : '' }}>
+                            {{ $status->name }}
+                        </option>
+                    @endforeach
+                </select>
 
             </div>
             <p><strong>CV :</strong>

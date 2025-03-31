@@ -62,6 +62,7 @@ class ApplicationController extends Controller
 
     public function showApplicationInfo($user_id, $offer_id)
     {
+        
         $user = User::findOrFail($user_id);
 
         // Vérifier si l'utilisateur est admin ou pilote
@@ -125,7 +126,6 @@ class ApplicationController extends Controller
     $application = Application::where('user_id', $user_id)
         ->where('offer_id', $offer_id)
         ->first();
-
     // Vérifier si la candidature existe
     if (!$application) {
         return redirect()->back()->with('error', 'Candidature introuvable.');

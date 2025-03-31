@@ -19,12 +19,68 @@ class OfferController extends Controller
 {
     use AuthorizesRequests;
 
-    public function show()
+        public function show(Request $request)
     {
         $this->authorize('search_offer');
-        $offers = Offer::paginate(9);
+
+        $query = Offer::query();
+
+        // Filtrer par secteur
+        if ($request->filled('sector')) {
+            $query->whereHas('company.sectors', function ($q) use ($request) {
+                $q->where('name', $request->sector);
+            });
+        }
+
+        // Filtrer par ville
+        if ($request->filled('city')) {
+            $query->whereHas('company.city', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->city . "%");
+            });
+        }
+
+        // Filtrer par compétences
+        if ($request->filled('skills')) {
+            $skills = explode(',', $request->skills);
+            $query->whereHas('skills', function ($q) use ($skills) {
+                $q->whereIn('name', $skills);
+            });
+        }
+
+        // Filtrer par salaire
+        if ($request->filled('min_salaire')) {
+            $query->where('salary', '>=', $request->min_salaire);
+        }
+        if ($request->filled('max_salaire')) {
+            $query->where('salary', '<=', $request->max_salaire);
+        }
+
+        // Filtrer par durée
+        if ($request->filled('duree_min')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [$request->duree_min]);
+        }
+        if ($request->filled('duree_max')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [$request->duree_max]);
+        }
+
+        // Filtrer par date de début
+        if ($request->filled('start_date')) {
+            $query->where('start_date', '>=', $request->start_date);
+        }
+
+        //Filtrer par entreprise
+        if ($request->filled('company')) {
+            $query->whereHas('company', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->company . "%");
+            });
+        }
+
+        // Récupérer les offres avec pagination
+        $offers = $query->paginate(9);
+
         return view('offers.list', compact('offers'));
     }
+
 
     public function showOfferRegister()
     {

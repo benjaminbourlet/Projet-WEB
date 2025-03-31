@@ -72,16 +72,17 @@
                                     @endforeach
                                 </select>
                             </div>
+                        
                         @elseif ($role === 'Pilote')
                             <div class="m-4">
-                                <label for="classesPilots" class="block text-sm font-medium text-white">Classes (Sélection
-                                    multiple)</label>
-                                <select id="classesPilots" name="classesPilots[]" multiple
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                <label for="classesPilots" class="block text-sm font-medium text-white">Classes (Sélection multiple)</label>
+                                <select id="classesPilots" name="classesPilots[]" class="p-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                    <option value="">Sélectionnez une/des classe(s)</option>
                                     @foreach($classes as $classe)
                                         <option value="{{ $classe->id }}">{{ $classe->name }}</option>
                                     @endforeach
                                 </select>
+                                <div id="selected-classesPilots" class="mt-2 flex flex-wrap gap-2"></div>
                             </div>
                         @endif
 
@@ -96,7 +97,7 @@
                         <div class="m-4">
                             <label for="city_id" class="block text-sm font-medium text-white">Ville</label>
                             <select id="city_id" name="city_id" required
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                class="p-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                                 <option value="">Sélectionnez une ville</option>
                                 @foreach($cities as $city)
                                     <option value="{{ $city->id }}">{{ $city->name }}</option>
