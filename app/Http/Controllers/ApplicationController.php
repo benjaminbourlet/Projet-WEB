@@ -128,7 +128,6 @@ class ApplicationController extends Controller
         // Recherche de la candidature spécifique pour un utilisateur et une offre.
         $application = Application::where('user_id', $user_id)
             ->where('offer_id', $offer_id); // Recherche une candidature spécifique.
-            ->first();
 
         // Validation des données envoyées dans la requête.
         $request->validate([
