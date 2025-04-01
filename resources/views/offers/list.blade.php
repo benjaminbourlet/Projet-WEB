@@ -7,6 +7,12 @@
 <!-- Contenu principal -->
 <main class="container mx-auto p-4 flex gap-6">
 
+    @if(session('success'))
+        <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <!-- Sidebar Filtres -->
     <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
 
@@ -36,8 +42,8 @@
             <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
 
             <label for="" class="mt-6">Ville</label>
-            <input type="text" name="city" value="{{ request('city') }}"
-                class="mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+            <input type="text" name="city" value="{{ request('city') }}" class="mb-4 w-full bg-teal-600 p-2 rounded"
+                placeholder="Rechercher">
             <label for="">Durée minimum</label>
             <input type="text" name="duree_min" value="{{ request('duree_min') }}"
                 class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
@@ -57,11 +63,11 @@
         <div class="mb-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold">Offres</h1>
             @role('Admin|Pilote')
-                <a href="{{ route('offer_register') }}">
-                    <button class="bg-blue-700 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">
-                        Ajouter une offre
-                    </button>
-                </a>
+            <a href="{{ route('offer_register') }}">
+                <button class="bg-blue-700 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">
+                    Ajouter une offre
+                </button>
+            </a>
             @endrole
         </div>
 
@@ -78,8 +84,7 @@
                         <!-- Affichage dynamique des compétences -->
                         <p class="text-sm text-black">Compétences :
                             @foreach ($offer->skills as $skill)
-                                <span
-                                    class="bg-[#387077] px-2 py-1 rounded text-sm text-white">{{ $skill->name }}</span>
+                                <span class="bg-[#387077] px-2 py-1 rounded text-sm text-white">{{ $skill->name }}</span>
                             @endforeach
                         </p>
 
@@ -87,29 +92,26 @@
                     </a>
 
                     @role('Admin|Etudiant')
-                        <!-- Bouton Wishlist -->
-                        <div class="mt-2">
-                            @if (auth()->user()->wishlists->contains($offer->id))
-                                <form
-                                    action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500">
-                                        🩶
-                                    </button>
-                                </form>
-                            @else
-                                <form
-                                    action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">
-                                        ❤️
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
+                    <!-- Bouton Wishlist -->
+                    <div class="mt-2">
+                        @if (auth()->user()->wishlists->contains($offer->id))
+                            <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500">
+                                    🩶
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">
+                                    ❤️
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                     @endrole
                 </div>
             @endforeach
@@ -121,60 +123,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var salarySlider = document.getElementById('salary_slider');
-            var minSalaryInput = document.getElementById('min_salaire');
-            var maxSalaryInput = document.getElementById('max_salaire');
-            var salaryMinValue = document.getElementById('salary_min_value');
-            var salaryMaxValue = document.getElementById('salary_max_value');
-    
-            // Initialisation du slider
-            noUiSlider.create(salarySlider, {
-                start: [{{ request('min_salaire') ?: 0 }}, {{ request('max_salaire') ?: 10000 }}],
-                connect: true,
-                range: {
-                    'min': [0],
-                    'max': [10000]
-                },
-                step: 100,
-                format: {
-                    to: function (value) {
-                        return Math.round(value);
-                    },
-                    from: function (value) {
-                        return value;
-                    }
-                }
-            });
-    
-            // Mettre à jour les valeurs quand le slider est déplacé
-            salarySlider.noUiSlider.on('update', function(values, handle) {
-                if (handle === 0) {
-                    salaryMinValue.innerText = values[0];
-                    minSalaryInput.value = values[0];
-                } else {
-                    salaryMaxValue.innerText = values[1];
-                    maxSalaryInput.value = values[1];
-                }
-            });
-    
-            // Ajout de l'événement submit pour s'assurer que les champs sont mis à jour avant l'envoi
-            var form = document.querySelector('form');
-            form.addEventListener('submit', function(event) {
-                // Empêcher l'envoi immédiat du formulaire pour mettre à jour les valeurs
-                event.preventDefault();
-                
-                // Assurer que les champs cachés sont mis à jour avec les valeurs actuelles du slider
-                minSalaryInput.value = salarySlider.noUiSlider.get()[0];
-                maxSalaryInput.value = salarySlider.noUiSlider.get()[1];
-    
-                // Enfin, soumettre le formulaire
-                form.submit();
-            });
-        });
-    </script>
-    
 </main>
 
 @include('partials.footer')

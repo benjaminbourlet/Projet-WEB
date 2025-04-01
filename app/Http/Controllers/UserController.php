@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Application;
 use App\Models\Classe;
 use App\Models\City;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -82,7 +83,8 @@ class UserController extends Controller
             $user->classesPilots()->attach($request->classesPilots);
         }
 
-        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list')
+            ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
     public function showUserInfo($role, $id)
@@ -183,7 +185,8 @@ class UserController extends Controller
             $user->classesPilots()->sync($request->classesPilots ?? []);
         }
 
-        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list')
+            ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
     public function deleteUser($id)
@@ -193,6 +196,16 @@ class UserController extends Controller
         $role = $user->hasRole('Etudiant') ? 'Etudiant' : 'Pilote';
 
         $this->authorize(ability: $role === 'Etudiant' ? 'delete_student' : 'delete_pilot');
+
+        if ($role === 'Etudiant') {
+
+            DB::table('applications')
+                ->where('user_id', $user->id)
+                ->update(['deleted_at' => now()]);
+
+            $user->wishlists()->detach();
+
+        }
 
         // On effectue une suppression douce
         $user->delete();

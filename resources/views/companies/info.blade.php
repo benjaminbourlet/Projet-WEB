@@ -25,6 +25,13 @@
             </div>
 
             <div class="mb-4">
+                <label class="block font-bold">Nombre de stagiaire ayant postulé :</label>
+                <p class="border p-2 w-full bg-gray-100">
+                    {{ $applicationsCount ? round($applicationsCount) . ' candidatures' : 'Non disponible' }}
+                </p>
+            </div>
+
+            <div class="mb-4">
                 <label class="block font-bold">🔥 Compétences les plus demandées :</label>
                 @if (count($topSkills) > 0)
                     <ul class="border p-2 bg-gray-100">
@@ -75,6 +82,19 @@
             <div class="mb-4">
                 <label class="block font-bold">🏙️ Ville :</label>
                 <p class="border p-2 w-full bg-gray-100">{{ $company->city->name ?? 'Non défini' }}</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-bold">Secteurs de l'entreprise :</label>
+                @if ($company->sectors->isNotEmpty())
+                    <ul class="border p-2 bg-gray-100">
+                        @foreach ($company->sectors as $sector)
+                            <li>• {{ $sector->name }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="border p-2 w-full bg-gray-100">Aucune compétence répertoriée.</p>
+                @endif
             </div>
 
             <div class="flex gap-4">
