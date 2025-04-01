@@ -140,7 +140,7 @@
                 <span class="h-[1px] bg-white w-full mb-2"></span>
                 <div class="mt-4 text-center"> <!-- Bouton Postuler -->
                     <a :href="{{ route('offer_apply', ['offer_title', 'offer_id' => $offer->id]) }}"
-                        class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F] border border-white">
+                        class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F] border border-white cursor-pointer">
                         Postuler maintenant
                     </a>
                 </div>
