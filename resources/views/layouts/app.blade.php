@@ -17,9 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.js"></script>
 
 </head>
-<body class="bg-gray-100">
-<div class="container mx-auto">
-        @yield('content') 
-    </div>
+<body class="container max-w-full">
+    @yield('content') 
 </body>
 </html>

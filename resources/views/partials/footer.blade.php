@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
-<body>
-    <footer>
-        <div class="bg-[#5A8E95] w-full flex flex-wrap items-center justify-between px-6">
+    <footer class="bg-[#5A8E95] mt-10">
+        <div class="w-full flex flex-wrap items-center justify-between px-6">
             <div class="w-full lg:w-auto flex flex-row lg:flex-col items-center justify-center lg:justify-start">
                 <!-- Dropdown button pour la langue -->
                 <div class="mx-6 py-4">

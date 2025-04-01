@@ -4,7 +4,7 @@
 
 @include('partials.header')
 
-<body class="bg-white">
+<main class="bg-white">
 
     @if(session('success'))
         <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto">
@@ -103,8 +103,6 @@
     </div>
 
 
-</body>
+</main>
 
 @include('partials.footer')
-
-</html>

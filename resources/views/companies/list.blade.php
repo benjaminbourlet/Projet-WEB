@@ -4,6 +4,8 @@
 
 @include('partials.header')
 
+@section('content')
+
 <main class="flex-grow container mx-auto p-4 flex gap-6">
     <div class="container mx-auto p-4">
 
@@ -130,3 +132,5 @@
 </main>
 
 @include('partials.footer')
+
+@endsection
