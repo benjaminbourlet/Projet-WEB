@@ -67,7 +67,7 @@
             @if ($wishlists->count() > 0)
             <div>
                 @foreach ($wishlists as $offer)
-                <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
+                <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="window.innerWidth < 768 ? window.location.href = '{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}' : selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
                     <div class="flex items-center">
                         @if (auth()->user()->wishlists->contains($offer->id))
                         <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="mt-4 flex items-center h-auto">
@@ -118,7 +118,7 @@
             @endif
         </div>
         <!-- Détails de l'offre -->
-        <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-max md:overflow-auto fixed bottom-0 w-full md:w-1/2"
+        <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-max md:overflow-auto fixed bottom-4 max-h-1/3 w-full md:w-1/2"
             x-show="selectedOffer" x-transition @click.stop>
             <div class="flex flex-col">
                 <h2 class="text-2xl text-center text-white font-bold mb-2" x-text="selectedOffer.title"></h2>
@@ -139,7 +139,7 @@
                 </div>
                 <span class="h-[1px] bg-white w-full mb-2"></span>
                 <div class="mt-4 text-center"> <!-- Bouton Postuler -->
-                    <a :href="'/offers/' + selectedOffer.id + '/apply'"
+                    <a :href="{{ route('offer_apply', ['offer_title', 'offer_id' => $offer->id]) }}"
                         class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F] border border-white">
                         Postuler maintenant
                     </a>
