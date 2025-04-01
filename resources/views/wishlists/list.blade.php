@@ -99,7 +99,7 @@
             @endif
         </div>
         <!-- Détails de l'offre -->
-        <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-screen md:overflow-auto fixed bottom-0 w-full md:w-1/2"
+        <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-max md:overflow-auto fixed bottom-0 w-full md:w-1/2"
             x-show="selectedOffer" x-transition @click.stop>
             <div class="flex flex-col">
                 <h2 class="text-2xl text-center text-white font-bold mb-2" x-text="selectedOffer.title"></h2>
