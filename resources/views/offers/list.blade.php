@@ -9,6 +9,12 @@
     <!-- Contenu principal -->
     <main class="container mx-auto p-4 flex gap-6">
 
+    @if(session('success'))
+        <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
+            {{ session('success') }}
+        </div>
+    @endif
+
         <!-- Sidebar Filtres -->
         <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
 

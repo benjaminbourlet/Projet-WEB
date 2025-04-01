@@ -132,7 +132,7 @@
                             src="{{ asset('storage/images/logo_linkedin.svg') }}" width="30" height="30"></a>
                 </div>
                 <a href="{{ route('mentions-legales') }}"
-                    class="block text-sm text-white sm:text-center p-4 bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300">
+                    class="block text-sm text-white sm:text-center p-4 rounded-lg transition duration-300">
                     Mentions Légales - Société Stage Finder ™ . All Rights Reserved.
                 </a>
     </footer>

@@ -56,11 +56,39 @@ class UserSeeder extends Seeder
             $user = User::create([
                 'name' => "Da Costa",
                 'first_name' => "Argan",
-                'email' => "zargan.dc@gmail.com",
+                'email' => "argan.dacosta@stagefinder.com",
                 'password' => bcrypt("aBcDEF1223._!!"), // Mot de passe sécurisé
                 'pp_path' => "images/profile_picture.jpg",
                 'city_id' => 21, // Génération d'un city_id (ici, un exemple statique)
                 'birthdate' => '2006-10-04', // Format de date corrigé
+            ]);
+
+            // Assigner le rôle "Admin" à cet utilisateur
+            $user->assignRole('Admin');
+        }
+        foreach (range(1, 1) as $index) {
+            $user = User::create([
+                'name' => "Bourlet",
+                'first_name' => "Benjamin",
+                'email' => "benjamin.bourlet@stagefinder.com",
+                'password' => bcrypt("aBcDEF1223._!!"), // Mot de passe sécurisé
+                'pp_path' => "images/profile_picture.jpg",
+                'city_id' => 21, // Génération d'un city_id (ici, un exemple statique)
+                'birthdate' => '2005-03-07', // Format de date corrigé
+            ]);
+
+            // Assigner le rôle "Admin" à cet utilisateur
+            $user->assignRole('Admin');
+        }
+        foreach (range(1, 1) as $index) {
+            $user = User::create([
+                'name' => "Bortolussi",
+                'first_name' => "Diego",
+                'email' => "diego.bortolussi@stagefinder.com",
+                'password' => bcrypt("aBcDEF1223._!!"), // Mot de passe sécurisé
+                'pp_path' => "images/profile_picture.jpg",
+                'city_id' => 21, // Génération d'un city_id (ici, un exemple statique)
+                'birthdate' => '2005-10-27', // Format de date corrigé
             ]);
 
             // Assigner le rôle "Admin" à cet utilisateur

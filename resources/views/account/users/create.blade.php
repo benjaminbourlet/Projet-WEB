@@ -128,12 +128,11 @@
                                 @error('password') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                             </div>
 
-                            <div class="m-8 w-3/4">
-                                <label for="password_confirmation" class="block text-white">Confirmez le mot de
-                                    passe</label>
-                                <input type="password" id="password_confirmation" name="password_confirmation" required
-                                    class="w-full mt-1 p-2 border rounded-md">
-                            </div>
+                        <div class="m-8 w-3/4">
+                            <label for="password_confirmation" class="block text-white">Confirmez le mot de passe</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" required
+                                class="w-full mt-1 p-2 border rounded-md">
+                        </div>
 
                             <button type="submit"
                                 class="w-3/4 bg-green-500 text-white px-8 py-2 rounded-full hover:bg-green-600 m-8">

@@ -7,8 +7,15 @@
 @section('content')
     <main>
         <div class="flex-grow container mx-auto p-4 flex gap-6">
-            <div class="container mx-auto p-4">
-                <h1 class="text-2xl font-bold">{{ $role }}s</h1>
+                <div class="container mx-auto p-4">
+        
+        @if(session('success'))
+            <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <h1 class="text-2xl font-bold">{{ $role }}s</h1>
 
                 <div class="mt-4 flex space-x-2">
                     <a href="{{ route('user_register', [$role === 'Etudiant' ? 'students' : 'pilots']) }}">

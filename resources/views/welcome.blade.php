@@ -6,6 +6,12 @@
 
 <main class="bg-white">
 
+    @if(session('success'))
+        <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="container mx-auto pt-20 text-center bg-100">
         <div class="relative w-2/3 mx-auto flex items-center">
             <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
@@ -22,10 +28,10 @@
         @if ($topCompanies->isNotEmpty())
             <div id="carousel" class="relative w-full">
                 <!-- Conteneur des entreprises -->
-                <div class="flex justify-center space-x-4 py-8">
+                <div class="flex justify-center space-x-4 py-8 transition-transform duration-500 ease-in-out">
                     @foreach ($topCompanies as $company)
                         <div
-                            class="carousel-item hidden w-64 h-64 bg-gray-100 rounded-xl shadow-lg overflow-hidden flex-col items-center">
+                            class="carousel-item hidden w-64 h-64 bg-gray-100 rounded-xl shadow-lg overflow-hidden flex-col items-center opacity-0 transition-opacity duration-500">
                             <img src="{{ asset('storage/' . $company->logo_path) }}" class="w-32 h-32 rounded-full mx-auto"
                                 alt="Logo">
                             <div class="p-4 text-center">
@@ -38,15 +44,14 @@
 
                 <!-- Boutons de navigation -->
                 <button id="prevBtn"
-                    class="absolute left-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700">
+                    class="absolute left-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700 transition-transform duration-300 hover:scale-110">
                     &lt;
                 </button>
                 <button id="nextBtn"
-                    class="absolute right-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700">
+                    class="absolute right-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700 transition-transform duration-300 hover:scale-110">
                     &gt;
                 </button>
             </div>
-
         @else
             <p class="text-gray-500 text-lg mt-5">Aucune entreprise mise en avant pour le moment.</p>
         @endif

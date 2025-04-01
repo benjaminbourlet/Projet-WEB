@@ -52,6 +52,9 @@
                     </p>
                 </div>
 
+            <p>Nombre d'étudiants ayant postulé : {{ $applicationsCount }}</p>
+            <p>Nombre d'étudiants ayant mis en wishlist : {{ $wishlistsCount }}</p>
+
                 @role('Admin|Etudiant')
                 <div class="flex gap-6">
                     <a href="{{ route('offer_apply', [$offer->id, 'title' => Str::slug($offer->title)]) }}"
