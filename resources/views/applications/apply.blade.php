@@ -2,9 +2,22 @@
 
 @section('title', 'Postuler à une offre')
 
+@include('partials.header')
+
 @section('content')
-    <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg ">
         <h2 class="text-2xl font-bold text-center mb-6">Postuler à l'offre : {{ $offer->title }}</h2>
+
+        <!-- Affichage des erreurs de validation -->
+        @if ($errors->any())
+            <div class="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded-md">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         @if (session('error'))
             <div class="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded-md">
@@ -48,4 +61,6 @@
 
         </form>
     </div>
+
+    @include('partials.footer')
 @endsection

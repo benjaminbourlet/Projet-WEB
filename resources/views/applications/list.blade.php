@@ -27,7 +27,7 @@
                             <td class="border p-2">
                                 <a
                                     href="{{ route('offer_info', ['id' => $application->offer->id, 'title' => Str::slug($application->offer->title)]) }}">
-                                    {{ $application->offer->title }}
+                                      {{ $application->offer->title }}
                                 </a>
                             </td>
                             <td class="border p-2">{{ $application->created_at->format('d/m/Y') }}</td>

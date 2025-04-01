@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\User;
+use App\Models\Application;
 use App\Models\Classe;
 use App\Models\City;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -81,13 +83,43 @@ class UserController extends Controller
             $user->classesPilots()->attach($request->classesPilots);
         }
 
-        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list')
+            ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
     public function showUserInfo($role, $id)
     {
         $role = $role === 'students' ? 'Etudiant' : 'Pilote';
         $user = User::findOrFail($id);
+
+        // Nombre total de candidatures de l'utilisateur
+        $totalApplications = Application::where('user_id', $id)->count();
+
+        // Candidatures acceptées, refusées et en attente de l'utilisateur via la relation statusable
+        $acceptedApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Acceptée');
+            })->count();
+
+        $rejectedApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Refusée');
+            })->count();
+
+        $pendingApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'En attente');
+            })->count();
+
+        $traitementApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'En cours de traitement');
+            })->count();
+
+        $interviewApplications = Application::where('user_id', $id)
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'Entretien programmé');
+            })->count();
 
         $this->authorize($role === 'Etudiant' ? 'view_student_stats' : 'edit_pilot');
 
@@ -97,6 +129,12 @@ class UserController extends Controller
             'cities' => City::all(),
             'classes' => Classe::all(),
             'applications' => $user->applications()->orderBy('created_at', 'desc')->take(3)->get(),
+            'totalApplications' => $totalApplications,
+            'acceptedApplications' => $acceptedApplications,
+            'rejectedApplications' => $rejectedApplications,
+            'pendingApplications' => $pendingApplications,
+            'traitementApplications' => $traitementApplications,
+            'interviewApplications' => $interviewApplications,
         ]);
     }
 
@@ -147,7 +185,8 @@ class UserController extends Controller
             $user->classesPilots()->sync($request->classesPilots ?? []);
         }
 
-        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');
+        return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list')
+            ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
     public function deleteUser($id)
@@ -157,6 +196,16 @@ class UserController extends Controller
         $role = $user->hasRole('Etudiant') ? 'Etudiant' : 'Pilote';
 
         $this->authorize(ability: $role === 'Etudiant' ? 'delete_student' : 'delete_pilot');
+
+        if ($role === 'Etudiant') {
+
+            DB::table('applications')
+                ->where('user_id', $user->id)
+                ->update(['deleted_at' => now()]);
+
+            $user->wishlists()->detach();
+
+        }
 
         // On effectue une suppression douce
         $user->delete();

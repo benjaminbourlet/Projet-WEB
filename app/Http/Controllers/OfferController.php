@@ -11,6 +11,7 @@ use App\Models\Sector;
 use App\Models\Offer;
 use App\Models\Skill;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -19,12 +20,68 @@ class OfferController extends Controller
 {
     use AuthorizesRequests;
 
-    public function show()
+        public function show(Request $request)
     {
         $this->authorize('search_offer');
-        $offers = Offer::paginate(9);
+
+        $query = Offer::query();
+
+        // Filtrer par secteur
+        if ($request->filled('sector')) {
+            $query->whereHas('company.sectors', function ($q) use ($request) {
+                $q->where('name', $request->sector);
+            });
+        }
+
+        // Filtrer par ville
+        if ($request->filled('city')) {
+            $query->whereHas('company.city', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->city . "%");
+            });
+        }
+
+        // Filtrer par compétences
+        if ($request->filled('skills')) {
+            $skills = explode(',', $request->skills);
+            $query->whereHas('skills', function ($q) use ($skills) {
+                $q->whereIn('name', $skills);
+            });
+        }
+
+        // Filtrer par salaire
+        if ($request->filled('min_salaire')) {
+            $query->where('salary', '>=', $request->min_salaire);
+        }
+        if ($request->filled('max_salaire')) {
+            $query->where('salary', '<=', $request->max_salaire);
+        }
+
+        // Filtrer par durée
+        if ($request->filled('duree_min')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [$request->duree_min]);
+        }
+        if ($request->filled('duree_max')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [$request->duree_max]);
+        }
+
+        // Filtrer par date de début
+        if ($request->filled('start_date')) {
+            $query->where('start_date', '>=', $request->start_date);
+        }
+
+        //Filtrer par entreprise
+        if ($request->filled('company')) {
+            $query->whereHas('company', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->company . "%");
+            });
+        }
+
+        // Récupérer les offres avec pagination
+        $offers = $query->paginate(9);
+
         return view('offers.list', compact('offers'));
     }
+
 
     public function showOfferRegister()
     {
@@ -77,11 +134,17 @@ class OfferController extends Controller
 
     public function showOfferInfo($id)
     {
-
         $offer = Offer::findOrFail($id);
-        return view('offers.info', compact('offer'));
+        
+        // Récupérer le nombre d'étudiants ayant postulé
+        $applicationsCount = $offer->user()->count();
+        
+        // Récupérer le nombre d'étudiants ayant mis l'offre en wishlist
+        $wishlistsCount = $offer->users()->count();
+        
+        return view('offers.info', compact('offer', 'applicationsCount', 'wishlistsCount'));
     }
-
+    
     public function showOfferUpdate($id)
     {
 
@@ -142,12 +205,22 @@ class OfferController extends Controller
         return redirect()->route('offer_list')->with('success', 'Offre mise à jour avec succès');
     }
 
-    public function deleteCompany($id)
+    public function deleteOffer($id)
     {
-        $company = Company::findOrFail($id);
-        // On effectue une suppression douce
-        $company->delete();
-
-        return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
+        $offer = Offer::findOrFail($id); // Trouve l'offre ou génère une erreur 404
+    
+        // Marquer les candidatures (applications) comme supprimées avec SoftDeletes
+        DB::table('applications')
+            ->where('offer_id', $offer->id)
+            ->update(['deleted_at' => now()]); 
+    
+        // Supprime les utilisateurs associés dans la table wishlists
+        $offer->users()->detach();
+    
+        // Effectuer une suppression douce de l'offre
+        $offer->delete();
+    
+        return redirect()->route('offer_list')->with('success', 'Offre supprimée avec succès');
     }
+    
 }

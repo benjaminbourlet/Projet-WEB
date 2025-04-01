@@ -4,87 +4,105 @@
 
 @include('partials.header')
 
+<main class="bg-white">
 
-<body class="bg-white">
+    @if(session('success'))
+        <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="container mx-auto pt-20 text-center bg-100">
         <div class="relative w-2/3 mx-auto flex items-center">
             <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
                 <img src="{{ asset('storage/images/loupe.png') }}" alt="Recherche" class="w-8 h-8">
             </button>
-            <input type="text" class="w-full pl-16 p-4 border-2 border-black rounded-full text-lg" placeholder="Rechercher...">
+            <input type="text" class="w-full pl-16 p-4 border-2 border-black rounded-full text-lg"
+                placeholder="Rechercher...">
         </div>
     </div>
 
-    <h1 class="text-4xl font-bold text-black text-center pt-20"> Stage - Entreprise à la une </h1>
-    <div class="m-4 mt-8">
-        <div x-data="{
-            slides: [
-                @foreach ($topCompanies as $company)
-                {
-                    imgSrc: '{{ $company->logo ? asset("storage/" . $company->logo) : asset("storage/images/LogoDQF.jpg") }}',
-                    imgAlt: 'Logo de {{ $company->name }}',
-                    title: '{{ $company->name }}',
-                    description: '{{ $company->offers_count }} offres publiées'
-                },
-                @endforeach
-            ],
-            currentSlideIndex: 1,
-            previous() {
-                if (this.currentSlideIndex > 1) {
-                    this.currentSlideIndex--;
-                } else {
-                    this.currentSlideIndex = this.slides.length;
-                }
-            },
-            next() {
-                if (this.currentSlideIndex < this.slides.length) {
-                    this.currentSlideIndex++;
-                } else {
-                    this.currentSlideIndex = 1;
-                }
-            }
-        }" class="relative w-full overflow-hidden">
+    <div class="container mx-auto pt-20 text-center">
+        <h1 class="text-4xl font-bold text-black text-center pt-20">Stage - Entreprise à la une</h1>
 
-            <!-- Bouton précédent -->
-            <button type="button"
-                class="absolute left-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-gray-500 p-2 text-white transition hover:bg-gray-700"
-                aria-label="previous slide" x-on:click="previous()">
-                &lt;
-            </button>
-            <!-- Bouton suivant -->
-            <button type="button"
-                class="absolute right-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-gray-500 p-2 text-white transition hover:bg-gray-700"
-                aria-label="next slide" x-on:click="next()">
-                &gt;
-            </button>
-            <!-- Slides -->
-            <div class="relative min-h-[50svh] w-full">
-                <template x-for="(slide, index) in slides" :key="index">
-                    <div x-cloak x-show="currentSlideIndex == index + 1" class="absolute inset-0"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-90">
-
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white text-center p-8">
-                            <h3 class="text-3xl font-bold" x-text="slide.title"></h3>
-                            <p class="text-lg" x-text="slide.description"></p>
+        @if ($topCompanies->isNotEmpty())
+            <div id="carousel" class="relative w-full">
+                <!-- Conteneur des entreprises -->
+                <div class="flex justify-center space-x-4 py-8 transition-transform duration-500 ease-in-out">
+                    @foreach ($topCompanies as $company)
+                        <div
+                            class="carousel-item hidden w-64 h-64 bg-gray-100 rounded-xl shadow-lg overflow-hidden flex-col items-center opacity-0 transition-opacity duration-500">
+                            <img src="{{ asset('storage/' . $company->logo_path) }}" class="w-32 h-32 rounded-full mx-auto"
+                                alt="Logo">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-semibold">{{ $company->name }}</h3>
+                                <p class="text-sm text-gray-600">{{ $company->offers_count }} offres publiées</p>
+                            </div>
                         </div>
+                    @endforeach
+                </div>
 
-                        <img class="absolute w-full h-full object-cover" x-bind:src="slide.imgSrc" x-bind:alt="slide.imgAlt" />
-                    </div>
-                </template>
+                <!-- Boutons de navigation -->
+                <button id="prevBtn"
+                    class="absolute left-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700 transition-transform duration-300 hover:scale-110">
+                    &lt;
+                </button>
+                <button id="nextBtn"
+                    class="absolute right-5 top-1/2 -translate-y-1/2 bg-gray-500 p-2 rounded-full text-white hover:bg-gray-700 transition-transform duration-300 hover:scale-110">
+                    &gt;
+                </button>
             </div>
-            <!-- Indicateurs -->
-            <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                <template x-for="(slide, index) in slides" :key="index">
-                    <button class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100"
-                        x-bind:class="currentSlideIndex === index + 1 ? 'bg-gray-800' : 'bg-white'"
-                        x-on:click="currentSlideIndex = index + 1"></button>
-                </template>
+        @else
+            <p class="text-gray-500 text-lg mt-5">Aucune entreprise mise en avant pour le moment.</p>
+        @endif
+    </div>
+
+    <!-- Section À propos de nous -->
+    <div class="container mx-auto pt-20 px-8">
+        <h2 class="text-3xl font-semibold text-[#387077]">À propos de nous</h2>
+        <p class="text-gray-700 mt-4">
+            Chez Job Finder, nous avons une mission claire : aider les étudiants à trouver un stage rapidement et
+            efficacement. Nous savons à quel point décrocher une première expérience professionnelle peut être un
+            parcours du combattant, c'est pourquoi nous avons créé une plateforme innovante qui simplifie la recherche
+            de stage.
+            <br>
+            <br>
+            Grâce à notre réseau d'entreprises partenaires et à notre technologie intelligente, nous mettons en relation
+            les étudiants avec des offres adaptées à leur profil et à leurs aspirations. Plus besoin de parcourir des
+            dizaines de sites : avec Job Finder, une seule candidature peut ouvrir plusieurs opportunités.
+            <br>
+            <br>
+            Que vous soyez à la recherche de votre premier stage ou d’une expérience clé pour votre avenir, Job Finder
+            vous accompagne à chaque étape. Trouvez le stage qui vous correspond, et lancez-vous dans le monde
+            professionnel en toute confiance !
+        </p>
+    </div>
+
+    <!-- Section Statistiques -->
+    <div class="container mx-auto pt-10 px-8">
+        <h2 class="text-3xl font-semibold text-[#387077]">À propos de nous</h2>
+        <div class="grid grid-cols-2 gap-6 mt-10 place-items-center -mx-2">
+            <div class="w-[300px] h-[250px] bg-[#dfdede] p-8 rounded-lg shadow-md text-center px-2">
+                <p class="text-3xl font-bold">{{ $totalOffers }}</p>
+                <img src="{{ asset('storage/images/job.png') }}" alt="Jobs" class="mx-auto w-20 h-20 my-4">
+                <p class="text-black">Offres disponibles actuellement, trouvez la parfaite pour vous !</p>
+            </div>
+            <div class="w-[300px] h-[250px] bg-[#dfdede] p-8 rounded-lg shadow-md text-center px-2">
+                <p class="text-3xl font-bold">{{ $totalCompanies }}</p>
+                <img src="{{ asset('storage/images/partners.png') }}" alt="Partenaires" class="mx-auto w-20 h-20 my-4">
+                <p class="text-black">Entreprises partenaires, une multitude de choix !</p>
+            </div>
+        </div>
+        <div class="flex justify-center mt-10">
+            <div class="w-[300px] h-[250px] bg-[#dfdede] p-8 rounded-lg shadow-md text-center">
+                <p class="text-3xl font-bold">{{ $totalStudents }}</p>
+                <img src="{{ asset('storage/images/students.png') }}" alt="Étudiants" class="mx-auto w-24 h-24 my-4">
+                <p class="text-black">Étudiants en recherche, vous n’êtes pas seul !</p>
             </div>
         </div>
     </div>
-</body>
-@include('partials.footer')
 
-</html>
+
+</main>
+
+@include('partials.footer')
