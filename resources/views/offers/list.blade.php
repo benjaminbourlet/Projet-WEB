@@ -9,12 +9,6 @@
     <!-- Contenu principal -->
     <main class="container mx-auto p-4 flex gap-6">
 
-    @if(session('success'))
-        <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
-            {{ session('success') }}
-        </div>
-    @endif
-
         <!-- Sidebar Filtres -->
         <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
 
@@ -95,21 +89,27 @@
 
                         @role('Admin|Etudiant')
                         <!-- Bouton Wishlist -->
-                        <div class="mt-2">
+                        <div class="m-4">
                             @if (auth()->user()->wishlists->contains($offer->id))
                                 <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
                                     method="POST">
                                     @csrf
-                                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500">
-                                        🩶
+                                    <button type="submit" class="relative group bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-500">
+                                        ❤️
+                                        <span class="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 z-40 transition-opacity duration-300">
+                                            Supprimer de la Wishlist
+                                        </span>
                                     </button>
                                 </form>
                             @else
                                 <form action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
                                     method="POST">
                                     @csrf
-                                    <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">
-                                        ❤️
+                                    <button type="submit" class="relative group bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-500">
+                                        🩶
+                                        <span class="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 z-40 transition-opacity duration-300">
+                                            Ajouter à la Wishlist
+                                        </span>
                                     </button>
                                 </form>
                             @endif
