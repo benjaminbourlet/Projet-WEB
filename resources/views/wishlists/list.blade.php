@@ -12,31 +12,50 @@
     <!-- Contenu de la page -->
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
 
-        <!-- Filtres -->
-        <div class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5" @click.stop>
-            <div class="mb-4">
-                <label class="block font-semibold">Dates</label>
-                <select class="w-full bg-teal-600 p-2 rounded">
-                    <option>-14j</option>
-                    <option>-7j</option>
-                    <option>-3j</option>
-                </select>
-            </div>
+        <!-- Sidebar Filtres -->
+        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
-            <div class="mb-4">
-                <label class="block font-semibold">Salaire</label>
-                <select class="w-full bg-teal-600 p-2 rounded">
-                    <option>1000 - 1500</option>
-                    <option>1500 - 2000</option>
-                    <option>2000 - 2500</option>
-                </select>
-            </div>
+            <!-- Barre de Recherche par entreprise -->
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
+                class="mb-4 text-black border p-2 rounded-full w-max">
 
-            <div class="mb-4">
-                <label class="block font-semibold">Lieux</label>
-                <input type="text" class="w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+            <!-- Filtres -->
+            <div class="grid">
+                <label for="">Entreprise</label>
+                <input type="text" name="company" value="{{ request('company') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+
+
+                <!-- Slider Salaire -->
+                <label for="salary_slider" class="block">Salaire :</label>
+                <div id="salary_slider" class="mb-4"></div>
+
+                <!-- Affichage des valeurs de salaire -->
+                <div class="flex justify-between">
+                    <span>Salaire Min: <span id="salary_min_value">{{ request('min_salaire') ?: '0' }}</span></span>
+                    <span>Salaire Max: <span id="salary_max_value">{{ request('max_salaire') ?: '10000' }}</span></span>
+                </div>
+
+                <!-- Valeurs de salaire min et max -->
+                <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
+                <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
+
+                <label for="" class="mt-6">Ville</label>
+                <input type="text" name="city" value="{{ request('city') }}" class="mb-4 w-full bg-teal-600 p-2 rounded"
+                    placeholder="Rechercher">
+                <label for="">Durée minimum</label>
+                <input type="text" name="duree_min" value="{{ request('duree_min') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+                <label for="">Durée maximum</label>
+                <input type="text" name="duree_max" value="{{ request('duree_max') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+                <label for="">Date de début</label>
+                <input type="text" name="start_date" value="{{ request('start_date') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
             </div>
-        </div>
+            <button type="submit"
+                class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
+        </form>
 
         <!-- Liste des offres -->
         <div>
@@ -55,7 +74,7 @@
                             @csrf
                             <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
                                 <!-- Icône de cœur -->
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                 </svg>
                             </button>
@@ -82,7 +101,7 @@
                     </div>
                     @role('Admin|Etudiant')
                     <div class="flex justify-center">
-                        <a href="{{ route('offer_apply', ['offer_id' => $offer->id]) }}"
+                        <a href="{{ route('offer_apply', ['offer_title', 'offer_id' => $offer->id]) }}"
                             class="bg-[#3D9DA9] text-white text-sm px-4 py-1.5 rounded-full hover:bg-[#3D8A8F] mb-2">
                             Candidater
                         </a>
@@ -161,19 +180,6 @@
             </template>
         </div>
 
-    </div>
-
-    <!-- Débug -->
-    <div class="text-sm text-red-500" x-text="JSON.stringify(selectedOffer)" @click.stop></div>
-    <div @click.stop>
-        <!-- Affiche la valeur et le type de selectedOffer.id -->
-        <div class="text-sm text-blue-500">
-            selectedOffer.id: <span x-text="typeof selectedOffer?.id"></span> - <span x-text="selectedOffer?.id"></span>
-        </div>
-        <!-- Affiche la valeur et le type de $offer->id -->
-        <div class="text-sm text-green-500">
-            $offer->id: <span x-text="'number'"></span> - <span>{{ $offer->id }}</span>
-        </div>
     </div>
 
 </main>
