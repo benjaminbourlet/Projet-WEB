@@ -105,6 +105,8 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pilotes</a></li>
                             <li><a href="{{ route('students_list') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Étudiants</a></li>
+                            <li><a href="{{ route('backpack.dashboard') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pannel Administrateur</a></li>
                             @endrole
 
                             @role('Pilote')
