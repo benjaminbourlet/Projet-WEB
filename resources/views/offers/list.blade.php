@@ -5,79 +5,82 @@
 
 @section('content')
 
-<!-- Contenu principal -->
-<div x-data="{ selectedOffer: null }">
-
-    @if(session('success'))
-    <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
+@if(session('success'))
+    <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block flex justify-center">
         {{ session('success') }}
     </div>
     @endif
 
+
+<!-- Contenu principal -->
+<div x-data="{ selectedOffer: null }">
+
     <!-- Contenu de la page -->
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
         <!-- Sidebar Filtres -->
-        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5 inline-block md:top-8 md:max-h-max sticky">
+        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
             <!-- Barre de Recherche par entreprise -->
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
                 class="mb-4 text-black border p-2 rounded-full w-max">
 
-        <!-- Filtres -->
-        <div class="grid">
+            <!-- Filtres -->
+            <div class="flex flex-col">
 
-            <!--Filtre par entreprise-->
-            <label for="">Entreprise</label>
-            <select name="company" class="text-black textborder p-2 rounded-md m-2 w-min h-min">
-                <option value="">Toutes les entreprises</option>
-                @foreach ($companies as $company)
+                <!--Filtre par entreprise-->
+                <label for="">Entreprise</label>
+                <select name="company" class="text-black textborder p-2 rounded-md m-2 max-w-max max-h-max">
+                    <option value="">Toutes les entreprises</option>
+                    @foreach ($companies as $company)
                     <option value="{{ $company->id }}" {{ request('company') == $company->id ? 'selected' : '' }}>
                         {{ $company->name }}
                     </option>
-                @endforeach
-            </select>
+                    @endforeach
+                </select>
 
                 <!-- Slider Salaire -->
                 <label for="salary_slider" class="block">Salaire :</label>
-                <div id="salary_slider" class="mb-4"></div>
+                <div class="p-2">
+                    <div id="salary_slider" class="mb-2"></div>
 
-                <!-- Affichage des valeurs de salaire -->
-                <div class="flex justify-between">
-                    <span>Salaire Min: <span id="salary_min_value">{{ request('min_salaire') ?: '0' }}</span></span>
-                    <span>Salaire Max: <span id="salary_max_value">{{ request('max_salaire') ?: '10000' }}</span></span>
+                    <!-- Affichage des valeurs de salaire -->
+                    <div class="flex justify-between">
+                        <span>Salaire Min: <span id="salary_min_value">{{ request('min_salaire') ?: '0' }}</span></span>
+                        <span>Salaire Max: <span id="salary_max_value">{{ request('max_salaire') ?: '10000' }}</span></span>
+                    </div>
+
+                    <!-- Valeurs de salaire min et max -->
+                    <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
+                    <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
                 </div>
 
-                <!-- Valeurs de salaire min et max -->
-                <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
-                <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
-
-            <!--Filtre Ville-->
-            <label for="" class="mt-6 text-black">Ville</label>
-            <select name="city" class="text-black border p-2 rounded-md m-2 w-min h-min">
-                <option value="">Toutes les villes</option>
-                @foreach ($cities as $city)
+                <!--Filtre Ville-->
+                <label for="" class="text-white">Ville</label>
+                <select name="city" class="text-black border p-2 rounded-md m-2 max-w-max max-h-max">
+                    <option value="">Toutes les villes</option>
+                    @foreach ($cities as $city)
                     <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
                         {{ $city->name }}
                     </option>
-                @endforeach
-            </select>
+                    @endforeach
+                </select>
 
-            <!--Filtre Durée minimum et maximum du stage-->
-            <label for="">Durée minimum</label>
-            <input type="text" name="duree_min" value="{{ request('duree_min') }}"
-                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-            <label for="">Durée maximum</label>
-            <input type="text" name="duree_max" value="{{ request('duree_max') }}"
-                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+                <!--Filtre Durée minimum et maximum du stage-->
+                <label for="">Durée minimum</label>
+                <input type="text" name="duree_min" value="{{ request('duree_min') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+                <label for="">Durée maximum</label>
+                <input type="text" name="duree_max" value="{{ request('duree_max') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
 
-            <!--Filtre date de début stage-->
-            <label for="">Date de début</label>
-            <input type="text" name="start_date" value="{{ request('start_date') }}"
-                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-        </div>
-        <button type="submit"
-            class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
-    </form>
+                <!--Filtre date de début stage-->
+                <label for="">Date de début</label>
+                <input type="text" name="start_date" value="{{ request('start_date') }}"
+                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+            </div>
+            <button type="submit"
+                class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
+        </form>
 
         <!-- Liste des offres -->
         <div>
@@ -97,7 +100,7 @@
                 <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="window.innerWidth < 768 ? window.location.href = '{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}' : selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
                     <div class="flex items-center">
                         @if (auth()->user()->wishlists->contains($offer->id))
-                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
+                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto mr-2">
                             @csrf
                             <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
                                 <!-- Icône de cœur -->
@@ -109,7 +112,7 @@
                         @else
                         <form action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
                             @csrf
-                            <button type="submit" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <button type="submit" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2">
                                 <!-- Icône de cœur vide -->
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="white" stroke="black" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3c3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -146,11 +149,6 @@
                     @endrole
                 </div>
                 @endforeach
-            </div>
-
-            <!-- Pagination -->
-            <div class="mt-4">
-                {{ $offers->links() }}
             </div>
         </div>
 
@@ -215,8 +213,12 @@
                 </div> <!-- Fin des compétences requises -->
             </div>
         </div>
-
     </div>
+    <!-- Pagination -->
+    <div class="mt-4 flex justify-end mr-8">
+        {{ $offers->links() }}
+    </div>
+
 </div>
 
 @endsection

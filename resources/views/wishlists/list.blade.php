@@ -13,7 +13,7 @@
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
 
         <!-- Sidebar Filtres -->
-        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5 inline-block md:top-8 md:max-h-max sticky">
+        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
             <!-- Barre de Recherche par entreprise -->
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
@@ -72,7 +72,7 @@
                         @if (auth()->user()->wishlists->contains($offer->id))
                         <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
                             @csrf
-                            <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
+                            <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none mr-2">
                                 <!-- Icône de cœur -->
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="black" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
