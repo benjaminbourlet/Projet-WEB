@@ -77,7 +77,7 @@ class OfferController extends Controller
         }
 
         // Récupérer les offres avec pagination
-        $offers = $query->paginate(9);
+        $offers = $query->paginate(10);
 
         return view('offers.list', compact('offers'));
     }
