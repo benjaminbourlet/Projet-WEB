@@ -2,7 +2,6 @@
 
 @section('title', 'Votre Profile')
 
-@include('partials.header')
 
 @section('content')
     <main>
@@ -47,5 +46,4 @@
             </div>
         </div>
     </main>
-    @include('partials.footer')
 @endsection

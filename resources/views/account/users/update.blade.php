@@ -2,7 +2,6 @@
 
 @section('title', 'Informations de ' . $user->name)
 
-@include('partials.header')
 
 @section('content')
     <main>
@@ -147,5 +146,4 @@
         </div>
     </main>
 
-    @include('partials.footer')
 @endsection

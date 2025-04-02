@@ -2,7 +2,6 @@
 
 @section('title', 'Créer une offre')
 
-@include('partials.header')
 
 @section('content')
 <main>
@@ -109,5 +108,4 @@
         </form>
     </div>
 </main>
-@include('partials.footer')
 @endsection

@@ -2,10 +2,7 @@
 
 @section('title', 'Ma Wishlist')
 
-@include('partials.header')
-
 @section('content')
-    <main class="flex-grow container mx-auto p-4 flex flex-col gap-6">
         <h1 class="text-2xl font-bold mb-4">Ma Wishlist</h1>
 
         @if (session('error'))
@@ -36,7 +33,4 @@
         @else
             <p class="text-gray-500">Votre wishlist est vide.</p>
         @endif
-    </main>
-
-    @include('partials.footer')
 @endsection
