@@ -1,13 +1,12 @@
-@extends('layouts.app')
-
-<body>
-    <nav class="bg-[#5A8E95] border-gray-200">
+<header>
+    <nav class="bg-[#5A8E95] mb-10 ">
         <div class="max-w-100 h-20 flex justify-between items-center mx-6 py-0">
             <!-- Logo + Texte -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
                 <a href="{{ route('home') }}">
                     <button>
-                        <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="w-18 h-16">
+                        <img src="{{ asset('storage/images/logo_2.png') }}" alt="Logo" class="w-18 h-auto"
+                            style="max-width: 70px;">
                     </button>
                 </a>
                 <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage Finder</span>
@@ -71,12 +70,11 @@
             <!-- User Account à droite -->
             <div class="flex items-center space-x-3">
                 @auth
-                    <!-- Affiche la photo de profil si l'utilisateur est connecté -->
                     <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300"
                         id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                         data-dropdown-placement="bottom">
-                        <img class="rounded-full" src="{{ asset('storage/' . auth()->user()->pp_path) }}" alt="user photo"
-                            width="50" height="50">
+                        <img class="w-12 h-12 rounded-full object-cover object-center"
+                            src="{{ asset('storage/' . auth()->user()->pp_path) }}" alt="user photo">
                     </button>
                 @else
                     <!-- Affiche l'icône de connexion si l'utilisateur n'est pas connecté -->
@@ -154,6 +152,5 @@
 
         </div>
     </nav>
-</body>
 
-</html>
+</header>

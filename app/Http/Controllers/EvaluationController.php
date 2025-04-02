@@ -76,7 +76,9 @@ class EvaluationController extends Controller
                 'evaluations.comment',
                 'evaluations.created_at',
                 'companies.name as company_name',
-                'users.name as user_name'
+                'companies.id as company_id',
+                'users.name as user_name',
+                'users.first_name as user_first_name',
             )
             ->paginate(10); // Paginera les résultats par 10 éléments par page
 

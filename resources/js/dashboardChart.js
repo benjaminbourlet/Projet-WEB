@@ -35,3 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+setTimeout(() => {
+    let successMessage = document.getElementById('success-message');
+    if (successMessage) {
+        successMessage.style.transition = "opacity 1s";
+        successMessage.style.opacity = "0";
+        setTimeout(() => successMessage.remove(), 1000); // Supprime l'élément après le fondu
+    }
+}, 1500); // 3 secondes avant de disparaître

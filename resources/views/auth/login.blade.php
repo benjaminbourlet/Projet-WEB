@@ -2,7 +2,10 @@
 
 @section('title', 'Connexion')
 
+@include('partials.header')
+
 @section('content')
+<main>
   <div class="py-40 lg:py-60 md:py-20 flex items-center justify-center">
     <div
     class="bg-white shadow-md max-w-md md:max-w-3xl lg:max-w-4xl md:h-auto lg:h-full lg:max-h-screen md:flex rounded-lg">
@@ -41,4 +44,6 @@
     </div>
     </div>
   </div>
+</main>
+@include('partials.footer')
 @endsection

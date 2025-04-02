@@ -25,6 +25,14 @@ Route::get('/mentions-legales', function () {
     return view('legal_mention');
 })->name('mentions-legales');
 
+Route::get('/qui_sommes_nous', function () {
+    return view('qui_sommes_nous');
+})->name('qui_sommes_nous');
+
+Route::get('/on_recrute', function () {
+    return view('on_recrute');
+})->name('on_recrute');
+
 
 // Dashboard
 use App\Http\Controllers\DashboardController;
@@ -50,7 +58,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/evaluations/{#}', [EvaluationController::class, '#'])->name('evaluate_list');
-    Route::get('/companies/{company_id}/evaluate',[EvaluationController::class, 'showEvaluationsCreate'])->name('evaluations_create');
+    Route::get('/companies/{company_id}/evaluate', [EvaluationController::class, 'showEvaluationsCreate'])->name('evaluations_create');
     Route::post('/companies/{company_id}/evaluate/create', [EvaluationController::class, 'evaluationsCreate'])->name('evaluationsCreate');
     Route::get('/companies/{company_id}/evaluations', [EvaluationController::class, 'showEvaluationsCompany'])->name('evaluations_company_list');
     Route::get('/my_evaluations/{user_id}', [EvaluationController::class, 'index'])->name('evaluations_user_list');

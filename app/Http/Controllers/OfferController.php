@@ -11,6 +11,7 @@ use App\Models\Sector;
 use App\Models\Offer;
 use App\Models\Skill;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -142,11 +143,17 @@ class OfferController extends Controller
 
     public function showOfferInfo($id)
     {
-
         $offer = Offer::findOrFail($id);
-        return view('offers.info', compact('offer'));
+        
+        // Récupérer le nombre d'étudiants ayant postulé
+        $applicationsCount = $offer->user()->count();
+        
+        // Récupérer le nombre d'étudiants ayant mis l'offre en wishlist
+        $wishlistsCount = $offer->users()->count();
+        
+        return view('offers.info', compact('offer', 'applicationsCount', 'wishlistsCount'));
     }
-
+    
     public function showOfferUpdate($id)
     {
 
@@ -209,10 +216,20 @@ class OfferController extends Controller
 
     public function deleteOffer($id)
     {
-        $offer = Offer::findOrFail($id);
-        // On effectue une suppression douce
+        $offer = Offer::findOrFail($id); // Trouve l'offre ou génère une erreur 404
+    
+        // Marquer les candidatures (applications) comme supprimées avec SoftDeletes
+        DB::table('applications')
+            ->where('offer_id', $offer->id)
+            ->update(['deleted_at' => now()]); 
+    
+        // Supprime les utilisateurs associés dans la table wishlists
+        $offer->users()->detach();
+    
+        // Effectuer une suppression douce de l'offre
         $offer->delete();
-
+    
         return redirect()->route('offer_list')->with('success', 'Offre supprimée avec succès');
     }
+    
 }
