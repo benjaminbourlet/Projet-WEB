@@ -2,7 +2,6 @@
 
 @section('title', 'Dashboard')
 
-@include('partials.header')
 
 @section('content')
 <main>
@@ -44,5 +43,4 @@
     </div>
 </div>
 </main>
-@include('partials.footer')
 @endsection

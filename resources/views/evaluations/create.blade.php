@@ -2,7 +2,6 @@
 
 @section('title', 'Evaluate' . $company->name)
 
-@include('partials.header')
 @section('content')
     <main>
         <div class="flex items-center justify-center auto-h-screen bg-gray-100">
@@ -65,5 +64,4 @@
             </script>
 
     </main>
-    @include('partials.footer')
 @endsection

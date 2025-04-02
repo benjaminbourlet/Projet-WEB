@@ -2,7 +2,6 @@
 
 @section('title', 'Mes candidatures')
 
-@include('partials.header')
 
 @section('content')
 
@@ -46,5 +45,4 @@
         @endif
     </main>
 
-    @include('partials.footer')
 @endsection

@@ -2,40 +2,52 @@
 
 @section('title', 'Avis')
 
-@include('partials.header')
-
 @section('content')
+        <!-- Liste des évaluations -->
+        <div class="w-4/5">
+            <div class="mb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">Avis</h1>
+            </div>
 
-    <main class="flex-grow container mx-auto p-4 flex gap-6">
-        <div class="container">
-            <h1 class="mb-4">All Evaluations</h1>
+            <!-- Liste des avis -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold mb-4">Liste des avis :</h4>
+                @forelse ($evaluations as $evaluation)
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <a href="{{ route('company_info', ['id' => $evaluation->company_id]) }}"
+                            >
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">
+                                   Utilisateur : {{ $evaluation->user_first_name ?? 'Utilisateur inconnu' }}
+                                    {{ $evaluation->user_name ?? '' }}
+                                </span>
+                                <span
+                                    class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($evaluation->created_at)->format('d M Y') }}</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">
+                                    Entreprise : {{ $evaluation->company_name ?? 'Entreprise inconnue' }}
+                                </span>
+                            </div>
+                            <div class="flex mb-2">
+                                @for ($i = 0; $i < $evaluation->grade; $i++)
+                                    <span class="text-yellow-500">&#9733;</span>
+                                @endfor
+                            </div>
+                            <div class="italic text-gray-600">
+                                <p>{{ $evaluation->comment ?? 'Pas de commentaire' }}</p>
+                            </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500">Aucun avis disponible.</p>
+                @endforelse
+            </div>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>User</th>
-                        <th>Grade</th>
-                        <th>Comment</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($evaluations as $evaluation)
-                        <tr>
-                            <td>{{ $evaluation->company_name }}</td>
-                            <td>{{ $evaluation->user_name }}</td>
-                            <td>{{ $evaluation->grade }}/5</td>
-                            <td>{{ $evaluation->comment ?? 'No comment' }}</td>
-                            <td>{{ \Carbon\Carbon::parse($evaluation->created_at)->format('d M Y') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            {{ $evaluations->links() }} <!-- Pagination links -->
+            <!-- Pagination -->
+            @if ($evaluations->hasPages())
+                <div class="mt-6">
+                    {{ $evaluations->links() }}
+                </div>
+            @endif
         </div>
-    </main>
-    @include('partials.footer')
-
 @endsection

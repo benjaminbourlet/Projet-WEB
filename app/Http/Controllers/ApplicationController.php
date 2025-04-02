@@ -66,11 +66,8 @@ class ApplicationController extends Controller
         $user = User::findOrFail($user_id); // Récupère l'utilisateur avec l'ID fourni. Si l'utilisateur n'est pas trouvé, une erreur 404 est renvoyée.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote')) {
-            // Si l'utilisateur n'est pas admin ou pilote, il doit être l'utilisateur connecté.
-            if ($user_id != auth()->id()) { // Vérifie si l'ID de l'utilisateur correspond à l'utilisateur connecté.
-                return redirect()->route('offer_list')->with('error', 'Vous n\'êtes pas autorisé à voir cette candidature.'); // Redirige avec un message d'erreur si ce n'est pas le cas.
-            }
+        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette candidature.');
         }
 
         // Vérifie si une candidature existe pour cet utilisateur et cette offre.
@@ -90,11 +87,8 @@ class ApplicationController extends Controller
         $user = User::findOrFail($user_id); // Récupère l'utilisateur en fonction de l'ID, renvoie une erreur 404 si l'utilisateur n'est pas trouvé.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote')) {
-            // Si l'utilisateur n'est pas admin ou pilote, il doit être l'utilisateur connecté.
-            if ($user_id != auth()->id()) { // Vérifie si l'ID de l'utilisateur correspond à l'utilisateur connecté.
-                return redirect()->route('home')->with('error', 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.'); // Redirige avec un message d'erreur si ce n'est pas le cas.
-            }
+        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
         }
 
         // Récupère les candidatures de l'utilisateur avec une pagination de 10 résultats par page.
@@ -105,8 +99,8 @@ class ApplicationController extends Controller
 
     public function showApplicationUpdate($user_id, $offer_id) 
     {
-        if (!auth()->user()->hasRole('Admin')) { // Si l'utilisateur n'est pas un administrateur.
-            return redirect()->route('home')->with('error', 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.'); // Redirige avec un message d'erreur.
+        if (!auth()->user()->hasRole('Admin')) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier cette candidature.');
         }
 
         // Recherche de la candidature pour un utilisateur et une offre spécifiques.

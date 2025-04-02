@@ -2,7 +2,6 @@
 
 @section('title', $role . 's')
 
-@include('partials.header')
 
 @section('content')
     <main>
@@ -98,5 +97,4 @@
         </div>
     </main>
 
-    @include('partials.footer')
-@endsection
+    @endsection

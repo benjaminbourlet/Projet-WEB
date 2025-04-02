@@ -2,10 +2,10 @@
 
 @section('title', 'Ma Wishlist')
 
-@include('partials.header')
+@section('content')
 
 
-<main x-data="{ selectedOffer: null }">
+<div x-data="{ selectedOffer: null }">
     <!-- Titre de la page -->
     <h1 class="text-2xl font-bold m-4">Ma Wishlist</h1>
 
@@ -182,6 +182,6 @@
 
     </div>
 
-</main>
+</div>
 
-@include('partials.footer')
+@endsection
