@@ -70,7 +70,7 @@
                 <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="window.innerWidth < 768 ? window.location.href = '{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}' : selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
                     <div class="flex items-center">
                         @if (auth()->user()->wishlists->contains($offer->id))
-                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="mt-4 flex items-center h-auto">
+                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
                             @csrf
                             <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
                                 <!-- Icône de cœur -->

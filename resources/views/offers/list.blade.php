@@ -23,12 +23,19 @@
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
                 class="mb-4 text-black border p-2 rounded-full w-max">
 
-            <!-- Filtres -->
-            <div class="grid">
-                <label for="">Entreprise</label>
-                <input type="text" name="company" value="{{ request('company') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+        <!-- Filtres -->
+        <div class="grid">
 
+            <!--Filtre par entreprise-->
+            <label for="">Entreprise</label>
+            <select name="company" class="text-black textborder p-2 rounded-md m-2 w-min h-min">
+                <option value="">Toutes les entreprises</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}" {{ request('company') == $company->id ? 'selected' : '' }}>
+                        {{ $company->name }}
+                    </option>
+                @endforeach
+            </select>
 
                 <!-- Slider Salaire -->
                 <label for="salary_slider" class="block">Salaire :</label>
@@ -44,22 +51,33 @@
                 <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
                 <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
 
-                <label for="" class="mt-6">Ville</label>
-                <input type="text" name="city" value="{{ request('city') }}" class="mb-4 w-full bg-teal-600 p-2 rounded"
-                    placeholder="Rechercher">
-                <label for="">Durée minimum</label>
-                <input type="text" name="duree_min" value="{{ request('duree_min') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-                <label for="">Durée maximum</label>
-                <input type="text" name="duree_max" value="{{ request('duree_max') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-                <label for="">Date de début</label>
-                <input type="text" name="start_date" value="{{ request('start_date') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-            </div>
-            <button type="submit"
-                class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
-        </form>
+            <!--Filtre Ville-->
+            <label for="" class="mt-6 text-black">Ville</label>
+            <select name="city" class="text-black border p-2 rounded-md m-2 w-min h-min">
+                <option value="">Toutes les villes</option>
+                @foreach ($cities as $city)
+                    <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
+                        {{ $city->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <!--Filtre Durée minimum et maximum du stage-->
+            <label for="">Durée minimum</label>
+            <input type="text" name="duree_min" value="{{ request('duree_min') }}"
+                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+            <label for="">Durée maximum</label>
+            <input type="text" name="duree_max" value="{{ request('duree_max') }}"
+                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+
+            <!--Filtre date de début stage-->
+            <label for="">Date de début</label>
+            <input type="text" name="start_date" value="{{ request('start_date') }}"
+                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+        </div>
+        <button type="submit"
+            class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
+    </form>
 
         <!-- Liste des offres -->
         <div>
@@ -79,7 +97,7 @@
                 <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="window.innerWidth < 768 ? window.location.href = '{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}' : selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
                     <div class="flex items-center">
                         @if (auth()->user()->wishlists->contains($offer->id))
-                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="mt-4 flex items-center h-auto">
+                        <form action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
                             @csrf
                             <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
                                 <!-- Icône de cœur -->
@@ -89,7 +107,7 @@
                             </button>
                         </form>
                         @else
-                        <form action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="mt-4 flex items-center h-auto">
+                        <form action="{{ route('wishlist_add', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}" method="POST" class="flex items-center h-auto">
                             @csrf
                             <button type="submit" class="text-gray-500 hover:text-gray-700 focus:outline-none">
                                 <!-- Icône de cœur vide -->
