@@ -25,9 +25,9 @@ class AuthController extends Controller
 
         // Vérifie les identifiants et tente d'authentifier l'utilisateur.
         if (Auth::attempt($request->only('email', 'password'))) { 
-            $request->session()->regenerate(); // Régénère la session pour éviter les attaques de session fixation.
-            return redirect()->route('home'); // Redirige l'utilisateur vers la page d'accueil après connexion réussie.
-        }
+            $request->session()->regenerate(); // Régénère la session
+            return redirect()->route('home')->with('success', 'Connexion réussie !'); // Ajoute un message flash
+        }        
 
         // Si l'authentification échoue, retourne une erreur de validation.
         throw ValidationException::withMessages([

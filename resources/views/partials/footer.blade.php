@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
-<body>
-    <footer>
-        <div class="bg-[#5A8E95] w-full flex flex-wrap items-center justify-between px-6">
+    <footer class="bg-[#5A8E95] mt-10">
+        <div class="w-full flex flex-wrap items-center justify-between px-6">
             <div class="w-full lg:w-auto flex flex-row lg:flex-col items-center justify-center lg:justify-start">
                 <!-- Dropdown button pour la langue -->
                 <div class="mx-6 py-4">
@@ -133,7 +132,7 @@
                             src="{{ asset('storage/images/logo_linkedin.svg') }}" width="30" height="30"></a>
                 </div>
                 <a href="{{ route('mentions-legales') }}"
-                    class="block text-sm text-white sm:text-center p-4 bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300">
+                    class="block text-sm text-white sm:text-center p-4 rounded-lg transition duration-300">
                     Mentions Légales - Société Stage Finder ™ . All Rights Reserved.
                 </a>
     </footer>

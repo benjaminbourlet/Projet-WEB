@@ -11,6 +11,8 @@ use App\Models\City;
 use App\Models\Sector;
 use App\Models\Skill;
 use App\Models\Offer;
+use App\Models\Application;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -87,8 +89,8 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
         $cities = City::all();
-    
-        // 🔥 Récupérer les 5 compétences les plus demandées
+
+        // Récupérer les 5 compétences les plus demandées
         $topSkills = Skill::select('skills.name')
             ->join('offers_skills', 'skills.id', '=', 'offers_skills.skill_id')
             ->join('offers', 'offers_skills.offer_id', '=', 'offers.id')
@@ -98,33 +100,37 @@ class CompanyController extends Controller
             ->limit(5)
             ->pluck('skills.name')
             ->toArray();
-    
-        // 💰 Calculer le salaire moyen des offres
+
+        // Calculer le salaire moyen des offres
         $averageSalary = round(Offer::where('company_id', $id)
             ->whereNotNull('salary')
             ->avg('salary') ?? 0);
-    
-        // 📆 Calculer la durée moyenne des offres en jours
+
+        // Calculer la durée moyenne des offres en jours
         $averageDuration = round(Offer::where('company_id', $id)
             ->whereNotNull('start_date')
             ->whereNotNull('end_date')
             ->selectRaw('AVG(DATEDIFF(end_date, start_date)) as avg_duration')
             ->value('avg_duration') ?? 0);
-    
-        return view('companies.info', compact('company', 'cities', 'topSkills', 'averageSalary', 'averageDuration'));
+
+        $applicationsCount = Application::whereHas('offer', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })->count();
+
+        return view('companies.info', compact('company', 'cities', 'topSkills', 'averageSalary', 'averageDuration', 'applicationsCount'));
     }
-    
+
 
     public function showCompanyUpdate($id)
     {
 
         $this->authorize('edit_company');
         $company = Company::findOrFail($id);
-        
+
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
         return view('companies.update', compact('company', 'cities', 'sectors'));
-    }    
+    }
 
     public function updateCompany(Request $request, $id)
     {
@@ -188,8 +194,28 @@ class CompanyController extends Controller
     {
         $this->authorize('delete_company');
         $company = Company::findOrFail($id);
-        // On effectue une suppression douce
-        $company->delete();
+
+        foreach ($company->offers as $offer) {
+            // Supprime les entrées dans la table pivot applications (candidatures)
+            //$offer->user()->detach();
+
+            DB::table('applications')
+            ->where('offer_id', $offer->id)
+            ->update(['deleted_at' => now()]);
+        
+            // Supprime les entrées dans la table pivot wishlists (souhaits)
+            $offer->users()->detach();
+        }
+        
+        // Supprime les offres associées à l'entreprise
+        $company->offers()->delete();
+        
+        DB::table('evaluations')
+        ->where('company_id', $company->id)
+        ->update(['deleted_at' => now()]);
+        
+        // Suppression douce de l'entreprise
+        $company->delete();        
 
         return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
     }
