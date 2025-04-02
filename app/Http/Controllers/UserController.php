@@ -28,15 +28,27 @@ class UserController extends Controller
         }
         return $request->classe_id ? Classe::findOrFail($request->classe_id) : null;
     }
+
     public function show(Request $request)
     {
         $role = $this->getRole($request->route()->getName());
         $this->authorize($role === 'Etudiant' ? 'search_student' : 'search_pilot');
 
-        $classes = auth()->user()->hasRole('Admin') ? Classe::all() : auth()->user()->classesPilots; //()->pluck('id');
+        // Récupération des classes en fonction du rôle de l'utilisateur
+        $classes = auth()->user()->hasRole('Admin') ? Classe::all() : auth()->user()->classesPilots;
 
+        // Recherche et filtres
         $users = User::role($role)
-            ->when($request->class_id, fn($query) => $query->where('classe_id', $request->class_id))
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->search . '%')
+                      ->orWhere('first_name', 'like', '%' . $request->search . '%')
+                      ->orWhere('email', 'like', '%' . $request->search . '%');
+                });
+            })
+            ->when($request->class_id, function ($query) use ($request) {
+                $query->where('classe_id', $request->class_id);
+            })
             ->paginate(10);
 
         return view('account.users.list', compact('users', 'role', 'classes'));
