@@ -88,10 +88,10 @@
                         <h2 class="mb-6 text-xl font-bold text-white ">L'Entreprise</h2>
                         <ul class="text-white font-medium">
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">QUI SOMMES NOUS ?</a>
+                                <a href="{{ route('qui_sommes_nous') }}" class="hover:underline">QUI SOMMES NOUS ?</a>
                             </li>
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">ON RECRUTE !</a>
+                                <a href="{{ route('on_recrute') }}" class="hover:underline">ON RECRUTE !</a>
                             </li>
                         </ul>
                     </div>
