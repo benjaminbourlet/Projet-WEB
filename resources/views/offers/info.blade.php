@@ -3,8 +3,8 @@
 @section('title', 'Informations sur ' . $offer->title)
 
 @section('content')
-<div class="flex gap-6">
-    <div class="bg-[#5A8E95] shadow-md rounded-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-2/3 mx-auto">
+<div class="flex gap-6 px-2">
+    <div class="bg-[#5A8E95] shadow-md rounded-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-3/4 mx-auto">
 
         <div class="flex items-center">
             @if (auth()->user()->wishlists->contains($offer->id))
@@ -99,7 +99,9 @@
         </div>
         @endrole
 
-        <a href="{{ url()->previous() }}" class="inline-block text-gray-200 hover:underline">Retour</a>
+        <a href="javascript:window.history.back();" class="inline-block text-gray-200 hover:underline">
+            Retour
+        </a>
 
         @role('Admin|Pilote')
         <div class="flex gap-6">
@@ -107,7 +109,7 @@
             <div class="mb-4 flex justify-between">
                 <!-- Bouton Modifier -->
                 <a href="{{ route('offer_edit', [$offer->id, 'title' => Str::slug($offer->title)]) }}"
-                class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">
+                    class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">
                     Modifier
                 </a>
 
@@ -118,7 +120,7 @@
                 onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-900">
                     Supprimer
                 </button>
             </form>
