@@ -6,7 +6,7 @@
 @section('content')
 
 <!-- Contenu principal -->
-<main x-data="{ selectedOffer: null }">
+<div x-data="{ selectedOffer: null }">
 
     @if(session('success'))
     <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
@@ -199,6 +199,6 @@
         </div>
 
     </div>
-</main>
+</div>
 
 @endsection
