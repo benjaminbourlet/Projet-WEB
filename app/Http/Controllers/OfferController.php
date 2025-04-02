@@ -21,32 +21,41 @@ class OfferController extends Controller
 
         public function show(Request $request)
     {
+
+        $companies = Company::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
+
         $this->authorize('search_offer');
 
         $query = Offer::query();
 
+        /*
         // Filtrer par secteur
         if ($request->filled('sector')) {
             $query->whereHas('company.sectors', function ($q) use ($request) {
                 $q->where('name', $request->sector);
             });
         }
+        */
 
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('description', 'LIKE', "%{$search}%");
+        }
         // Filtrer par ville
-        if ($request->filled('city')) {
-            $query->whereHas('company.city', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->city . "%");
-            });
+        if ($request->filled('search')) {
+            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('description', 'LIKE', '%' . $request->search . '%');
         }
 
-        // Filtrer par compétences
+        /*
         if ($request->filled('skills')) {
             $skills = explode(',', $request->skills);
             $query->whereHas('skills', function ($q) use ($skills) {
                 $q->whereIn('name', $skills);
             });
         }
-
+        */
         // Filtrer par salaire
         if ($request->filled('min_salaire')) {
             $query->where('salary', '>=', $request->min_salaire);
@@ -78,7 +87,7 @@ class OfferController extends Controller
         // Récupérer les offres avec pagination
         $offers = $query->paginate(9);
 
-        return view('offers.list', compact('offers'));
+        return view('offers.list', compact('offers', 'cities', 'companies'));
     }
 
 

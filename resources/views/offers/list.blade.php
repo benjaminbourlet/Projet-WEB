@@ -8,7 +8,7 @@
 <main class="container mx-auto p-4 flex gap-6">
 
     <!-- Sidebar Filtres -->
-    <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
+    <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-min">
 
         <!-- Barre de Recherche par entreprise -->
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
@@ -16,10 +16,17 @@
 
         <!-- Filtres -->
         <div class="grid">
-            <label for="">Entreprise</label>
-            <input type="text" name="company" value="{{ request('company') }}"
-                class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
 
+            <!--Filtre par entreprise-->
+            <label for="">Entreprise</label>
+            <select name="company" class="text-black textborder p-2 rounded-md m-2 w-min h-min">
+                <option value="">Toutes les entreprises</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}" {{ request('company') == $company->id ? 'selected' : '' }}>
+                        {{ $company->name }}
+                    </option>
+                @endforeach
+            </select>
 
             <!-- Slider Salaire -->
             <label for="salary_slider" class="block">Salaire :</label>
@@ -35,15 +42,26 @@
             <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
             <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
 
-            <label for="" class="mt-6">Ville</label>
-            <input type="text" name="city" value="{{ request('city') }}"
-                class="mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+            <!--Filtre Ville-->
+            <label for="" class="mt-6 text-black">Ville</label>
+            <select name="city" class="text-black border p-2 rounded-md m-2 w-min h-min">
+                <option value="">Toutes les villes</option>
+                @foreach ($cities as $city)
+                    <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
+                        {{ $city->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <!--Filtre Durée minimum et maximum du stage-->
             <label for="">Durée minimum</label>
             <input type="text" name="duree_min" value="{{ request('duree_min') }}"
                 class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
             <label for="">Durée maximum</label>
             <input type="text" name="duree_max" value="{{ request('duree_max') }}"
                 class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+
+            <!--Filtre date de début stage-->
             <label for="">Date de début</label>
             <input type="text" name="start_date" value="{{ request('start_date') }}"
                 class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
@@ -128,7 +146,7 @@
             var maxSalaryInput = document.getElementById('max_salaire');
             var salaryMinValue = document.getElementById('salary_min_value');
             var salaryMaxValue = document.getElementById('salary_max_value');
-    
+
             // Initialisation du slider
             noUiSlider.create(salarySlider, {
                 start: [{{ request('min_salaire') ?: 0 }}, {{ request('max_salaire') ?: 10000 }}],
@@ -139,15 +157,15 @@
                 },
                 step: 100,
                 format: {
-                    to: function (value) {
+                    to: function(value) {
                         return Math.round(value);
                     },
-                    from: function (value) {
+                    from: function(value) {
                         return value;
                     }
                 }
             });
-    
+
             // Mettre à jour les valeurs quand le slider est déplacé
             salarySlider.noUiSlider.on('update', function(values, handle) {
                 if (handle === 0) {
@@ -158,23 +176,23 @@
                     maxSalaryInput.value = values[1];
                 }
             });
-    
+
             // Ajout de l'événement submit pour s'assurer que les champs sont mis à jour avant l'envoi
             var form = document.querySelector('form');
             form.addEventListener('submit', function(event) {
                 // Empêcher l'envoi immédiat du formulaire pour mettre à jour les valeurs
                 event.preventDefault();
-                
+
                 // Assurer que les champs cachés sont mis à jour avec les valeurs actuelles du slider
                 minSalaryInput.value = salarySlider.noUiSlider.get()[0];
                 maxSalaryInput.value = salarySlider.noUiSlider.get()[1];
-    
+
                 // Enfin, soumettre le formulaire
                 form.submit();
             });
         });
     </script>
-    
+
 </main>
 
 @include('partials.footer')
