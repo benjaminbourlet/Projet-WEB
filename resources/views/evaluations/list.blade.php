@@ -2,8 +2,6 @@
 
 @section('title', 'Évaluations de ' . $company->name)
 
-@include('partials.header')
-
 @section('content')
     <main>
         <div class="container mx-auto p-6">
@@ -71,5 +69,4 @@
         </div>
 
     </main>
-    @include('partials.footer')
 @endsection

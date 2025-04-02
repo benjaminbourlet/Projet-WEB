@@ -2,7 +2,6 @@
 
 @section('title', 'Créer une entreprise')
 
-@include('partials.header')
 
 @section('content')
 <main>
@@ -141,5 +140,4 @@
         </form>
     </div>
 </main>
-@include('partials.footer')
 @endsection

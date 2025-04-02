@@ -2,14 +2,10 @@
 
 @section('title', 'Entreprises')
 
-@include('partials.header')
-
 @section('content')
-
-<main class="flex-grow container mx-auto p-4 flex gap-6">
     <div class="container mx-auto p-4">
 
-    @if(session('success'))
+        @if(session('success'))
             <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
                 {{ session('success') }}
             </div>
@@ -51,8 +47,6 @@
                     <!-- Filtre par secteur -->
                     <div class="flex flex-wrap gap-2 w-full">
 
-
-
                         <!-- Sélection des secteurs -->
                         <select id="sector-select" class="border p-2 rounded-md m-2 w-min h-min">
                             <option value="">Sélectionner un secteur</option>
@@ -60,8 +54,6 @@
                                 <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                             @endforeach
                         </select>
-
-
 
                         <!-- Filtre par ville -->
                         <select name="city" class="border p-2 rounded-md m-2 w-min h-min">
@@ -105,8 +97,6 @@
 
                         <div>
                             <p class="text-lg font-semibold"><strong>Nom :</strong> {{ $company->name }}</p>
-                            <p class="text-sm text-gray-600"><strong>ID :</strong> {{ $company->id }}</p>
-                            <p class="text-sm text-gray-600"><strong>Siret :</strong> {{ $company->siret }}</p>
                             <p class="text-sm text-gray-600"><strong>Email :</strong> {{ $company->email }}</p>
                             <p class="text-sm text-gray-600"><strong>Téléphone :</strong>
                                 {{ $company->tel_number ?? 'Non renseigné' }}</p>
@@ -130,7 +120,4 @@
         </div>
     </div>
 </main>
-
-@include('partials.footer')
-
 @endsection

@@ -2,7 +2,6 @@
 
 @section('title', 'Postuler à une offre')
 
-@include('partials.header')
 
 @section('content')
     <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg ">
@@ -62,5 +61,4 @@
         </form>
     </div>
 
-    @include('partials.footer')
 @endsection

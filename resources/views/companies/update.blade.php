@@ -2,10 +2,7 @@
 
 @section('title', 'Informations de ' . $company->name)
 
-@include('partials.header')
-
 @section('content')
-    <main>
 
         <div class="container p-4 mx-6">
             <h1 class="text-2xl font-bold">Profil de {{ $company->name }}</h1>
@@ -132,7 +129,4 @@
                 </button>
             </form>
         </div>
-    </main>
-    @include('partials.footer')
-
 @endsection

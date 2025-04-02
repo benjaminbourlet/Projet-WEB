@@ -2,12 +2,7 @@
 
 @section('title', 'Offres')
 
-@include('partials.header')
-
 @section('content')
-
-    <!-- Contenu principal -->
-    <main class="flex-grow container mx-auto p-4 flex gap-6">
 
         <!-- Sidebar Filtres -->
         <div class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
@@ -91,9 +86,5 @@
                 {{ $offers->links() }}
             </div>
         </div>
-
-    </main>
-
-    @include('partials.footer')
 
 @endsection

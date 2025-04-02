@@ -2,11 +2,7 @@
 
 @section('title', 'Informations de ' . $company->name)
 
-@include('partials.header')
-
 @section('content')
-    <main>
-
         <div class="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-6">
 
             <!-- 📊 SECTION STATISTIQUES -->
@@ -155,8 +151,5 @@
                 </a>
             </div>
         </div>
-    </main>
-
-    @include('partials.footer')
 
 @endsection
