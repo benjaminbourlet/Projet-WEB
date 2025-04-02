@@ -25,6 +25,14 @@ Route::get('/mentions-legales', function () {
     return view('legal_mention');
 })->name('mentions-legales');
 
+Route::get('/qui_sommes_nous', function () {
+    return view('qui_sommes_nous');
+})->name('qui_sommes_nous');
+
+Route::get('/on_recrute', function () {
+    return view('on_recrute');
+})->name('on_recrute');
+
 
 // Dashboard
 use App\Http\Controllers\DashboardController;
