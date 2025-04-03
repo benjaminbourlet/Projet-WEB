@@ -141,7 +141,7 @@ class ApplicationController extends Controller
             'status_id' => $request->status_id, // Mise à jour du statut de la candidature.
         ]);
 
-        return redirect()->route('applications_info', ['user_id' => $user_id, 'offer_id' => $offer_id]) // Redirige vers la page des informations de la candidature avec un message de succès.
+        return redirect()->route('applications_list', ['user_id' => $user_id, 'offer_id' => $offer_id]) // Redirige vers la page des informations de la candidature avec un message de succès.
             ->with('success', 'Statut de la candidature mis à jour avec succès.');
     }
 }
