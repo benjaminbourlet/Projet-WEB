@@ -1,15 +1,20 @@
 <header>
-    <nav class="bg-[#5A8E95] mb-10 ">
+    <nav class="bg-[#5A8E95]">
         <div class="max-w-100 h-20 flex justify-between items-center mx-6 py-0">
             <!-- Logo + Texte -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <!-- rtl:space-x-reverse permet de gérer l'ordre des éléments dans le flexbox pour les langues RTL -->
+                <!-- rtl : right-to-left -->
                 <a href="{{ route('home') }}">
                     <button>
                         <img src="{{ asset('storage/images/logo_2.png') }}" alt="Logo" class="w-18 h-auto"
                             style="max-width: 70px;">
                     </button>
                 </a>
-                <span class="self-center text-2xl font-semibold whitespace-nowrap">Stage Finder</span>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap bg-gradient-to-r from-black via-white to-black bg-clip-text text-transparent bg-[length:200%_200%] animate-gradientAnimation">Stage Finder</span>
+                <!-- self-center permet de centrer le texte verticalement dans le flexbox -->
+                <!-- whitespace-nowrap empêche le texte de se diviser sur plusieurs lignes -->
+                <!-- bg[length:200%_200%] permet de créer un effet de dégradé sur le texte -->
             </div>
 
             <!-- Menu central -->
@@ -33,11 +38,14 @@
 
             <div id="popup-modal" tabindex="-1"
                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+                <!--inset-0 permet de positionner le modal par rapport à son parent -->
+                <!-- h-modal md:h-full permet de définir la hauteur du modal -->
                 <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                    <!--relative permet de positionner le modal par rapport à son parent -->
                     <!-- Contenu du modal -->
                     <div class="relative bg-[#5A8E95] rounded-lg shadow">
                         <button type="button"
-                            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 "
                             data-modal-toggle="popup-modal">
                             <img src="{{ asset('storage/images/icon_cross.svg') }}" alt="close_menu" width="20"
                                 height="20">
