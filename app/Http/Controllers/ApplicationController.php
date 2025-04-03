@@ -39,9 +39,12 @@ class ApplicationController extends Controller
 
         // Validation des fichiers reçus dans la requête (CV et lettre de motivation).
         $request->validate([
-            'cv' => 'required|mimes:pdf,doc,docx|max:2048', // Le fichier CV doit être requis et de type PDF, DOC, DOCX avec une taille maximale de 2 Mo.
-            'cover_letter' => 'nullable|string', // La lettre de motivation est optionnelle et doit être une chaîne de caractères.
-        ]);
+            'cv' => 'required|mimes:pdf|max:2048',
+            'cover_letter' => 'nullable|string',
+        ], [
+            'cv.required' => 'Le CV est obligatoire.',
+            'cv.mimes' => 'Le CV doit être un fichier de type PDF, DOC ou DOCX.',
+        ]);        
 
         // Sauvegarde du CV si un fichier est uploadé
         $cvPath = null; // Initialisation du chemin du CV à null.
@@ -66,9 +69,9 @@ class ApplicationController extends Controller
         $user = User::findOrFail($user_id); // Récupère l'utilisateur avec l'ID fourni. Si l'utilisateur n'est pas trouvé, une erreur 404 est renvoyée.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
+        if (!auth()->user()->hasAnyRole(['Admin', 'Pilote']) && $user_id != auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à voir cette candidature.');
-        }
+        }        
 
         // Vérifie si une candidature existe pour cet utilisateur et cette offre.
         $application = Application::where('offer_id', $offer_id)
@@ -87,9 +90,9 @@ class ApplicationController extends Controller
         $user = User::findOrFail($user_id); // Récupère l'utilisateur en fonction de l'ID, renvoie une erreur 404 si l'utilisateur n'est pas trouvé.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
-            abort(403, 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
-        }
+        if (!auth()->user()->hasAnyRole(['Admin', 'Pilote']) && $user_id != auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette candidature.');
+        }        
 
         // Récupère les candidatures de l'utilisateur avec une pagination de 10 résultats par page.
         $applications = $user->applications()
