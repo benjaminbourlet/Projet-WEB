@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Company;
+use App\Models\City;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class WishlistController extends Controller
@@ -21,10 +21,12 @@ class WishlistController extends Controller
                 return redirect()->route('home')->with('error', 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
             }
         }
+        $companies = Company::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
 
         $wishlists = $user->wishlists()->paginate(10);
 
-        return view('wishlists.list', compact('wishlists'));
+        return view('wishlists.list', compact('wishlists', 'companies', 'cities'));
     }
 
     public function addToWishlist($user_id, $offer_id)

@@ -12,11 +12,13 @@
 
     <div class="container mx-auto pt-20 text-center bg-100">
         <div class="relative w-2/3 mx-auto flex items-center">
-            <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
-                <img src="{{ asset('storage/images/loupe.png') }}" alt="Recherche" class="w-8 h-8">
-            </button>
-            <input type="text" class="w-full pl-16 p-4 border-2 border-black rounded-full text-lg"
-                placeholder="Rechercher...">
+            <form method="GET" action="{{ route('offer.search') }}" class="w-full">
+                <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
+                    <img src="{{ asset('storage/images/loupe.png') }}" alt="Recherche" class="w-8 h-8">
+                </button>
+                <input type="text" name="search" value="{{ request('search') }}"
+                    class="w-full pl-16 p-4 border-2 border-black rounded-full text-lg" placeholder="Rechercher...">
+            </form>
         </div>
     </div>
 
@@ -81,8 +83,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 place-items-center mx-2 w-full">
             <div class="bg-[#dfdede] w-full max-w-xs p-8 rounded-lg shadow-md text-center">
                 <p class="text-3xl font-bold">{{ $totalOffers }}</p>
-                <img src="{{ asset('storage/images/job.png') }}" alt="Jobs"
-                    class="mx-auto w-16 md:w-20 h-16 md:h-20 my-4">
+                <img src="{{ asset('storage/images/job.png') }}" alt="Jobs" class="mx-auto w-16 md:w-20 h-16 md:h-20 my-4">
                 <p class="text-black">Offres disponibles actuellement, trouvez la parfaite pour vous !</p>
             </div>
             <div class="bg-[#dfdede] w-full max-w-xs p-8 rounded-lg shadow-md text-center">

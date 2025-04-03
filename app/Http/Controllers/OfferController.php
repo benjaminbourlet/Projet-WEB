@@ -330,4 +330,29 @@ class OfferController extends Controller
         return redirect()->route('offer_list')->with('success', 'Offre supprimée avec succès');
     }
 
+    public function dashboard()
+{
+
+    // Répartition des offres par compétence
+    $skillsDistribution = Skill::withCount('offers')->orderByDesc('offers_count')->get();
+
+    // Répartition des offres par durée de stage
+    $durationDistribution = Offer::selectRaw('
+            CASE 
+                WHEN DATEDIFF(end_date, start_date) <= 30 THEN "Moins d\'1 mois"
+                WHEN DATEDIFF(end_date, start_date) BETWEEN 31 AND 90 THEN "1 à 3 mois"
+                WHEN DATEDIFF(end_date, start_date) BETWEEN 91 AND 180 THEN "3 à 6 mois"
+                ELSE "Plus de 6 mois"
+            END as duration_range, COUNT(*) as count
+        ')
+        ->groupBy('duration_range')
+        ->get();
+
+    // Récupération des offres les plus mises en wishlist
+    $topWishlistedOffers = Offer::withCount('users')->orderByDesc('users_count')->take(5)->get();
+
+    return view('offers.dashboard', compact('skillsDistribution', 'durationDistribution', 'topWishlistedOffers'));
+}
+
+
 }

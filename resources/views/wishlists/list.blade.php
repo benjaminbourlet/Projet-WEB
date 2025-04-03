@@ -12,50 +12,92 @@
     <!-- Contenu de la page -->
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
 
-        <!-- Sidebar Filtres -->
-        <form method="GET" class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
+            <!-- Sidebar Filtres -->
+            <form method="GET" action="{{ route('offer.search') }}"
+                class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
-            <!-- Barre de Recherche par entreprise -->
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
-                class="mb-4 text-black border p-2 rounded-full w-max">
+                <!-- Barre de Recherche par entreprise -->
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'offre"
+                    class="mb-4 text-black border p-2 rounded-full w-max">
 
-            <!-- Filtres -->
-            <div class="grid">
-                <label for="">Entreprise</label>
-                <input type="text" name="company" value="{{ request('company') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
+                <!-- Filtres -->
+                <div class="flex flex-col">
 
+                    <!--Filtre par entreprise-->
+                    <label for="">Entreprise</label>
+                    <select name="company" class="text-black textborder p-2 rounded-md m-2 max-w-max max-h-max">
+                        <option value="">Toutes les entreprises</option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}" {{ request('company') == $company->id ? 'selected' : '' }}>
+                                {{ $company->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                <!-- Slider Salaire -->
-                <label for="salary_slider" class="block">Salaire :</label>
-                <div id="salary_slider" class="mb-4"></div>
+                    <!--Filtre Ville-->
+                    <label for="" class="text-white">Ville</label>
+                    <select name="city" class="text-black border p-2 rounded-md m-2 max-w-max max-h-max">
+                        <option value="">Toutes les villes</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
+                                {{ $city->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                <!-- Affichage des valeurs de salaire -->
-                <div class="flex justify-between">
-                    <span>Salaire Min: <span id="salary_min_value">{{ request('min_salaire') ?: '0' }}</span></span>
-                    <span>Salaire Max: <span id="salary_max_value">{{ request('max_salaire') ?: '10000' }}</span></span>
+                    <!-- Slider Salaire -->
+                    <label for="salary_slider" class="block">Salaire :</label>
+                    <div class="p-2">
+                        <div id="salary_slider" class="mb-2"></div>
+
+                        <!-- Affichage des valeurs de salaire -->
+                        <div class="flex justify-between">
+                            <span>Salaire Min: <span id="salary_min_value">{{ request('min_salaire') ?: '0' }}</span></span>
+                            <span>Salaire Max: <span
+                                    id="salary_max_value">{{ request('max_salaire') ?: '10000' }}</span></span>
+                        </div>
+
+                        <!-- Valeurs de salaire min et max -->
+                        <input type="hidden" name="min_salaire" id="min_salaire"
+                            value="{{ request('min_salaire') ?: '0' }}">
+                        <input type="hidden" name="max_salaire" id="max_salaire"
+                            value="{{ request('max_salaire') ?: '10000' }}">
+                    </div>
+
+                    <!-- Slider Durée -->
+                    <label for="duration_slider" class="block">Durée :</label>
+                    <div class="p-2">
+                        <div id="duration_slider" class="mb-2"></div>
+
+                        <!-- Affichage des valeurs de durée -->
+                        <div class="flex justify-between">
+                            <span>Durée Min: <span id="duration_min_value">{{ request('duration_min') ?: '0' }}</span>
+                            </span>
+                            <span>Durée Max: <span id="duration_max_value">{{ request('duration_max') ?: '180' }}</span>
+                            </span>
+                        </div>
+
+                        <!-- Valeurs de durée min et max -->
+                        <input type="hidden" name="duration_min" id="duration_min"
+                            value="{{ request('duration_min') ?: '0' }}">
+                        <input type="hidden" name="duration_max" id="duration_max"
+                            value="{{ request('duration_max') ?: '180' }}">
+                    </div>
+
+                    <!--Filtre Durée minimum et maximum du stage-->
+
+                    <!-- Filtre date de début stage -->
+                    <label for="">Date de début</label>
+                    <input type="date" name="start_date" value="{{ request('start_date') }}"
+                        class="mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
                 </div>
-
-                <!-- Valeurs de salaire min et max -->
-                <input type="hidden" name="min_salaire" id="min_salaire" value="{{ request('min_salaire') ?: '0' }}">
-                <input type="hidden" name="max_salaire" id="max_salaire" value="{{ request('max_salaire') ?: '10000' }}">
-
-                <label for="" class="mt-6">Ville</label>
-                <input type="text" name="city" value="{{ request('city') }}" class="mb-4 w-full bg-teal-600 p-2 rounded"
-                    placeholder="Rechercher">
-                <label for="">Durée minimum</label>
-                <input type="text" name="duree_min" value="{{ request('duree_min') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-                <label for="">Durée maximum</label>
-                <input type="text" name="duree_max" value="{{ request('duree_max') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-                <label for="">Date de début</label>
-                <input type="text" name="start_date" value="{{ request('start_date') }}"
-                    class=" mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
-            </div>
-            <button type="submit"
-                class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
-        </form>
+                <button type="submit"
+                    class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
+                <a href="{{ route('offer.search') }}"
+                    class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">
+                    Réinitialiser
+                </a>
+            </form>
 
         <!-- Liste des offres -->
         <div>

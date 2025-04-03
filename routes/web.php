@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
     Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
     Route::get('/offers/search', [OfferController::class, 'search'])->name('offer.search');
+    Route::get('/offers/dashboard', [OfferController::class, 'dashboard'])->name('dashboard.offers');
 });
 
 Route::middleware(['auth'])->group(function () {
