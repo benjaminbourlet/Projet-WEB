@@ -29,6 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
             responsive: true,
             plugins: {
                 legend: {
+                    labels: {
+                        color: '#fff',
+                    },
                     position: 'bottom'
                 }
             }

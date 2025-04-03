@@ -33,6 +33,27 @@ Route::get('/on_recrute', function () {
     return view('on_recrute');
 })->name('on_recrute');
 
+Route::get('/centre_aide', function () {
+    return view('centre_aide');
+})->name('centre_aide');
+
+Route::get('/trouver_expert', function () {
+    return view('trouver_expert');
+})->name('trouver_expert');
+
+Route::get('/plateforme_dev', function () {
+    return view('plateforme_dev');
+})->name('plateforme_dev');
+
+Route::get('/forum', function () {
+    return view('forum');
+})->name('forum');
+
+Route::get('/professionel', function () {
+    return view('professionel');
+})->name('professionel');
+
+
 
 // Dashboard
 use App\Http\Controllers\DashboardController;
