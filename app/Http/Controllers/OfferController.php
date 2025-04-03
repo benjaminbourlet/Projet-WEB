@@ -27,6 +27,19 @@ class OfferController extends Controller
     
         $this->authorize('search_offer');
     
+        // Récupérer les offres avec pagination
+        $offers = Offer::paginate(9);
+        
+        return view('offers.list', compact('offers', 'cities', 'companies'));
+    }
+    
+    public function search(Request $request)
+    {
+        $companies = Company::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
+    
+        $this->authorize('search_offer');
+    
         $query = Offer::query();
     
         // Appliquer les filtres un par un
@@ -41,10 +54,10 @@ class OfferController extends Controller
         $offers = $query->paginate(9);
     
         $offers->appends($request->all());
-    
-        return view('offers.list', compact('offers', 'cities', 'companies'));
+
+        return view('offers.list', compact('offers', 'companies', 'cities'));
     }
-    
+
     protected function applySearchFilter($query, Request $request)
     {
         if ($request->filled('search')) {

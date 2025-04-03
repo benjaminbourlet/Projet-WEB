@@ -16,7 +16,7 @@ class EvaluationController extends Controller
     /**
      * Afficher les évaluations d'une entreprise.
      */
-    public function index($user_id)
+    public function showEvaluations($user_id)
     {
         $user = User::findOrFail($user_id);
     
@@ -47,7 +47,7 @@ class EvaluationController extends Controller
             ->where('evaluations.user_id', '=', $user_id) 
             ->paginate(10); // Paginera les résultats par 10 éléments par page
     
-        return view('evaluations.all', compact('evaluations')); // Retourne la vue avec les évaluations
+        return view('evaluations.list_user', compact('evaluations')); // Retourne la vue avec les évaluations
     }    
 
     // Afficher la vue de création d'évaluation pour une entreprise
@@ -118,8 +118,16 @@ class EvaluationController extends Controller
     public function removeEvaluations($userId, $companyId)
     {
         $user = User::findOrFail($userId); // Recherche de l'utilisateur par son ID
-        $user->evaluations()->wherePivot('company_id', $companyId)->detach(); // Supprime l'évaluation de l'entreprise pour cet utilisateur
-
+    
+        // Vérifie si l'utilisateur est l'auteur de l'offre ou un administrateur
+        if (Auth::id() !== $userId && !Auth::user()->hasRole('admin')) {
+            // Si l'utilisateur n'est pas l'auteur de l'offre et n'est pas admin, retourner une erreur
+            return redirect()->route('evaluations_all')->with('error', 'Vous n\'êtes pas autorisé à supprimer cette offre');
+        }
+    
+        // Si l'utilisateur est autorisé, on supprime l'évaluation
+        $user->evaluations()->wherePivot('company_id', $companyId)->detach(); 
+    
         return redirect()->route('evaluations_all')->with('success', 'Offre supprimée avec succès');
     }
 

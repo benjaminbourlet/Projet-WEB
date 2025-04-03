@@ -4,6 +4,7 @@
 
 @include('partials.header')
 
+@section('content')
 <main class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Détails de la Candidature</h1>
 
