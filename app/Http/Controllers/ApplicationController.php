@@ -14,7 +14,7 @@ class ApplicationController extends Controller
 {
     use AuthorizesRequests; // On utilise le trait AuthorizesRequests pour faciliter la gestion des autorisations.
 
-    public function showApplicationRegister($offer_id) 
+    public function showApplicationRegister($offer_id)
     {
         $this->authorize('apply_for_offer'); // Vérifie si l'utilisateur est autorisé à postuler à une offre.
 
@@ -23,7 +23,7 @@ class ApplicationController extends Controller
         return view('applications.apply', compact('offer')); // Retourne la vue "applications.apply" avec l'offre en paramètre pour afficher le formulaire de candidature.
     }
 
-    public function applicationRegister(Request $request, $offer_id) 
+    public function applicationRegister(Request $request, $offer_id)
     {
         $user = Auth::user(); // Récupère l'utilisateur actuellement authentifié.
         $this->authorize('apply_for_offer'); // Vérifie si l'utilisateur est autorisé à postuler à l'offre.
@@ -39,9 +39,12 @@ class ApplicationController extends Controller
 
         // Validation des fichiers reçus dans la requête (CV et lettre de motivation).
         $request->validate([
-            'cv' => 'required|mimes:pdf,doc,docx|max:2048', // Le fichier CV doit être requis et de type PDF, DOC, DOCX avec une taille maximale de 2 Mo.
-            'cover_letter' => 'nullable|string', // La lettre de motivation est optionnelle et doit être une chaîne de caractères.
-        ]);
+            'cv' => 'required|mimes:pdf|max:2048',
+            'cover_letter' => 'nullable|string',
+        ], [
+            'cv.required' => 'Le CV est obligatoire.',
+            'cv.mimes' => 'Le CV doit être un fichier de type PDF, DOC ou DOCX.',
+        ]);        
 
         // Sauvegarde du CV si un fichier est uploadé
         $cvPath = null; // Initialisation du chemin du CV à null.
@@ -61,14 +64,14 @@ class ApplicationController extends Controller
         return redirect()->route('offer_list')->with('success', 'Candidature envoyée avec succès.'); // Redirige vers la liste des offres avec un message de succès.
     }
 
-    public function showApplicationInfo($user_id, $offer_id) 
+    public function showApplicationInfo($user_id, $offer_id)
     {
         $user = User::findOrFail($user_id); // Récupère l'utilisateur avec l'ID fourni. Si l'utilisateur n'est pas trouvé, une erreur 404 est renvoyée.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
+        if (!auth()->user()->hasAnyRole(['Admin', 'Pilote']) && $user_id != auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à voir cette candidature.');
-        }
+        }        
 
         // Vérifie si une candidature existe pour cet utilisateur et cette offre.
         $application = Application::where('offer_id', $offer_id)
@@ -82,22 +85,26 @@ class ApplicationController extends Controller
         return view('applications.info', compact('application', 'user')); // Retourne la vue "applications.info" avec les informations de la candidature et de l'utilisateur.
     }
 
-    public function show($user_id) 
+    public function show($user_id)
     {
         $user = User::findOrFail($user_id); // Récupère l'utilisateur en fonction de l'ID, renvoie une erreur 404 si l'utilisateur n'est pas trouvé.
 
         // Vérifie si l'utilisateur est admin ou pilote.
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Pilote') && $user_id != auth()->id()) {
-            abort(403, 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
-        }
+        if (!auth()->user()->hasAnyRole(['Admin', 'Pilote']) && $user_id != auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette candidature.');
+        }        
 
         // Récupère les candidatures de l'utilisateur avec une pagination de 10 résultats par page.
-        $applications = $user->applications()->with('offer')->paginate(10); // Récupère les candidatures associées à l'utilisateur et les offres correspondantes.
+        $applications = $user->applications()
+            ->with(['offer', 'status'])
+            ->orderByRaw("FIELD(status_id, 4, 3, 2, 1, 5)") // Trie selon l'ordre des statuts voulu
+            ->orderBy('created_at', 'desc') // Trie par date de postulation (du plus récent au plus ancien)
+            ->paginate(10); // Récupère les candidatures associées à l'utilisateur et les offres correspondantes.
 
         return view('applications.list', compact('applications', 'user')); // Retourne la vue "applications.list" avec les candidatures et l'utilisateur.
     }
 
-    public function showApplicationUpdate($user_id, $offer_id) 
+    public function showApplicationUpdate($user_id, $offer_id)
     {
         if (!auth()->user()->hasRole('Admin')) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier cette candidature.');
@@ -117,7 +124,7 @@ class ApplicationController extends Controller
         return view('applications.update', compact('application', 'statuses')); // Retourne la vue "applications.update" avec la candidature et les statuts disponibles.
     }
 
-    public function updateApplication(Request $request, $user_id, $offer_id) 
+    public function updateApplication(Request $request, $user_id, $offer_id)
     {
         // Recherche de la candidature spécifique pour un utilisateur et une offre.
         $application = Application::where('user_id', $user_id)
@@ -127,17 +134,17 @@ class ApplicationController extends Controller
         $request->validate([
             'status_id' => 'required|exists:statuses,id', // Vérifie que le statut existe dans la base de données.
         ]);
-    // Vérifier si la candidature existe
-    if (!$application) {
-        return redirect()->back()->with('error', 'Candidature introuvable.');
-    }
+        // Vérifier si la candidature existe
+        if (!$application) {
+            return redirect()->back()->with('error', 'Candidature introuvable.');
+        }
 
         // Mise à jour du statut de la candidature.
         $application->update([
             'status_id' => $request->status_id, // Mise à jour du statut de la candidature.
         ]);
 
-        return redirect()->route('applications_info', ['user_id' => $user_id, 'offer_id' => $offer_id]) // Redirige vers la page des informations de la candidature avec un message de succès.
+        return redirect()->route('applications_list', ['user_id' => $user_id, 'offer_id' => $offer_id]) // Redirige vers la page des informations de la candidature avec un message de succès.
             ->with('success', 'Statut de la candidature mis à jour avec succès.');
     }
 }

@@ -27,48 +27,30 @@
 
             <form method="GET" action="{{ route('company.search') }}"
                 class="flex flex-wrap gap-4 border p-4 rounded-md w-full m-2">
-                @csrf
-
-                <!-- Div Barre de Recherche + Bouton Rechercher-->
                 <div class="flex w-full items-center gap-2">
                     <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Rechercher une entreprise..." class="flex-1 border p-2 rounded-md">
-
                     <button type="submit"
                         class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
                 </div>
 
-                <!-- Div Filtres -->
                 <div class="flex flex-col space-between w-full h-min p-2 m-2">
-
-                    <!-- Liste des secteurs sélectionnés -->
                     <div id="selected-sectors" class="flex flex-wrap flex-none gap-2"></div>
-
-                    <!-- Filtre par secteur -->
                     <div class="flex flex-wrap gap-2 w-full">
-
-                        <!-- Sélection des secteurs -->
                         <select id="sector-select" class="border p-2 rounded-md m-2 w-min h-min">
                             <option value="">Sélectionner un secteur</option>
                             @foreach ($sectors as $sector)
                                 <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                             @endforeach
                         </select>
-
-                        <!-- Filtre par ville -->
                         <select name="city" class="border p-2 rounded-md m-2 w-min h-min">
                             <option value="">Toutes les villes</option>
                             @foreach ($cities as $city)
                                 <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
-                                    {{ $city->name }}
-                                </option>
+                                    {{ $city->name }}</option>
                             @endforeach
                         </select>
-
-                        <!-- Champ caché pour les secteurs sélectionnés -->
                         <input type="hidden" name="sector" id="sector-input">
-
-                        <!-- Trie -->
                         <select name="sort" class="border p-2 rounded-md m-2 ml-auto w-min">
                             <option value="">Trier par</option>
                             <option value="name_asc">Nom A-Z</option>
@@ -77,11 +59,11 @@
                             <option value="date_old">Date ancienne</option>
                         </select>
                         <a href="{{ route('company.search') }}"
-                            class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">
-                            Réinitialiser
-                        </a>
+                            class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">Réinitialiser</a>
                     </div>
+                </div>
             </form>
+
 
         </div>
 
@@ -92,8 +74,7 @@
                     <a href="{{ route('company_info', ['id' => $company->id]) }}"
                         class="flex flex-col items-center text-center space-y-3">
 
-                        <img src="{{ asset('storage/' . $company->logo_path) }}" class="w-12 h-12 rounded-full"
-                            alt="Company">
+                        <img src="{{ asset('storage/' . $company->logo_path) }}" class="w-12 h-12 rounded-full" alt="Company">
 
                         <div>
                             <p class="text-lg font-semibold"><strong>Nom :</strong> {{ $company->name }}</p>
@@ -119,5 +100,5 @@
             {{ $companies->links() }}
         </div>
     </div>
-</main>
+    </main>
 @endsection
