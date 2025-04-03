@@ -2,12 +2,11 @@
 
 @section('title', 'Informations de ' . $user->name)
 
-
 @section('content')
     <main>
         <div class="flex-grow container mx-auto p-6 min-h-screen">
-            <div class="flex mt-10 bg-[#EEEEEE]">
-                <div class="w-1/3 bg-[#387077] rounded-lg shadow-lg">
+            <div class="flex flex-col md:flex-row mt-10 bg-[#EEEEEE]">
+                <div class="w-full md:w-1/3 bg-[#387077] rounded-lg shadow-lg mb-6 md:mb-0 min-h-full flex flex-col justify-between">
                     <div class="max-w-md mx-auto mt-6 p-6">
 
                         <div class="container mx-auto p-4">
@@ -102,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-2/3">
+                <div class="w-full md:w-2/3 md:ml-4 bg-white rounded-lg shadow-lg p-6 flex flex-col justify-center">
                     @if ($user->hasRole('Etudiant'))
                         <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
                             <h2 class="text-xl font-bold mb-4">Dernières Candidatures</h2>
@@ -122,7 +121,7 @@
                             @endif
                         </div>
                         <a href="{{ route('applications_list_user', ['user_id' => $user->id]) }}"
-                            class="text-blue-500 hover:underline">Voir toutes les candidatures</a>
+                            class="text-[#3D9DA9] hover:underline">Voir toutes les candidatures</a>
                         <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
                             <h2 class="text-xl font-bold mb-4">Dernières offres ajoutées à la wishlist</h2>
                             @if ($user->wishlists->isEmpty())
@@ -140,28 +139,28 @@
                             @endif
                         </div>
                         <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
-                            class="text-blue-500 hover:underline">Voir la wishlist</a>
+                            class="text-[#3D9DA9] hover:underline">Voir la wishlist</a>
 
-                        <div class="container">
-                            <h1 class="mb-4">Statistiques</h1>
+                        <div class="mt-10">
+                            <h2 class="text-2xl font-bold mb-6 text-gray-800">📊 Statistiques</h2>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="card text-black bg-success mb-3">
-                                        <div class="card-header">Nombre de candidatures</div>
-                                        <div class="card-body">
-                                            <h4 class="card-title">{{ $totalApplications }}</h4>
-                                        </div>
-                                    </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Carte des candidatures -->
+                                <div class="bg-green-100 text-green-900 rounded-xl shadow-md p-6">
+                                    <h3 class="text-lg font-semibold mb-2">Nombre total de candidatures</h3>
+                                    <p class="text-4xl font-bold">{{ $totalApplications }}</p>
                                 </div>
-                            </div>
 
-                            <div class="row mt-4">
-                                <div class="col-md-6">
-                                    <canvas id="applicationsChart" data-accepted="{{ $acceptedApplications }}"
-                                        data-rejected="{{ $rejectedApplications }}" data-pending="{{ $pendingApplications }}"
+                                <!-- Graphique des candidatures -->
+                                <div class="bg-white rounded-xl shadow-md p-6">
+                                    <h3 class="text-lg font-semibold mb-4 text-gray-700">Répartition des candidatures</h3>
+                                    <canvas id="applicationsChart"
+                                        data-accepted="{{ $acceptedApplications }}"
+                                        data-rejected="{{ $rejectedApplications }}"
+                                        data-pending="{{ $pendingApplications }}"
                                         data-traitement="{{ $traitementApplications }}"
-                                        data-interview="{{ $interviewApplications }}" width="50" height="50">
+                                        data-interview="{{ $interviewApplications }}"
+                                        class="mx-auto max-w-full h-64">
                                     </canvas>
                                 </div>
                             </div>

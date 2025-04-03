@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: {
                 legend: {
                     labels: {
-                        color: '#fff',
+                        color: '#000',
                     },
                     position: 'bottom'
                 }
