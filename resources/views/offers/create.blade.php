@@ -8,16 +8,16 @@
         <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-bold text-center mb-6">Créer une offre</h2>
 
-        <!-- Affichage des erreurs globaux -->
-        @if ($errors->any())
-            <div class="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded-md">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            <!-- Affichage des erreurs globaux -->
+            @if ($errors->any())
+                <div class="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded-md">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('offerRegister') }}" enctype="multipart/form-data">
                 @csrf

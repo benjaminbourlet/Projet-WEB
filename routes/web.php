@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/companies', [CompanyController::class, 'show'])->name('company_list');
+    Route::get('/companies/search', [CompanyController::class, 'search'])->name('company.search');
     Route::get('/companies/register', [CompanyController::class, 'showCompanyRegister'])->name('company_register');
     Route::post('/companies/register', [CompanyController::class, 'companyRegister'])->name('companyRegister');
     Route::get('/companies/{id}', [CompanyController::class, 'showCompanyInfo'])->name('company_info');
@@ -75,7 +76,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/companies/{id}/update', [CompanyController::class, 'updateCompany'])->name('company_update');
     Route::delete('/companies/{id}/delete', [CompanyController::class, 'deleteCompany'])->name('company_delete');
     Route::get('/companies/{id}/offers', [CompanyController::class, 'showOffers'])->name('company_offers');
-    Route::get('/companies/search', [CompanyController::class, 'search'])->name('company.search');
 });
 
 Route::middleware('auth')->group(function () {

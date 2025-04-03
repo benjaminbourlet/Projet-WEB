@@ -61,28 +61,28 @@ class CompanyController extends Controller
             'name.required' => 'Le nom de l\'entreprise est obligatoire.',
             'name.max' => 'Le nom de l\'entreprise ne peut pas dépasser 50 caractères.',
             'name.unique' => 'Ce nom d\'entreprise est déjà utilisé.',
-        
+
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez entrer une adresse email valide.',
             'email.unique' => 'Cet email est déjà utilisé par une autre entreprise.',
             'email.max' => 'L\'adresse email ne peut pas dépasser 50 caractères.',
-        
+
             'tel_number.unique' => 'Ce numéro de téléphone est déjà utilisé.',
             'tel_number.regex' => 'Le numéro de téléphone doit être valide et au format français.',
-        
+
             'logo.image' => 'Le fichier doit être une image.',
             'logo.mimes' => 'Les formats acceptés sont : jpeg, png, jpg, gif.',
             'logo.max' => 'L\'image ne doit pas dépasser 2 Mo.',
-        
+
             'siret.required' => 'Le numéro SIRET est obligatoire.',
             'siret.size' => 'Le numéro SIRET doit contenir exactement 14 caractères.',
             'siret.unique' => 'Ce numéro SIRET est déjà utilisé.',
-        
+
             'city_id.required' => 'La ville est obligatoire.',
             'city_id.exists' => 'La ville sélectionnée n\'existe pas.',
-        
+
             'address.required' => 'L\'adresse est obligatoire.',
-        
+
             'sectors.*.exists' => 'L\'un des secteurs sélectionnés n\'existe pas.'
         ]);
 
@@ -192,28 +192,28 @@ class CompanyController extends Controller
             'name.required' => 'Le nom de l\'entreprise est obligatoire.',
             'name.max' => 'Le nom de l\'entreprise ne peut pas dépasser 50 caractères.',
             'name.unique' => 'Ce nom d\'entreprise est déjà utilisé.',
-        
+
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez entrer une adresse email valide.',
             'email.unique' => 'Cet email est déjà utilisé par une autre entreprise.',
             'email.max' => 'L\'adresse email ne peut pas dépasser 50 caractères.',
-        
+
             'tel_number.unique' => 'Ce numéro de téléphone est déjà utilisé.',
             'tel_number.regex' => 'Le numéro de téléphone doit être valide et au format français.',
-        
+
             'logo.image' => 'Le fichier doit être une image.',
             'logo.mimes' => 'Les formats acceptés sont : jpeg, png, jpg, gif.',
             'logo.max' => 'L\'image ne doit pas dépasser 2 Mo.',
-        
+
             'siret.required' => 'Le numéro SIRET est obligatoire.',
             'siret.size' => 'Le numéro SIRET doit contenir exactement 14 caractères.',
             'siret.unique' => 'Ce numéro SIRET est déjà utilisé.',
-        
+
             'city_id.required' => 'La ville est obligatoire.',
             'city_id.exists' => 'La ville sélectionnée n\'existe pas.',
-        
+
             'address.required' => 'L\'adresse est obligatoire.',
-        
+
             'sectors.*.exists' => 'L\'un des secteurs sélectionnés n\'existe pas.'
         ]);
 
@@ -256,22 +256,22 @@ class CompanyController extends Controller
             //$offer->user()->detach();
 
             DB::table('applications')
-            ->where('offer_id', $offer->id)
-            ->update(['deleted_at' => now()]);
-        
+                ->where('offer_id', $offer->id)
+                ->update(['deleted_at' => now()]);
+
             // Supprime les entrées dans la table pivot wishlists (souhaits)
             $offer->users()->detach();
         }
-        
+
         // Supprime les offres associées à l'entreprise
         $company->offers()->delete();
-        
+
         DB::table('evaluations')
-        ->where('company_id', $company->id)
-        ->update(['deleted_at' => now()]);
-        
+            ->where('company_id', $company->id)
+            ->update(['deleted_at' => now()]);
+
         // Suppression douce de l'entreprise
-        $company->delete();        
+        $company->delete();
 
         return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
     }
@@ -341,8 +341,6 @@ class CompanyController extends Controller
         $query = $this->sortCompanyResults($query, $request);
 
         $companies = $query->paginate(9);
-
-        $companies->appends($request->all());
 
         // Envoyer les données des filtres
         $cities = City::orderBy('name', 'asc')->get();
