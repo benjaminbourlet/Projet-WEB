@@ -253,8 +253,6 @@ class CompanyController extends Controller
 
         foreach ($company->offers as $offer) {
             // Supprime les entrées dans la table pivot applications (candidatures)
-            //$offer->user()->detach();
-
             DB::table('applications')
                 ->where('offer_id', $offer->id)
                 ->update(['deleted_at' => now()]);
@@ -266,15 +264,15 @@ class CompanyController extends Controller
         // Supprime les offres associées à l'entreprise
         $company->offers()->delete();
 
-        DB::table('evaluations')
-            ->where('company_id', $company->id)
-            ->update(['deleted_at' => now()]);
+        // Supprime les évaluations associées à l'entreprise
+        $company->evaluations()->detach();
 
         // Suppression douce de l'entreprise
         $company->delete();
 
         return redirect()->route('company_list')->with('success', 'Entreprise supprimée avec succès');
     }
+
 
     private function getCompanyBySectorId($query, $request)
     {
