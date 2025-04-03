@@ -67,17 +67,6 @@ Route::get('/profile/{id}', [ProfileController::class, 'show'])
     ->middleware('auth')
     ->name('profile');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/offers', [OfferController::class, 'show'])->name('offer_list');
-    Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
-    Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
-    Route::get('/offers/{id}/{title}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
-    Route::get('/offers/{id}/{title}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
-    Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
-    Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
-    Route::get('/offers/search', [OfferController::class, 'search'])->name('offer.search');
-});
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/companies/{company_id}/evaluate', [EvaluationController::class, 'showEvaluationsCreate'])->name('evaluations_create');
     Route::post('/companies/{company_id}/evaluate/create', [EvaluationController::class, 'evaluationsCreate'])->name('evaluationsCreate');
@@ -87,9 +76,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/evaluations', [EvaluationController::class, 'showAllEvaluations'])->name('evaluations_all');
 });
 
+
+Route::middleware('auth')->group(function () {
+    Route::get('/offers', [OfferController::class, 'show'])->name('offer_list');
+    Route::get('/offers/register', [OfferController::class, 'showOfferRegister'])->name('offer_register');
+    Route::post('/offers/register', [OfferController::class, 'offerRegister'])->name('offerRegister');
+    Route::get('/offers/{id}/{title}', [OfferController::class, 'showOfferInfo'])->name('offer_info');
+    Route::get('/offers/{id}/{title}/edit', [OfferController::class, 'showOfferUpdate'])->name('offer_edit');
+    Route::post('/offers/{id}/update', [OfferController::class, 'updateOffer'])->name('offer_update');
+    Route::delete('/offers/{id}/delete', [OfferController::class, 'deleteOffer'])->name('offer_delete');
+    Route::get('/offers/search', [OfferController::class, 'search'])->name('offer_search');
+    Route::get('/offers/dashboard', [OfferController::class, 'dashboard'])->name('dashboard_offers');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/companies', [CompanyController::class, 'show'])->name('company_list');
-    Route::get('/companies/search', [CompanyController::class, 'search'])->name('company.search');
+    Route::get('/companies/search', [CompanyController::class, 'search'])->name('company_search');
     Route::get('/companies/register', [CompanyController::class, 'showCompanyRegister'])->name('company_register');
     Route::post('/companies/register', [CompanyController::class, 'companyRegister'])->name('companyRegister');
     Route::get('/companies/{id}', [CompanyController::class, 'showCompanyInfo'])->name('company_info');
@@ -114,6 +116,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist/{user_id}', [WishlistController::class, 'index'])->name('wishlists_list');
     Route::get('/students/{user_id}/wishlist', [WishlistController::class, 'index'])->name('wishlists_list_user');
+    Route::get('/students/{user_id}/wishlist/search', [WishlistController::class, 'search'])->name('wishlists_search');
     Route::post('/wishlist/{user_id}/add/{offer_id}', [WishlistController::class, 'addToWishlist'])->name('wishlist_add');
     Route::post('/wishlist/{user_id}/remove/{offer_id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist_remove');
 });
@@ -122,7 +125,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/students', [UserController::class, 'show'])->name('students_list');
     Route::get('/pilots', [UserController::class, 'show'])->name('pilots_list');
-    Route::get('/{role}/search', [UserController::class, 'search'])->name('user.search');
+    Route::get('/{role}/search', [UserController::class, 'search'])->name('user_search');
     Route::get('/{role}/register', [UserController::class, 'showUserRegister'])->name('user_register');
     Route::post('/users/register', [UserController::class, 'userRegister'])->name('userRegister');
     Route::get('/{role}/{id}', [UserController::class, 'showUserInfo'])->name('user_info');

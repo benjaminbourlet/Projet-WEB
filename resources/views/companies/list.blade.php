@@ -3,6 +3,11 @@
 @section('title', 'Entreprises')
 
 @section('content')
+
+@if ($companies->isEmpty())
+        <p class="text-gray-500">Aucune entreprise n'est sur le site</p>
+    @else
+
     <div class="container mx-auto p-4">
 
         @if(session('success'))
@@ -25,7 +30,7 @@
             </div>
             @endrole
 
-            <form method="GET" action="{{ route('company.search') }}"
+            <form method="GET" action="{{ route('company_search') }}"
                 class="flex flex-wrap gap-4 border p-4 rounded-md w-full m-2">
                 <div class="flex w-full items-center gap-2">
                     <input type="text" name="search" value="{{ request('search') }}"
@@ -58,7 +63,7 @@
                             <option value="date_recent">Date récente</option>
                             <option value="date_old">Date ancienne</option>
                         </select>
-                        <a href="{{ route('company.search') }}"
+                        <a href="{{ route('company_search') }}"
                             class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">Réinitialiser</a>
                     </div>
                 </div>
@@ -101,4 +106,5 @@
         </div>
     </div>
     </main>
+    @endif
 @endsection
