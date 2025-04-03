@@ -2,36 +2,42 @@
 
 @section('title', 'Dashboard')
 
-
 @section('content')
-<main>
-<div class="container">
-    <h1 class="mb-4">Tableau de Bord</h1>
+<main class="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 py-10">
+    <div class="container mx-auto max-w-5xl px-6">
+        <h1 class="mb-8 text-5xl font-bold text-center text-white drop-shadow-lg">
+            <!-- drop-shadow-lg : ajoute un effet d'ombre large à un élément, lui donnant une apparence de profondeur ou de relief. -->
+            Tableau de Bord
+        </h1>
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card text-black bg-success mb-3">
-                <div class="card-header">Nombre de candidatures</div>
-                <div class="card-body">
-                    <h4 class="card-title">{{ $totalApplications }}</h4>
-                </div>
+        <!-- Carte des candidatures -->
+        <div class="flex flex-wrap gap-4">
+            <!-- flex-wrap : permet aux éléments enfants de se répartir sur plusieurs lignes si l'espace est insuffisant. -->
+            <div class="w-full md:w-1/3 bg-gradient-to-br from-green-400 to-green-600 p-6 rounded-xl shadow-xl transform transition duration-500 hover:scale-105">
+                <div class="mb-2 text-lg font-semibold text-white">Nombre de candidatures</div>
+                <div class="text-4xl font-bold text-white">{{ $totalApplications }}</div>
             </div>
         </div>
-    </div>
 
-    <h2 class="mt-4">Compétences les plus demandées</h2>
-    <ul class="list-group">
-        @foreach($topSkills as $skill)
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ $skill->name }}
-                <span class="badge bg-primary rounded-pill">{{ $skill->count }}</span>
-            </li>
-        @endforeach
-    </ul>
+        <!-- Liste des compétences -->
+        <h2 class="mt-10 mb-4 text-3xl font-semibold text-white">
+            Compétences les plus demandées
+        </h2>
+        <ul class="space-y-4">
+            @foreach($topSkills as $skill)
+                <li class="flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow border border-gray-700 transform transition duration-300 hover:scale-105">
+                    <span class="text-sm text-white">{{ $skill->name }}</span>
+                    <span class="px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-bold">
+                        {{ $skill->count }}
+                    </span>
+                </li>
+            @endforeach
+        </ul>
 
-    <div class="row mt-4">
-        <div class="col-md-6">
+        <!-- Graphique -->
+        <div class="mt-4 flex justify-center max-w-md mx-auto">
             <canvas id="applicationsChart"
+                class="w-full bg-white/10 p-2 rounded-xl shadow-xl"
                 data-accepted="{{ $acceptedApplications }}"
                 data-rejected="{{ $rejectedApplications }}"
                 data-pending="{{ $pendingApplications }}"
@@ -41,6 +47,5 @@
             </canvas>
         </div>
     </div>
-</div>
 </main>
 @endsection

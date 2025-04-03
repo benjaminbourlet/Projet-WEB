@@ -1,4 +1,4 @@
-<footer class="bg-[#5A8E95] mt-10">
+<footer class="bg-[#5A8E95]">
     <div class="w-full flex flex-wrap items-center justify-between px-6">
         <div class="w-full lg:w-auto flex flex-row lg:flex-col items-center justify-center lg:justify-start">
             <!-- Dropdown button pour la langue -->
@@ -20,7 +20,7 @@
                         <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Francais</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Anglais</a>
                         </li>
                         <li>
@@ -28,7 +28,7 @@
                         </li>
                         <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Italien</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -50,12 +50,12 @@
                         <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Euros €</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Dollars $</a>
                         </li>
                         <li>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Livre £</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -97,19 +97,19 @@
                         <h2 class="mb-6 text-xl font-bold text-white">Communauté</h2>
                         <ul class="text-white  font-medium">
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">CENTRE D'AIDE</a>
+                                <a href="{{ route('centre_aide') }}" class="hover:underline">CENTRE D'AIDE</a>
                             </li>
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">TROUVER UN EXPERT</a>
+                                <a href="{{ route('trouver_expert') }}" class="hover:underline">TROUVER UN EXPERT</a>
                             </li>
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">PLATEFORME DE DÉVELOPPEMENT</a>
+                                <a href="{{ route('plateforme_dev') }}" class="hover:underline">PLATEFORME DE DÉVELOPPEMENT</a>
                             </li>
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">FORUM</a>
+                                <a href="{{ route('forum') }}" class="hover:underline">FORUM</a>
                             </li>
                             <li class="mb-4">
-                                <a href="#" class="hover:underline">PROFESSIONNEL</a>
+                                <a href="{{ route('professionel') }}" class="hover:underline">PROFESSIONNEL</a>
                             </li>
                         </ul>
                     </div>

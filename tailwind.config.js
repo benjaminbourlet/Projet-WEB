@@ -14,6 +14,24 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            backgroundSize: {
+                '200': '200% 200%',
+            },
+            keyframes: {
+                gradientHorizontal: {
+                    '0%, 100%': { 'background-position': '0% 50%' },
+                    '50%': { 'background-position': '100% 50%' },
+                },
+                gradientAnimation: {
+                    '0%': { 'background-position': '0%' },
+                    '100%': { 'background-position': '200%' },
+                   
+                },
+            },
+            animation: {
+                gradientHorizontal: 'gradientHorizontal 5s ease infinite',
+                gradientAnimation: 'gradientAnimation 5s ease infinite',
+            },
         },
     },
     plugins: [],

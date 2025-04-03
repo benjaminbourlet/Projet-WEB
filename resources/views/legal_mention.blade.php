@@ -4,6 +4,7 @@
 
 @section('content')
     <main class="container mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 max-w-3xl">
+        <!--container : conteneur centralisé avec des marges automatiques, destiné à organiser et structurer le contenu -->
         <h1 class="text-center text-4xl font-extrabold text-blue-600 mb-6">Mentions Légales</h1>
 
         <div class="space-y-6 text-center">
@@ -50,6 +51,7 @@
                     moment gérer ces cookies via votre navigateur :
                 </p>
                 <ul class="list-disc list-inside text-gray-700 mt-2 space-y-2">
+                    <!-- list-disc : liste à puces, list-inside : les puces sont à l'intérieur de la marge de la liste -->
                     <li><strong>Chrome :</strong> Menu > Paramètres > Afficher les paramètres avancés > Paramètres de
                         contenu > Bloquer les cookies et les données de sites tiers.</li>
                     <li><strong>Firefox :</strong> Menu > Options > Vie privée > Utiliser les paramètres personnalisés pour
