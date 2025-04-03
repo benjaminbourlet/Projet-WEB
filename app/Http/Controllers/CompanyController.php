@@ -342,6 +342,8 @@ class CompanyController extends Controller
 
         $companies = $query->paginate(9);
 
+        $companies->appends($request->all());
+
         // Envoyer les données des filtres
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
