@@ -3,6 +3,10 @@
 @section('title', 'Évaluations de ' . $company->name)
 
 @section('content')
+
+@if ($evaluations->isEmpty())
+        <p class="text-gray-500">Aucun avis n'a été publié</p>
+    @else
     <main>
         <div class="container mx-auto p-6">
             <h1 class="text-3xl font-semibold mb-6">Évaluations pour l'entreprise: {{ $company->name }}</h1>

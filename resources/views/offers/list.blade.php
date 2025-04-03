@@ -12,6 +12,9 @@
         </div>
     @endif
 
+    @if ($offers->isEmpty())
+        <p class="text-gray-500">Aucune offre n'a été publiée</p>
+    @else
 
     <!-- Contenu principal -->
     <div x-data="{ selectedOffer: null }">
@@ -19,7 +22,7 @@
         <!-- Contenu de la page -->
         <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
             <!-- Sidebar Filtres -->
-            <form method="GET" action="{{ route('offer.search') }}"
+            <form method="GET" action="{{ route('offer_search') }}"
                 class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
                 <!-- Barre de Recherche par entreprise -->
@@ -99,7 +102,7 @@
                 </div>
                 <button type="submit"
                     class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
-                <a href="{{ route('offer.search') }}"
+                <a href="{{ route('offer_search') }}"
                     class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">
                     Réinitialiser
                 </a>
@@ -261,5 +264,6 @@
         </div>
 
     </div>
+    @endif
 
 @endsection

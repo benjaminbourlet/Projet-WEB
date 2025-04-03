@@ -12,7 +12,7 @@
 
     <div class="container mx-auto pt-20 text-center bg-100">
         <div class="relative w-2/3 mx-auto flex items-center">
-            <form method="GET" action="{{ route('offer.search') }}" class="w-full">
+            <form method="GET" action="{{ route('offer_search') }}" class="w-full">
                 <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 bg-[#387077] p-2 rounded-full z-10">
                     <img src="{{ asset('storage/images/loupe.png') }}" alt="Recherche" class="w-8 h-8">
                 </button>

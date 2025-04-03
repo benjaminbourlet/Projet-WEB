@@ -3,6 +3,11 @@
 @section('title', $role . 's')
 
 @section('content')
+
+@if ($users->isEmpty())
+        <p class="text-gray-500">Aucun avis n'a été publié</p>
+    @else
+
 <main>
     <div class="container mx-auto p-4 flex flex-col gap-6">
         
@@ -21,12 +26,12 @@
         </div>
 
         <!-- Formulaire de recherche et filtres -->
-        <form method="GET" action="{{ route('user.search', ['role' => $role === 'Etudiant' ? 'students' : 'pilots']) }}" class="mt-4 flex items-center space-x-2">
+        <form method="GET" action="{{ route('user_search', ['role' => $role === 'Etudiant' ? 'students' : 'pilots']) }}" class="mt-4 flex items-center space-x-2">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un utilisateur..." class="w-full border p-2 rounded-md">
             
             @if ($role === 'Etudiant')
                 <button type="button" onclick="toggleClassList()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">📁</button>
-                <a href="{{ route('user.search', ['role' => $role === 'Etudiant' ? 'students' : 'pilots']) }}" class="bg-blue-700 hover:bg-blue-400 text-white p-2 rounded-md">Réinitialiser</a>
+                <a href="{{ route('user_search', ['role' => $role === 'Etudiant' ? 'students' : 'pilots']) }}" class="bg-blue-700 hover:bg-blue-400 text-white p-2 rounded-md">Réinitialiser</a>
             @endif
         </form>
 
@@ -37,7 +42,7 @@
             <ul class="mt-2">
                 @foreach ($classes as $class)
                     <li>
-                        <a href="{{ route('user.search', ['students', 'class_id' => $class->id, 'search' => request('search')]) }}" class="text-blue-500 hover:underline">
+                        <a href="{{ route('user_search', ['students', 'class_id' => $class->id, 'search' => request('search')]) }}" class="text-blue-500 hover:underline">
                             {{ $class->name }}
                         </a>
                     </li>
@@ -86,4 +91,5 @@
         </div>
     </div>
 </main>
+@endif
 @endsection

@@ -120,15 +120,15 @@ class EvaluationController extends Controller
         $user = User::findOrFail($userId); // Recherche de l'utilisateur par son ID
     
         // Vérifie si l'utilisateur est l'auteur de l'offre ou un administrateur
-        if (Auth::id() !== $userId && !Auth::user()->hasRole('admin')) {
+        if (Auth::id() !== $userId && !Auth::user()->hasRole('Admin')) {
             // Si l'utilisateur n'est pas l'auteur de l'offre et n'est pas admin, retourner une erreur
             return redirect()->route('evaluations_all')->with('error', 'Vous n\'êtes pas autorisé à supprimer cette offre');
         }
     
         // Si l'utilisateur est autorisé, on supprime l'évaluation
-        $user->evaluations()->wherePivot('company_id', $companyId)->detach(); 
+        $user->evaluations()->wherePivot('company_id', $companyId)->detach();
     
         return redirect()->route('evaluations_all')->with('success', 'Offre supprimée avec succès');
-    }
+    }    
 
 }

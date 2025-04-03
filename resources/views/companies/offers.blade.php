@@ -4,6 +4,9 @@
 
 @section('content')
 
+@if ($offers->isEmpty())
+        <p class="text-gray-500">Aucune offre n'a été publiée par l'entreprise</p>
+    @else
         <!-- Sidebar Filtres -->
         <div class="bg-teal-700 text-white p-4 rounded-lg w-1/5">
             <div class="mb-4">
@@ -86,5 +89,6 @@
                 {{ $offers->links() }}
             </div>
         </div>
+        @endif
 
 @endsection

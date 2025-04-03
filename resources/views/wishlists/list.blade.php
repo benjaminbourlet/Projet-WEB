@@ -4,6 +4,9 @@
 
 @section('content')
 
+@if ($wishlists->isEmpty())
+    <p class="text-gray-500">Aucune offre dans la wishlist.</p>
+@else
 
 <div x-data="{ selectedOffer: null }">
     <!-- Titre de la page -->
@@ -13,7 +16,7 @@
     <div class="flex flex-col md:flex-row container mx-auto p-4 gap-6">
 
             <!-- Sidebar Filtres -->
-            <form method="GET" action="{{ route('offer.search') }}"
+            <form method="GET" action="{{ route('wishlists_search', ['user_id' => $user->id]) }}"
                 class="bg-teal-700 text-white p-4 rounded-lg w-full md:w-1/5 inline-block md:top-8 md:max-h-max sticky">
 
                 <!-- Barre de Recherche par entreprise -->
@@ -93,7 +96,7 @@
                 </div>
                 <button type="submit"
                     class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">Rechercher</button>
-                <a href="{{ route('offer.search') }}"
+                <a href="{{ route('wishlists_search', ['user_id' => $user->id]) }}"
                     class="bg-blue-700 hover:bg-blue-400 text-white border text-center p-2 rounded-md m-2">
                     Réinitialiser
                 </a>
@@ -106,7 +109,6 @@
                 {{ session('error') }}
             </div>
             @endif
-            @if ($wishlists->count() > 0)
             <div>
                 @foreach ($wishlists as $offer)
                 <div class="bg-white hover:bg-gray-100 shadow-md rounded-tr-2xl rounded-bl-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-1/3 cursor-pointer transition-all" @click="window.innerWidth < 768 ? window.location.href = '{{ route('offer_info', ['id' => $offer->id, 'title' => Str::slug($offer->title)]) }}' : selectedOffer = {{ json_encode($offer->load(['company','company.city', 'skills'])) }}" @click.away="selectedOffer = null" @click.stop>
@@ -155,9 +157,6 @@
             <div class="mt-4">
                 {{ $wishlists->links() }}
             </div>
-            @else
-            <p class="text-gray-500">Votre wishlist est vide.</p>
-            @endif
         </div>
         <!-- Détails de l'offre -->
         <div class="w-full md:w-1/2 bg-[#5A8E95] p-4 rounded-lg border border-black mx-auto inline-block sticky md:top-8 md:max-h-max md:overflow-auto fixed bottom-4 max-h-1/3 w-full md:w-1/2"
@@ -225,5 +224,6 @@
     </div>
 
 </div>
+@endif
 
 @endsection
