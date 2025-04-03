@@ -37,6 +37,15 @@
                             <div class="italic text-gray-600">
                                 <p>{{ $evaluation->comment ?? 'Pas de commentaire' }}</p>
                             </div>
+                            @role('Admin')
+                            <form action="{{ route('evaluations_remove', ['user_id' => $evaluation->user_id, 'company_id' => $evaluation->company_id]) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette evaluation ?');"
+                                        class="ml-auto">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="px-3 pt-1.5 pb-1.5 bg-red-500 rounded-lg">X</button>
+                                    </form>
+                            @endrole
                     </div>
                 @empty
                     <p class="text-gray-500">Aucun avis disponible.</p>

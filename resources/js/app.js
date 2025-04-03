@@ -4,4 +4,4 @@ import './companiesFilter';
 import './MultipleSelect';
 import './carousel';
 import './dashboardChart';
-import './slider'
+import './slider';

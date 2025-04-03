@@ -56,6 +56,34 @@ class CompanyController extends Controller
             'siret' => 'required|string|size:14|unique:companies,siret',
             'sectors' => 'nullable|array', // Ajouter la validation pour le tableau des secteurs
             'sectors.*' => 'exists:sectors,id', // Vérifier que chaque secteur existe dans la table 'sectors'
+        ], [
+            // Messages personnalisés
+            'name.required' => 'Le nom de l\'entreprise est obligatoire.',
+            'name.max' => 'Le nom de l\'entreprise ne peut pas dépasser 50 caractères.',
+            'name.unique' => 'Ce nom d\'entreprise est déjà utilisé.',
+        
+            'email.required' => 'L\'adresse email est obligatoire.',
+            'email.email' => 'Veuillez entrer une adresse email valide.',
+            'email.unique' => 'Cet email est déjà utilisé par une autre entreprise.',
+            'email.max' => 'L\'adresse email ne peut pas dépasser 50 caractères.',
+        
+            'tel_number.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'tel_number.regex' => 'Le numéro de téléphone doit être valide et au format français.',
+        
+            'logo.image' => 'Le fichier doit être une image.',
+            'logo.mimes' => 'Les formats acceptés sont : jpeg, png, jpg, gif.',
+            'logo.max' => 'L\'image ne doit pas dépasser 2 Mo.',
+        
+            'siret.required' => 'Le numéro SIRET est obligatoire.',
+            'siret.size' => 'Le numéro SIRET doit contenir exactement 14 caractères.',
+            'siret.unique' => 'Ce numéro SIRET est déjà utilisé.',
+        
+            'city_id.required' => 'La ville est obligatoire.',
+            'city_id.exists' => 'La ville sélectionnée n\'existe pas.',
+        
+            'address.required' => 'L\'adresse est obligatoire.',
+        
+            'sectors.*.exists' => 'L\'un des secteurs sélectionnés n\'existe pas.'
         ]);
 
         // Gestion de l'upload du logo
@@ -159,6 +187,34 @@ class CompanyController extends Controller
             'address' => 'required|string',
             'sectors' => 'nullable|array', // Vérification du tableau des secteurs
             'sectors.*' => 'exists:sectors,id', // Vérification que chaque secteur existe dans la table 'sectors'
+        ], [
+            // Messages personnalisés
+            'name.required' => 'Le nom de l\'entreprise est obligatoire.',
+            'name.max' => 'Le nom de l\'entreprise ne peut pas dépasser 50 caractères.',
+            'name.unique' => 'Ce nom d\'entreprise est déjà utilisé.',
+        
+            'email.required' => 'L\'adresse email est obligatoire.',
+            'email.email' => 'Veuillez entrer une adresse email valide.',
+            'email.unique' => 'Cet email est déjà utilisé par une autre entreprise.',
+            'email.max' => 'L\'adresse email ne peut pas dépasser 50 caractères.',
+        
+            'tel_number.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'tel_number.regex' => 'Le numéro de téléphone doit être valide et au format français.',
+        
+            'logo.image' => 'Le fichier doit être une image.',
+            'logo.mimes' => 'Les formats acceptés sont : jpeg, png, jpg, gif.',
+            'logo.max' => 'L\'image ne doit pas dépasser 2 Mo.',
+        
+            'siret.required' => 'Le numéro SIRET est obligatoire.',
+            'siret.size' => 'Le numéro SIRET doit contenir exactement 14 caractères.',
+            'siret.unique' => 'Ce numéro SIRET est déjà utilisé.',
+        
+            'city_id.required' => 'La ville est obligatoire.',
+            'city_id.exists' => 'La ville sélectionnée n\'existe pas.',
+        
+            'address.required' => 'L\'adresse est obligatoire.',
+        
+            'sectors.*.exists' => 'L\'un des secteurs sélectionnés n\'existe pas.'
         ]);
 
         // Gestion de l'upload du logo
