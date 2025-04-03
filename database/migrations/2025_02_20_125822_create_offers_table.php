@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->text('description');
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('salary')->nullable();
+            $table->integer('salary');
             $table->foreignId('company_id')->constrained('companies');
             $table->timestamps();
             $table->softDeletes();

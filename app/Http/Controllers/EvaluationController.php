@@ -16,13 +16,39 @@ class EvaluationController extends Controller
     /**
      * Afficher les évaluations d'une entreprise.
      */
-    public function index($companyId)
+    public function showEvaluations($user_id)
     {
-        $company = Company::findOrFail($companyId); // Recherche de l'entreprise par son ID
-        $evaluations = $company->evaluations()->withTrashed()->get(); // Récupère toutes les évaluations de l'entreprise, y compris celles supprimées
-
-        return response()->json($evaluations); // Retourne les évaluations sous forme de réponse JSON
-    }
+        $user = User::findOrFail($user_id);
+    
+        // Vérifier si l'utilisateur est admin
+        if (!auth()->user()->hasRole('Admin')) {
+            // Si l'utilisateur n'est pas admin, il doit être l'utilisateur connecté
+            if ($user_id != auth()->id()) {
+                return redirect()->route('home')->with('error', 'Vous n\'êtes pas autorisé à voir les candidatures de cet utilisateur.');
+            }   
+        }
+    
+        // Si l'utilisateur est admin, il peut voir les évaluations de n'importe quel utilisateur
+        // Si l'utilisateur est connecté et que l'id correspond, on récupère ses évaluations
+        $evaluations = DB::table('evaluations') // Requête SQL sur la table evaluations
+            ->join('companies', 'evaluations.company_id', '=', 'companies.id') // Jointure avec la table companies
+            ->join('users', 'evaluations.user_id', '=', 'users.id') // Jointure avec la table users
+            ->select( // Sélectionne les colonnes spécifiques
+                'evaluations.grade',
+                'evaluations.comment',
+                'evaluations.created_at',
+                'companies.name as company_name',
+                'companies.id as company_id',
+                'users.name as user_name',
+                'users.first_name as user_first_name',
+                'users.id as user_id',
+            )
+            // Si l'utilisateur n'est pas admin, on filtre par l'ID de l'utilisateur connecté ou l'ID passé
+            ->where('evaluations.user_id', '=', $user_id) 
+            ->paginate(10); // Paginera les résultats par 10 éléments par page
+    
+        return view('evaluations.list_user', compact('evaluations')); // Retourne la vue avec les évaluations
+    }    
 
     // Afficher la vue de création d'évaluation pour une entreprise
     public function showEvaluationsCreate($company_id)
@@ -79,6 +105,7 @@ class EvaluationController extends Controller
                 'companies.id as company_id',
                 'users.name as user_name',
                 'users.first_name as user_first_name',
+                'users.id as user_id',
             )
             ->paginate(10); // Paginera les résultats par 10 éléments par page
 
@@ -88,12 +115,20 @@ class EvaluationController extends Controller
     /**
      * Supprimer une évaluation (Soft Delete).
      */
-    public function remove($userId, $companyId)
+    public function removeEvaluations($userId, $companyId)
     {
         $user = User::findOrFail($userId); // Recherche de l'utilisateur par son ID
-        $user->evaluations()->wherePivot('company_id', $companyId)->detach(); // Supprime l'évaluation de l'entreprise pour cet utilisateur
-
-        return response()->json(['message' => 'Évaluation supprimée avec succès']); // Retourne une réponse JSON avec un message de succès
+    
+        // Vérifie si l'utilisateur est l'auteur de l'offre ou un administrateur
+        if (Auth::id() !== $userId && !Auth::user()->hasRole('admin')) {
+            // Si l'utilisateur n'est pas l'auteur de l'offre et n'est pas admin, retourner une erreur
+            return redirect()->route('evaluations_all')->with('error', 'Vous n\'êtes pas autorisé à supprimer cette offre');
+        }
+    
+        // Si l'utilisateur est autorisé, on supprime l'évaluation
+        $user->evaluations()->wherePivot('company_id', $companyId)->detach(); 
+    
+        return redirect()->route('evaluations_all')->with('success', 'Offre supprimée avec succès');
     }
 
 }

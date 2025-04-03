@@ -20,77 +20,96 @@ class OfferController extends Controller
 {
     use AuthorizesRequests;
 
-        public function show(Request $request)
+    public function show(Request $request)
     {
-
         $companies = Company::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
-
+    
         $this->authorize('search_offer');
-
+    
+        // Récupérer les offres avec pagination
+        $offers = Offer::paginate(9);
+        
+        return view('offers.list', compact('offers', 'cities', 'companies'));
+    }
+    
+    public function search(Request $request)
+    {
+        $companies = Company::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
+    
+        $this->authorize('search_offer');
+    
         $query = Offer::query();
+    
+        // Appliquer les filtres un par un
+        $this->applySearchFilter($query, $request);
+        $this->applySalaryFilter($query, $request);
+        $this->applyDurationFilter($query, $request);
+        $this->applyStartDateFilter($query, $request);
+        $this->applyCompanyFilter($query, $request);
+        $this->applyCityFilter($query, $request);
+    
+        // Récupérer les offres avec pagination
+        $offers = $query->paginate(9);
+    
+        $offers->appends($request->all());
 
-        /*
-        // Filtrer par secteur
-        if ($request->filled('sector')) {
-            $query->whereHas('company.sectors', function ($q) use ($request) {
-                $q->where('name', $request->sector);
-            });
-        }
-        */
+        return view('offers.list', compact('offers', 'companies', 'cities'));
+    }
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('description', 'LIKE', "%{$search}%");
-        }
-        // Filtrer par ville
+    protected function applySearchFilter($query, Request $request)
+    {
         if ($request->filled('search')) {
-            $query->where('title', 'LIKE', '%' . $request->search . '%')
-                ->orWhere('description', 'LIKE', '%' . $request->search . '%');
-        }
-
-        /*
-        if ($request->filled('skills')) {
-            $skills = explode(',', $request->skills);
-            $query->whereHas('skills', function ($q) use ($skills) {
-                $q->whereIn('name', $skills);
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $request->search . '%');
             });
         }
-        */
-        // Filtrer par salaire
+    }
+    
+    protected function applySalaryFilter($query, Request $request)
+    {
         if ($request->filled('min_salaire')) {
-            $query->where('salary', '>=', $request->min_salaire);
+            $query->where('salary', '>=', (int) $request->min_salaire);
         }
         if ($request->filled('max_salaire')) {
-            $query->where('salary', '<=', $request->max_salaire);
+            $query->where('salary', '<=', (int) $request->max_salaire);
         }
-
-        // Filtrer par durée
-        if ($request->filled('duree_min')) {
-            $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [$request->duree_min]);
+    }
+    
+    protected function applyDurationFilter($query, Request $request)
+    {
+        if ($request->filled('duration_min')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [(int) $request->duration_min]);
         }
-        if ($request->filled('duree_max')) {
-            $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [$request->duree_max]);
+        if ($request->filled('duration_max')) {
+            $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [(int) $request->duration_max]);
         }
-
-        // Filtrer par date de début
+    }
+    
+    protected function applyStartDateFilter($query, Request $request)
+    {
         if ($request->filled('start_date')) {
             $query->where('start_date', '>=', $request->start_date);
         }
-
-        //Filtrer par entreprise
+    }
+    
+    protected function applyCompanyFilter($query, Request $request)
+    {
         if ($request->filled('company')) {
-            $query->whereHas('company', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->company . "%");
+            $query->where('company_id', $request->company);
+        }
+    }
+    
+    protected function applyCityFilter($query, Request $request)
+    {
+        if ($request->filled('city')) {
+            $query->whereHas('company.city', function ($q) use ($request) {
+                $q->where('id', $request->city);
             });
         }
-
-        // Récupérer les offres avec pagination
-        $offers = $query->paginate(9);
-
-        return view('offers.list', compact('offers', 'cities', 'companies'));
     }
-
 
     public function showOfferRegister()
     {
@@ -110,14 +129,54 @@ class OfferController extends Controller
             'title' => 'required|string|max:150',
             'description' => 'nullable|string',
             'start_date' => 'required|date|after:today|before:' . now()->addYear()->format('Y-m-d'),
-            'end_date' => 'required|date|after:start_date|before:' . now()->addYear()->format('Y-m-d'),
-            'salary' => 'nullable',
+            'end_date' => [
+                'required',
+                'date',
+                'after:start_date',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->start_date) {
+                        $maxEndDate = \Carbon\Carbon::parse($request->start_date)->addMonths(6)->format('Y-m-d');
+                        if ($value > $maxEndDate) {
+                            $fail("La date de fin doit être au maximum 6 mois après la date de début (jusqu'au $maxEndDate).");
+                        }
+                    }
+                },
+            ],
+            'salary' => 'required|integer',
             'company_id' => 'required|exists:companies,id',
             'skills' => 'nullable|array',
             'skills.*' => 'exists:skills,id',
             'departments' => 'nullable|array',
             'departments.*' => 'exists:departments,id',
+        ], [
+            'title.required' => 'Le titre est obligatoire.',
+            'title.string' => 'Le titre doit être une chaîne de caractères.',
+            'title.max' => 'Le titre ne peut pas dépasser 150 caractères.',
+
+            'description.string' => 'La description doit être une chaîne de caractères.',
+
+            'start_date.required' => 'La date de début est obligatoire.',
+            'start_date.date' => 'La date de début doit être une date valide.',
+            'start_date.after' => 'La date de début doit être après aujourd’hui.',
+            'start_date.before' => 'La date de début ne peut pas dépasser un an à partir d’aujourd’hui.',
+
+            'end_date.required' => 'La date de fin est obligatoire.',
+            'end_date.date' => 'La date de fin doit être une date valide.',
+            'end_date.after' => 'La date de fin doit être après la date de début.',
+
+            'salary.required' => 'Le salaire est obligatoire.',
+            'salary.integer' => 'Le salaire doit être un nombre entier.',
+
+            'company_id.required' => 'L’identifiant de l’entreprise est obligatoire.',
+            'company_id.exists' => 'L’entreprise sélectionnée n’existe pas.',
+
+            'skills.array' => 'Les compétences doivent être sous forme de tableau.',
+            'skills.*.exists' => 'L’une des compétences sélectionnées n’existe pas.',
+
+            'departments.array' => 'Les départements doivent être sous forme de tableau.',
+            'departments.*.exists' => 'L’un des départements sélectionnés n’existe pas.',
         ]);
+
 
         // Création de l'entreprise
         $offer = Offer::create([
@@ -144,16 +203,16 @@ class OfferController extends Controller
     public function showOfferInfo($id)
     {
         $offer = Offer::findOrFail($id);
-        
+
         // Récupérer le nombre d'étudiants ayant postulé
         $applicationsCount = $offer->user()->count();
-        
+
         // Récupérer le nombre d'étudiants ayant mis l'offre en wishlist
         $wishlistsCount = $offer->users()->count();
-        
+
         return view('offers.info', compact('offer', 'applicationsCount', 'wishlistsCount'));
     }
-    
+
     public function showOfferUpdate($id)
     {
 
@@ -176,13 +235,52 @@ class OfferController extends Controller
             'title' => 'required|string|max:150',
             'description' => 'nullable|string',
             'start_date' => 'required|date|after:today|before:' . now()->addYear()->format('Y-m-d'),
-            'end_date' => 'required|date|after:start_date|before:' . now()->addYear()->format('Y-m-d'),
-            'salary' => 'nullable|numeric',
+            'end_date' => [
+                'required',
+                'date',
+                'after:start_date',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->start_date) {
+                        $maxEndDate = \Carbon\Carbon::parse($request->start_date)->addMonths(6)->format('Y-m-d');
+                        if ($value > $maxEndDate) {
+                            $fail("La date de fin doit être au maximum 6 mois après la date de début (jusqu'au $maxEndDate).");
+                        }
+                    }
+                },
+            ],
+            'salary' => 'required|integer',
             'company_id' => 'required|exists:companies,id',
             'skills' => 'nullable|array',
             'skills.*' => 'exists:skills,id',
             'departments' => 'nullable|array',
             'departments.*' => 'exists:departments,id',
+        ], [
+            'title.required' => 'Le titre est obligatoire.',
+            'title.string' => 'Le titre doit être une chaîne de caractères.',
+            'title.max' => 'Le titre ne peut pas dépasser 150 caractères.',
+
+            'description.string' => 'La description doit être une chaîne de caractères.',
+
+            'start_date.required' => 'La date de début est obligatoire.',
+            'start_date.date' => 'La date de début doit être une date valide.',
+            'start_date.after' => 'La date de début doit être après aujourd’hui.',
+            'start_date.before' => 'La date de début ne peut pas dépasser un an à partir d’aujourd’hui.',
+
+            'end_date.required' => 'La date de fin est obligatoire.',
+            'end_date.date' => 'La date de fin doit être une date valide.',
+            'end_date.after' => 'La date de fin doit être après la date de début.',
+
+            'salary.required' => 'Le salaire est obligatoire.',
+            'salary.integer' => 'Le salaire doit être un nombre entier.',
+
+            'company_id.required' => 'L’identifiant de l’entreprise est obligatoire.',
+            'company_id.exists' => 'L’entreprise sélectionnée n’existe pas.',
+
+            'skills.array' => 'Les compétences doivent être sous forme de tableau.',
+            'skills.*.exists' => 'L’une des compétences sélectionnées n’existe pas.',
+
+            'departments.array' => 'Les départements doivent être sous forme de tableau.',
+            'departments.*.exists' => 'L’un des départements sélectionnés n’existe pas.',
         ]);
 
         // Mise à jour des informations de l'offre
@@ -217,19 +315,19 @@ class OfferController extends Controller
     public function deleteOffer($id)
     {
         $offer = Offer::findOrFail($id); // Trouve l'offre ou génère une erreur 404
-    
+
         // Marquer les candidatures (applications) comme supprimées avec SoftDeletes
         DB::table('applications')
             ->where('offer_id', $offer->id)
-            ->update(['deleted_at' => now()]); 
-    
+            ->update(['deleted_at' => now()]);
+
         // Supprime les utilisateurs associés dans la table wishlists
         $offer->users()->detach();
-    
+
         // Effectuer une suppression douce de l'offre
         $offer->delete();
-    
+
         return redirect()->route('offer_list')->with('success', 'Offre supprimée avec succès');
     }
-    
+
 }

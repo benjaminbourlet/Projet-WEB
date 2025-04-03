@@ -1,48 +1,66 @@
 <?php
 
-namespace App\Http\Controllers; // Déclare l'espace de noms du contrôleur.
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request; // Importation de la classe Request pour gérer les requêtes HTTP.
-use Illuminate\Support\Facades\Auth; // Importation de la classe Auth pour gérer l'authentification des utilisateurs.
-use Illuminate\Validation\ValidationException; // Importation de la classe ValidationException pour gérer les erreurs de validation.
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AuthController extends Controller
 {
     // Affiche la page de connexion.
     public function showLogin()
     {
-        return view('auth.login'); // Retourne la vue du formulaire de connexion.
+        return view('auth.login'); 
     }
 
     // Gère la connexion de l'utilisateur.
     public function login(Request $request)
     {
-        // Validation des champs du formulaire.
+        // Validation avec messages personnalisés.
         $request->validate([
-            'email' => 'required|email', // L'email est requis et doit être valide.
-            'password' => 'required', // Le mot de passe est requis.
+            'email' => 'required|email',
+            'password' => 'required',
+        ], [
+            'email.required' => 'L\'adresse email est obligatoire.',
+            'email.email' => 'Veuillez entrer une adresse email valide.',
+            'password.required' => 'Le mot de passe est obligatoire.',
         ]);
 
-        // Vérifie les identifiants et tente d'authentifier l'utilisateur.
-        if (Auth::attempt($request->only('email', 'password'))) { 
-            $request->session()->regenerate(); // Régénère la session
-            return redirect()->route('home')->with('success', 'Connexion réussie !'); // Ajoute un message flash
-        }        
+        // Clé de limitation de tentative basée sur l'IP.
+        $throttleKey = 'login:' . $request->ip();
 
-        // Si l'authentification échoue, retourne une erreur de validation.
-        throw ValidationException::withMessages([
-            'email' => 'Les identifiants sont incorrects.', // Message d'erreur affiché à l'utilisateur.
-        ]);
+        // Vérifier si trop de tentatives ont été faites.
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            return back()->withErrors([
+                'email' => 'Trop de tentatives. Veuillez réessayer dans ' . RateLimiter::availableIn($throttleKey) . ' secondes.'
+            ]);
+        }
+
+        // Tentative d'authentification.
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            RateLimiter::hit($throttleKey, 60); // Bloque après 5 essais en 60s
+            return back()->withErrors([
+                'email' => 'Les identifiants sont incorrects.',
+            ])->withInput();
+        }
+
+        // Si connexion réussie, réinitialiser le compteur de tentatives.
+        RateLimiter::clear($throttleKey);
+
+        // Régénérer la session pour des raisons de sécurité.
+        $request->session()->regenerate();
+
+        return redirect()->route('home')->with('success', 'Connexion réussie !');
     }
 
     // Gère la déconnexion de l'utilisateur.
     public function logout(Request $request)
     {
-        Auth::logout(); // Déconnecte l'utilisateur.
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        $request->session()->invalidate(); // Invalide la session actuelle.
-        $request->session()->regenerateToken(); // Régénère un nouveau jeton CSRF pour plus de sécurité.
-
-        return redirect()->route('home'); // Redirige l'utilisateur vers la page d'accueil après déconnexion.
+        return redirect()->route('home');
     }
 }
