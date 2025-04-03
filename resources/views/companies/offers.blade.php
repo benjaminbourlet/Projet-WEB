@@ -7,7 +7,7 @@
 
 @if(session('success'))
 <div id="success-message"
-    class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block flex justify-center">
+    class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block flex justify-center mt-4">
     {{ session('success') }}
 </div>
 @endif
