@@ -4,12 +4,15 @@
 
 @section('content')
 
+{{--  Verification de la présence d'une entreprise.  --}}
+
 @if ($companies->isEmpty())
         <p class="text-gray-500">Aucune entreprise n'est sur le site</p>
     @else
 
     <div class="container mx-auto p-4">
 
+        {{-- Message de succès --}}
         @if(session('success'))
             <div id="success-message" class="bg-green-500 text-white p-3 rounded-md mb-4 max-w-sm mx-auto inline-block">
                 {{ session('success') }}
@@ -30,6 +33,7 @@
             </div>
             @endrole
 
+            {{-- Formulaire de recherche --}}
             <form method="GET" action="{{ route('company_search') }}"
                 class="flex flex-wrap gap-4 border p-4 rounded-md w-full m-2">
                 <div class="flex w-full items-center gap-2">
@@ -78,7 +82,8 @@
 
 
         </div>
-
+        
+        {{-- Conteneur des entreprises  --}}
         <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($companies as $company)
                 <div

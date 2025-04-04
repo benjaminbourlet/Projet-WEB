@@ -24,6 +24,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
 
+    <!-- Script pour le Service Worker (PWA) -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
@@ -36,6 +37,7 @@
 
 </head>
 
+<!-- Contenu de la page-->
 <body class="container max-w-full min-h-screen flex flex-col justify-between">
 
     {{-- Header inclus ici --}}

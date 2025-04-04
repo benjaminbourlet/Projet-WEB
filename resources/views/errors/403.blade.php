@@ -4,6 +4,9 @@
 
 
 @section('content')
+
+{{--  Page d'erreur 403  --}}
+
 <main class="container mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 max-w-3xl text-center">
     <img src="{{ asset('storage/images/403.png') }}" alt="Accès interdit" class="mx-auto w-64 mb-6">
     <h1 class="text-4xl font-bold text-red-600">403 - Accès Interdit</h1>

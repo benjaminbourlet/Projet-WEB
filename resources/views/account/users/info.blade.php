@@ -1,4 +1,9 @@
 @extends('layouts.app')
+{{-- 
+    Fichier: info.blade.php
+    Description: Affiche les informations détaillées d'un utilisateur, y compris son profil, ses candidatures, 
+                 sa wishlist et ses statistiques. Les sections sont adaptées en fonction du rôle de l'utilisateur.
+--}}
 
 @section('title', 'Informations de ' . $user->name)
 
@@ -141,6 +146,7 @@
                         <a href="{{ route('wishlists_list_user', ['user_id' => $user->id]) }}"
                             class="text-[#3D9DA9] hover:underline">Voir la wishlist</a>
 
+                        {{-- Section Statistiques: Affiche les statistiques des candidatures de l'utilisateur --}}
                         <div class="mt-10">
                             <h2 class="text-2xl font-bold mb-6 text-gray-800">📊 Statistiques</h2>
 

@@ -4,6 +4,9 @@
 
 
 @section('content')
+
+{{-- Page d'erreur 503 --}}
+
 <main class="container mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 max-w-3xl text-center">
     <img src="#" alt="Erreur 503" class="mx-auto rounded-lg">
     <h1 class="text-4xl font-bold text-red-600 mt-6">Oups ! Service Indisponible</h1>

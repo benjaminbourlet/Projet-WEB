@@ -9,11 +9,13 @@
         <form action="{{ route('offer_update', ['id' => $offer->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            <!-- Titre de l'offre -->
             <div class="mb-4">
                 <label class="block font-bold">Titre de l'offre :</label>
                 <input type="text" name="title" value="{{ old('title', $offer->title) }}" class="border p-2 w-full">
             </div>
 
+            <!-- Description de l'offre -->
             <div class="mb-4">
                 <label for="description" class="block font-bold">Description :</label>
                 <textarea id="description" name="description" rows="4"
@@ -23,23 +25,27 @@
                 @enderror
             </div>
 
+            <!-- Sélection du salaire -->
             <div class="mb-4">
                 <label class="block font-bold">Salaire :</label>
                 <input type="text" name="salary" value="{{ old('salary', $offer->salary) }}" class="border p-2 w-full">
             </div>
 
+            <!-- Sélection de la date de début -->
             <div class="mb-4">
                 <label class="block font-bold">Date de début :</label>
                 <input type="date" name="start_date" value="{{ old('start_date', $offer->start_date) }}"
                     class="border p-2 w-full">
             </div>
 
+            <!-- Sélection de la date de fin -->
             <div class="mb-4">
                 <label class="block font-bold">Date de fin :</label>
                 <input type="date" name="end_date" value="{{ old('end_date', $offer->end_date) }}"
                     class="border p-2 w-full">
             </div>
 
+            <!-- Sélection de l'entreprise -->
             <div class="mb-4">
                 <label class="block font-bold">Entreprise :</label>
                 <select name="company_id" class="border p-2 w-full">
@@ -52,6 +58,7 @@
                 </select>
             </div>
 
+            <!-- Sélection des compétences -->
             <div class="mb-4">
                 <label for="skills" class="block text-sm font-medium text-gray-700">Compétences (Sélection
                     multiple)</label>
@@ -68,6 +75,7 @@
                 @enderror
             </div>
 
+            <!-- Sélection des départements -->
             <div class="mb-4">
                 <label for="departments" class="block text-sm font-medium text-gray-700">Départements (Sélection
                     multiple)</label>
@@ -85,6 +93,7 @@
                 @enderror
             </div>
 
+            <!-- Bouton de confirmation -->
             <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">
                 Modifier
             </button>

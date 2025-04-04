@@ -48,6 +48,7 @@
                             @endforeach
                         </select>
 
+                        <!-- Sélection de la région -->
                         <label for="" class="text-white">Region</label>
                         <select name="region" class="text-black border p-2 rounded-md m-2 max-w-max max-h-max">
                             <option value="">Toutes les régions</option>
@@ -104,6 +105,7 @@
                         <input type="date" name="start_date" value="{{ request('start_date') }}"
                             class="mb-4 w-full bg-teal-600 p-2 rounded" placeholder="Rechercher">
                     </div>
+                    <!-- Bouton chercher et réinitialiser -->
                     <div class="flex justify-between items-center space-x-2">
                         <button type="submit" class="bg-blue-700 hover:bg-blue-400 text-white px-4 py-2 rounded-md flex-none">
                             Rechercher
@@ -129,6 +131,7 @@
                                 @click.away="selectedOffer = null" @click.stop>
                                 <div class="flex items-center">
                                     @if (auth()->user()->wishlists->contains($offer->id))
+                                    <!-- Formulaire pour supprimer de la wishlist -->
                                         <form
                                             action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
                                             method="POST" class="flex items-center h-auto">
@@ -150,7 +153,7 @@
                                     </h4>
                                 </div>
                                 <div class="flex flex-row items-center justify-between">
-                                    <!-- Première partie -->
+                                    <!-- Nom de l'entreprise -->
                                     <h6 class="text-gray-500 text-center flex-1">
                                         {{ $offer->company->name }}
                                     </h6>
@@ -158,7 +161,7 @@
                                     <!-- Séparateur vertical -->
                                     <span class="mx-2 w-[1px] bg-gray-400 self-stretch"></span>
 
-                                    <!-- Deuxième partie -->
+                                    <!-- Date du stage -->
                                     <p class="text-gray-500 mx-2 text-center flex-1">
                                         {{ \Carbon\Carbon::parse($offer->start_date)->translatedFormat('d F Y') }} to
                                         {{ \Carbon\Carbon::parse($offer->end_date)->translatedFormat('d F Y') }}
