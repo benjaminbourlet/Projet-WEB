@@ -16,11 +16,23 @@ class UserController extends Controller
 
     use AuthorizesRequests;
 
+    /**
+     * Récupère le rôle de l'utilisateur basé sur la route.
+     *
+     * @param string $route
+     * @return string
+     */
     private function getRole($route)
     {
         return $route === 'students_list' ? 'Etudiant' : 'Pilote';
     }
 
+    /**
+     * Récupère ou crée une classe en fonction de la requête.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \App\Models\Classe|null
+     */
     private function getOrCreateClasse(Request $request)
     {
         if ($request->new_classe) {
@@ -28,28 +40,35 @@ class UserController extends Controller
         }
         return $request->classe_id ? Classe::findOrFail($request->classe_id) : null;
     }
+
+    /**
+     * Affiche la liste des utilisateurs avec filtres.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
     public function show(Request $request)
     {
-        // Récupérer le rôle de l'utilisateur basé sur la route actuelle
         $role = $this->getRole($request->route()->getName());
-    
-        // Autoriser en fonction du rôle de l'utilisateur (étudiant ou pilote)
         $this->authorize($role === 'Etudiant' ? 'search_student' : 'search_pilot');
-    
-        // Récupérer les classes accessibles en fonction du rôle de l'utilisateur
+
         $classes = auth()->user()->hasRole('Admin')
-            ? Classe::all()  // Si l'utilisateur est Admin, on récupère toutes les classes
-            : auth()->user()->classesPilots; // Sinon, on récupère les classes liées à l'utilisateur pilote
-    
-        // Récupérer les utilisateurs avec filtre de rôle et de classe (pagination incluse)
+            ? Classe::all()
+            : auth()->user()->classesPilots;
+
         $users = User::role($role)
             ->when($request->class_id, fn($query) => $query->where('classe_id', $request->class_id))
             ->paginate(10);
-    
-        // Retourner la vue avec les utilisateurs, le rôle et les classes accessibles
+
         return view('account.users.list', compact('users', 'role', 'classes'));
     }
-    
+
+    /**
+     * Recherche des utilisateurs avec filtres.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
     public function search(Request $request)
     {
         $role = $request->route('role');
@@ -61,17 +80,21 @@ class UserController extends Controller
         
         $query = User::role($role);
     
-        // Appliquer les filtres
         $this->applySearchFilter($query, $request->search);
         $this->applyClassFilter($query, $request->class_id);
     
         $users = $query->paginate(10);
     
-    
         return view('account.users.list', compact('users', 'role', 'classes'));
     }
-    
-    
+
+    /**
+     * Applique un filtre de recherche sur les utilisateurs.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|null $search
+     * @return void
+     */
     private function applySearchFilter($query, ?string $search)
     {
         if ($search) {
@@ -82,14 +105,27 @@ class UserController extends Controller
             });
         }
     }
-    
+
+    /**
+     * Applique un filtre de classe sur les utilisateurs.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|null $classId
+     * @return void
+     */
     private function applyClassFilter($query, ?int $classId)
     {
         if ($classId) {
             $query->where('classe_id', $classId);
         }
     }
-    
+
+    /**
+     * Affiche le formulaire d'enregistrement d'un utilisateur.
+     *
+     * @param string $role
+     * @return \Illuminate\View\View
+     */
     public function showUserRegister($role)
     {
         $role = $role === 'students' ? 'Etudiant' : 'Pilote';
@@ -102,6 +138,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Enregistre un nouvel utilisateur.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function userRegister(Request $request)
     {
         $role = $request->role;
@@ -169,15 +211,20 @@ class UserController extends Controller
             ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
+    /**
+     * Affiche les informations d'un utilisateur spécifique.
+     *
+     * @param string $role
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function showUserInfo($role, $id)
     {
         $role = $role === 'students' ? 'Etudiant' : 'Pilote';
         $user = User::findOrFail($id);
 
-        // Nombre total de candidatures de l'utilisateur
         $totalApplications = Application::where('user_id', $id)->count();
 
-        // Candidatures acceptées, refusées et en attente de l'utilisateur via la relation statusable
         $acceptedApplications = Application::where('user_id', $id)
             ->whereHas('status', function ($query) {
                 $query->where('name', 'Acceptée');
@@ -220,6 +267,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Affiche le formulaire de mise à jour d'un utilisateur.
+     *
+     * @param string $role
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function showUserUpdate($role, $id)
     {
         $role = $role === 'students' ? 'Etudiant' : 'Pilote';
@@ -237,6 +291,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -305,28 +366,29 @@ class UserController extends Controller
             ->with('success', "Le profil " . $role . " a bien été créé");
     }
 
+    /**
+     * Supprime un utilisateur.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser($id)
     {
-
         $user = User::findOrFail($id);
         $role = $user->hasRole('Etudiant') ? 'Etudiant' : 'Pilote';
 
         $this->authorize(ability: $role === 'Etudiant' ? 'delete_student' : 'delete_pilot');
 
         if ($role === 'Etudiant') {
-
             DB::table('applications')
                 ->where('user_id', $user->id)
                 ->update(['deleted_at' => now()]);
 
             $user->wishlists()->detach();
 
-            // Delete the evaluations associated with the user
-            $user->evaluations()->detach(); // This will remove the relationships in the pivot table
-
+            $user->evaluations()->detach();
         }
 
-        // On effectue une suppression douce
         $user->delete();
 
         return redirect()->route($role === 'Etudiant' ? 'students_list' : 'pilots_list');

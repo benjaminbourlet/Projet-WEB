@@ -16,9 +16,9 @@ public function homeControl()
             ->get();
     
         // Récupère le nombre total d'étudiants
-        $totalStudents = User::role('Etudiant')->count();
-        $totalCompanies = Company::count();
-        $totalOffers = Offer::count();
+        $totalStudents = User::role('Etudiant')->count(); // Récupère le nombre total d'étudiants
+        $totalCompanies = Company::count(); // Récupère le nombre total d'entreprises
+        $totalOffers = Offer::count(); // Récupère le nombre total d'offres
 
         return view('welcome', compact('topCompanies', 'totalStudents','totalCompanies','totalOffers' ));
     }

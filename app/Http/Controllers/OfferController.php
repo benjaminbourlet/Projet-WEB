@@ -14,19 +14,15 @@ use App\Models\Department;
 use App\Models\Region;
 use Illuminate\Support\Facades\DB;
 
-
-
-
-
 class OfferController extends Controller
 {
     use AuthorizesRequests;
 
     public function show(Request $request)
     {
-        $companies = Company::orderBy('name', 'asc')->get();
-        $cities = City::orderBy('name', 'asc')->get();
-        $regions = Region::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get(); // Récupérer toutes les entreprises
+        $cities = City::orderBy('name', 'asc')->get(); // Récupérer toutes les villes
+        $regions = Region::orderBy('name', 'asc')->get(); // Récupérer toutes les régions
     
         $this->authorize('search_offer');
     
@@ -38,6 +34,7 @@ class OfferController extends Controller
     
     public function search(Request $request)
     {
+        // Récupère toutes les entreprises, villes, régions pour afficher dans le formulaire de recherche
         $companies = Company::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         $regions = Region::orderBy('name', 'asc')->get();
@@ -65,6 +62,7 @@ class OfferController extends Controller
 
     protected function applySearchFilter($query, Request $request)
     {
+        // Vérifier si le champ de recherche est rempli puis applique le filtre
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'LIKE', '%' . $request->search . '%')
@@ -75,9 +73,11 @@ class OfferController extends Controller
     
     protected function applySalaryFilter($query, Request $request)
     {
+        // Vérifier si le champ 'min_salaire' est rempli puis applique le filtre
         if ($request->filled('min_salaire')) {
             $query->where('salary', '>=', (int) $request->min_salaire);
         }
+        // Vérifier si le champ 'max_salaire' est rempli puis applique le filtre
         if ($request->filled('max_salaire')) {
             $query->where('salary', '<=', (int) $request->max_salaire);
         }
@@ -85,9 +85,11 @@ class OfferController extends Controller
     
     protected function applyDurationFilter($query, Request $request)
     {
+        // Vérifier si le champ 'duration_min' est rempli puis applique le filtre
         if ($request->filled('duration_min')) {
             $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [(int) $request->duration_min]);
         }
+        // Vérifier si le champ 'duration_max' est rempli puis applique le filtre
         if ($request->filled('duration_max')) {
             $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [(int) $request->duration_max]);
         }
@@ -95,6 +97,7 @@ class OfferController extends Controller
     
     protected function applyStartDateFilter($query, Request $request)
     {
+        // Vérifier si le champ 'start_date' est rempli puis applique le filtre
         if ($request->filled('start_date')) {
             $query->where('start_date', '>=', $request->start_date);
         }
@@ -102,6 +105,7 @@ class OfferController extends Controller
     
     protected function applyCompanyFilter($query, Request $request)
     {
+        // Vérifier si le champ 'company' est rempli puis applique le filtre
         if ($request->filled('company')) {
             $query->where('company_id', $request->company);
         }
@@ -109,6 +113,7 @@ class OfferController extends Controller
     
     protected function applyCityFilter($query, Request $request)
     {
+        // Vérifier si le champ 'city' est rempli puis applique le filtre
         if ($request->filled('city')) {
             $query->whereHas('company.city', function ($q) use ($request) {
                 $q->where('id', $request->city);
@@ -118,6 +123,7 @@ class OfferController extends Controller
 
     protected function applyRegionFilter($query, Request $request)
     {
+        // Vérifier si le champ 'region' est rempli puis applique le filtre
         if ($request->filled('region')) {
             $query->whereHas('company.city.region', function ($q) use ($request) {
                 $q->where('id', $request->region);
@@ -127,7 +133,7 @@ class OfferController extends Controller
 
     public function showOfferRegister()
     {
-
+        // Vérifier si l'utilisateur a le droit de créer une offre
         $this->authorize('create_offer');
         $companies = Company::all();
         $skills = Skill::all();
@@ -137,6 +143,7 @@ class OfferController extends Controller
 
     public function offerRegister(Request $request)
     {
+        // Vérifier si l'utilisateur a le droit de créer une offre
         $this->authorize('create_offer');
 
         $request->validate([
@@ -147,7 +154,7 @@ class OfferController extends Controller
                 'required',
                 'date',
                 'after:start_date',
-                function ($attribute, $value, $fail) use ($request) {
+                function ($attribute, $value, $fail) use ($request) { // Utilisation de la closure pour valider la date de fin
                     if ($request->start_date) {
                         $maxEndDate = \Carbon\Carbon::parse($request->start_date)->addMonths(6)->format('Y-m-d');
                         if ($value > $maxEndDate) {
@@ -191,31 +198,41 @@ class OfferController extends Controller
             'departments.*.exists' => 'L’un des départements sélectionnés n’existe pas.',
         ]);
 
-
         // Création de l'entreprise
-        $offer = Offer::create([
+        $offer = Offer::create([ 
+            // Titre de l'offre
             'title' => $request->title,
+            // Description de l'offre
             'description' => $request->description,
+            // Date de début de l'offre
             'start_date' => $request->start_date,
+            // Date de fin de l'offre
             'end_date' => $request->end_date,
+            // Salaire proposé pour l'offre
             'salary' => $request->salary,
+            // Date de publication de l'offre
             'publication_date' => $request->publication_date,
+            // Identifiant de l'entreprise associée à l'offre
             'company_id' => $request->company_id,
         ]);
 
+        // Attacher les compétences associées à l'offre
         if ($request->has('skills')) {
             $offer->skills()->attach($request->skills);
         }
 
+        // Attacher les départements associés à l'offre
         if ($request->has('departments')) {
             $offer->departments()->attach($request->departments);
         }
 
+        // Redirection avec un message de succès
         return redirect()->route('offer_list')->with('success', 'Offre créée avec succès');
     }
 
     public function showOfferInfo($id)
     {
+        // Récupérer les informations d'une offre spécifique
         $offer = Offer::findOrFail($id);
 
         // Récupérer le nombre d'étudiants ayant postulé
@@ -229,7 +246,7 @@ class OfferController extends Controller
 
     public function showOfferUpdate($id)
     {
-
+        // Vérifier si l'utilisateur a le droit de modifier une offre
         $this->authorize('edit_offer');
         $offer = Offer::findOrFail($id);
         $companies = Company::all();
@@ -345,28 +362,25 @@ class OfferController extends Controller
     }
 
     public function dashboard()
-{
+    {
+        // Répartition des offres par compétence
+        $skillsDistribution = Skill::withCount('offers')->orderByDesc('offers_count')->get();
 
-    // Répartition des offres par compétence
-    $skillsDistribution = Skill::withCount('offers')->orderByDesc('offers_count')->get();
+        // Répartition des offres par durée de stage
+        $durationDistribution = Offer::selectRaw('
+                CASE 
+                    WHEN DATEDIFF(end_date, start_date) <= 30 THEN "Moins d\'1 mois"
+                    WHEN DATEDIFF(end_date, start_date) BETWEEN 31 AND 90 THEN "1 à 3 mois"
+                    WHEN DATEDIFF(end_date, start_date) BETWEEN 91 AND 180 THEN "3 à 6 mois"
+                    ELSE "Plus de 6 mois"
+                END as duration_range, COUNT(*) as count
+            ')
+            ->groupBy('duration_range')
+            ->get();
 
-    // Répartition des offres par durée de stage
-    $durationDistribution = Offer::selectRaw('
-            CASE 
-                WHEN DATEDIFF(end_date, start_date) <= 30 THEN "Moins d\'1 mois"
-                WHEN DATEDIFF(end_date, start_date) BETWEEN 31 AND 90 THEN "1 à 3 mois"
-                WHEN DATEDIFF(end_date, start_date) BETWEEN 91 AND 180 THEN "3 à 6 mois"
-                ELSE "Plus de 6 mois"
-            END as duration_range, COUNT(*) as count
-        ')
-        ->groupBy('duration_range')
-        ->get();
+        // Récupération des offres les plus mises en wishlist
+        $topWishlistedOffers = Offer::withCount('users')->orderByDesc('users_count')->take(5)->get();
 
-    // Récupération des offres les plus mises en wishlist
-    $topWishlistedOffers = Offer::withCount('users')->orderByDesc('users_count')->take(5)->get();
-
-    return view('offers.dashboard', compact('skillsDistribution', 'durationDistribution', 'topWishlistedOffers'));
-}
-
-
+        return view('offers.dashboard', compact('skillsDistribution', 'durationDistribution', 'topWishlistedOffers'));
+    }
 }
