@@ -36,7 +36,7 @@
 
 </head>
 
-<body class="container max-w-full">
+<body class="container max-w-full min-h-screen flex flex-col justify-between">
 
     {{-- Header inclus ici --}}
     @include('partials.header')

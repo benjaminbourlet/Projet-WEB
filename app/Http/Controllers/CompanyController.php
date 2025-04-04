@@ -11,6 +11,7 @@ use App\Models\City;
 use App\Models\Sector;
 use App\Models\Skill;
 use App\Models\Offer;
+use App\Models\Region;
 use App\Models\Application;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,8 @@ class CompanyController extends Controller
         $companies = Company::paginate(9);
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
-        return view('companies.list', compact('companies', 'sectors', 'cities'));
+        $regions = Region::orderBy('name', 'asc')->get();
+        return view('companies.list', compact('companies', 'sectors', 'cities', 'regions'));
     }
 
     public function showCompanyRegister()
@@ -248,6 +250,7 @@ class CompanyController extends Controller
 
     public function deleteCompany($id)
     {
+
         $this->authorize('delete_company');
         $company = Company::findOrFail($id);
 
@@ -296,6 +299,16 @@ class CompanyController extends Controller
         return $query;
     }
 
+    protected function applyRegionFilter($query, Request $request)
+    {
+        if ($request->filled('region')) {
+            $query->whereHas('city.region', function ($q) use ($request) {
+                $q->where('id', $request->region);
+            });
+        }
+        return $query;
+    }
+
     private function getCompanyByName($query, $request)
     {
         if ($request->has('search')) {
@@ -334,6 +347,7 @@ class CompanyController extends Controller
         $query = $this->getCompanyByName($query, $request);
         $query = $this->getCompanyBySectorId($query, $request);
         $query = $this->getCompanyByCityId($query, $request);
+        $query = $this->applyRegionFilter($query, $request);
 
         // Trie
         $query = $this->sortCompanyResults($query, $request);
@@ -343,8 +357,9 @@ class CompanyController extends Controller
         // Envoyer les données des filtres
         $cities = City::orderBy('name', 'asc')->get();
         $sectors = Sector::orderBy('name', 'asc')->get();
+        $regions = Region::orderBy('name', 'asc')->get();
 
-        return view('companies.list', compact('companies', 'sectors', 'cities'));
+        return view('companies.list', compact('companies', 'sectors', 'cities', 'regions'));
     }
 
     public function showOffers($company_id)

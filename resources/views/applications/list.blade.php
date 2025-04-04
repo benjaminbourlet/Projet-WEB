@@ -95,10 +95,10 @@
                 <a href="javascript:void(0);" @click="showModal = false" class="text-gray-200 hover:underline px-4">
                     Retour
                 </a>
-                <a href="{{ route('offer_info', ['id' => $application->offer->id, 'title' => Str::slug($application->offer->title)]) }}"
-                class="cursor-pointer text-gray-200 hover:underline px-4">
-                    Voir l'offre
-                </a>
+                <a x-bind:href="'/offers/' + application.offer.id + '/' + application.offer.title.replace(/\s+/g, '-').toLowerCase()"
+   class="cursor-pointer text-gray-200 hover:underline px-4">
+    Voir l'offre
+</a>
             </div>
         </div>
     </div>
