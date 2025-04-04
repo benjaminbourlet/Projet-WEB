@@ -279,44 +279,65 @@ class CompanyController extends Controller
 
     private function getCompanyBySectorId($query, $request)
     {
+        // Vérifie si la requête contient un paramètre 'sector' dans l'URL (par exemple, ?sector=1,2,3)
         if ($request->filled('sector')) {
+            // Extrait les IDs des secteurs (en supposant qu'ils soient séparés par des virgules)
             $sectors = explode(',', $request->sector);
+            
+            // Pour chaque secteur extrait, on ajoute un filtre au query
             foreach ($sectors as $sectorId) {
                 $query->whereHas('sectors', function ($q) use ($sectorId) {
+                    // Vérifie que l'entreprise est associée à ce secteur
                     $q->where('sectors.id', $sectorId);
                 });
             }
         }
+    
+        // Retourne la requête modifiée
         return $query;
-
     }
 
     private function getCompanyByCityId($query, $request)
     {
+        // Vérifie si la requête contient un paramètre 'city'
         if ($request->filled('city')) {
+            // Applique un filtre sur la colonne 'city_id' dans la base de données
             $query->where('city_id', $request->city);
         }
+        // Retourne la requête modifiée (avec le filtre ou sans)
         return $query;
-    }
+    }    
 
     protected function applyRegionFilter($query, Request $request)
     {
+        // Vérifie si la requête contient un paramètre 'region'
         if ($request->filled('region')) {
+            // Applique un filtre sur la relation 'city.region' de l'entreprise
             $query->whereHas('city.region', function ($q) use ($request) {
+                // Vérifie que l'ID de la région dans la table 'regions' correspond à celui passé dans la requête
                 $q->where('id', $request->region);
             });
         }
+        // Retourne la requête modifiée (avec le filtre ou sans)
         return $query;
-    }
+    }    
 
     private function getCompanyByName($query, $request)
     {
+        // Vérifie si le paramètre 'search' existe dans la requête
         if ($request->has('search')) {
+            // Récupère la valeur du paramètre 'search' 
             $search = $request->input('search');
+            
+            // Applique le filtre sur la colonne 'name' de la table 'companies'
+            // Le LIKE permet de trouver des entreprises dont le nom contient la chaîne de recherche
             $query->where('name', 'LIKE', "%{$search}%");
         }
+        
+        // Retourne la requête modifiée
         return $query;
     }
+    
 
     private function sortCompanyResults($query, $request)
     {

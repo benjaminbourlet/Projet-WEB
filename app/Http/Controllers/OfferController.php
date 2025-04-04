@@ -27,15 +27,15 @@ class OfferController extends Controller
         $companies = Company::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         $regions = Region::orderBy('name', 'asc')->get();
-    
+
         $this->authorize('search_offer');
-    
+
         // Récupérer les offres avec pagination
         $offers = Offer::paginate(9);
-        
+
         return view('offers.list', compact('offers', 'cities', 'companies', 'regions'));
     }
-    
+
     public function search(Request $request)
     {
         $companies = Company::orderBy('name', 'asc')->get();
@@ -43,9 +43,9 @@ class OfferController extends Controller
         $regions = Region::orderBy('name', 'asc')->get();
 
         $this->authorize('search_offer');
-    
+
         $query = Offer::query();
-    
+
         // Appliquer les filtres un par un
         $this->applySearchFilter($query, $request);
         $this->applySalaryFilter($query, $request);
@@ -54,61 +54,76 @@ class OfferController extends Controller
         $this->applyCompanyFilter($query, $request);
         $this->applyCityFilter($query, $request);
         $this->applyRegionFilter($query, $request);
-    
+
         // Récupérer les offres avec pagination
         $offers = $query->paginate(9);
-    
+
         $offers->appends($request->all());
 
         return view('offers.list', compact('offers', 'companies', 'cities', 'regions'));
     }
 
+    // Applique un filtre de recherche sur le titre et la description
     protected function applySearchFilter($query, Request $request)
     {
+        // Vérifie si un terme de recherche est fourni dans la requête
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
+                // Recherche dans le titre ou la description en utilisant LIKE pour une correspondance partielle
                 $q->where('title', 'LIKE', '%' . $request->search . '%')
                     ->orWhere('description', 'LIKE', '%' . $request->search . '%');
             });
         }
     }
-    
+
+    // Applique un filtre sur le salaire minimum et maximum
     protected function applySalaryFilter($query, Request $request)
     {
+        // Vérifie et applique un salaire minimum
         if ($request->filled('min_salaire')) {
             $query->where('salary', '>=', (int) $request->min_salaire);
         }
+        // Vérifie et applique un salaire maximum
         if ($request->filled('max_salaire')) {
             $query->where('salary', '<=', (int) $request->max_salaire);
         }
     }
-    
+
+    // Applique un filtre sur la durée (calculée en jours entre la date de début et la date de fin)
     protected function applyDurationFilter($query, Request $request)
     {
+        // Vérifie et applique une durée minimale
         if ($request->filled('duration_min')) {
             $query->whereRaw('DATEDIFF(end_date, start_date) >= ?', [(int) $request->duration_min]);
         }
+        // Vérifie et applique une durée maximale
         if ($request->filled('duration_max')) {
             $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [(int) $request->duration_max]);
         }
     }
-    
+
+    // Applique un filtre sur la date de début de l'offre
     protected function applyStartDateFilter($query, Request $request)
     {
+        // Vérifie si une date de début est fournie et filtre les offres qui commencent à partir de cette date
         if ($request->filled('start_date')) {
             $query->where('start_date', '>=', $request->start_date);
         }
     }
-    
+
+    // Applique un filtre sur l'entreprise
     protected function applyCompanyFilter($query, Request $request)
     {
+        // Vérifie si un identifiant d'entreprise est fourni et filtre les offres correspondantes
         if ($request->filled('company')) {
             $query->where('company_id', $request->company);
         }
     }
-    
+
+    // Applique un filtre sur la ville en vérifiant la relation entre l'offre et la ville de l'entreprise
     protected function applyCityFilter($query, Request $request)
     {
+        // Vérifie si une ville est spécifiée et filtre les offres en fonction de la ville de l'entreprise
         if ($request->filled('city')) {
             $query->whereHas('company.city', function ($q) use ($request) {
                 $q->where('id', $request->city);
@@ -116,8 +131,10 @@ class OfferController extends Controller
         }
     }
 
+    // Applique un filtre sur la région en vérifiant la relation entre l'offre et la région de la ville de l'entreprise
     protected function applyRegionFilter($query, Request $request)
     {
+        // Vérifie si une région est spécifiée et filtre les offres en fonction de la région de la ville de l'entreprise
         if ($request->filled('region')) {
             $query->whereHas('company.city.region', function ($q) use ($request) {
                 $q->where('id', $request->region);
@@ -345,13 +362,13 @@ class OfferController extends Controller
     }
 
     public function dashboard()
-{
+    {
 
-    // Répartition des offres par compétence
-    $skillsDistribution = Skill::withCount('offers')->orderByDesc('offers_count')->get();
+        // Répartition des offres par compétence
+        $skillsDistribution = Skill::withCount('offers')->orderByDesc('offers_count')->get();
 
-    // Répartition des offres par durée de stage
-    $durationDistribution = Offer::selectRaw('
+        // Répartition des offres par durée de stage
+        $durationDistribution = Offer::selectRaw('
             CASE 
                 WHEN DATEDIFF(end_date, start_date) <= 30 THEN "Moins d\'1 mois"
                 WHEN DATEDIFF(end_date, start_date) BETWEEN 31 AND 90 THEN "1 à 3 mois"
@@ -359,14 +376,14 @@ class OfferController extends Controller
                 ELSE "Plus de 6 mois"
             END as duration_range, COUNT(*) as count
         ')
-        ->groupBy('duration_range')
-        ->get();
+            ->groupBy('duration_range')
+            ->get();
 
-    // Récupération des offres les plus mises en wishlist
-    $topWishlistedOffers = Offer::withCount('users')->orderByDesc('users_count')->take(5)->get();
+        // Récupération des offres les plus mises en wishlist
+        $topWishlistedOffers = Offer::withCount('users')->orderByDesc('users_count')->take(5)->get();
 
-    return view('offers.dashboard', compact('skillsDistribution', 'durationDistribution', 'topWishlistedOffers'));
-}
+        return view('offers.dashboard', compact('skillsDistribution', 'durationDistribution', 'topWishlistedOffers'));
+    }
 
 
 }
