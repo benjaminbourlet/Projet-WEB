@@ -5,7 +5,7 @@
 @section('content')
         <div class="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-6">
 
-            <!-- 📊 SECTION STATISTIQUES -->
+            <!-- SECTION STATISTIQUES -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h2 class="text-xl font-bold mb-4">📊 Statistiques</h2>
 
@@ -45,7 +45,7 @@
 
             </div>
 
-            <!-- 📄 SECTION INFORMATIONS ENTREPRISE -->
+            <!-- SECTION INFORMATIONS ENTREPRISE -->
             <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg">
                 <h1 class="text-2xl font-bold">Profil de {{ $company->name }}</h1>
 
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <!-- 📋 SECTION OFFRES -->
+        <!-- SECTION OFFRES -->
         <div class="max-w-5xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-xl font-bold mb-4">Dernières Offres</h2>
 

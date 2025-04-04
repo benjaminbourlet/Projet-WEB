@@ -25,6 +25,17 @@
         <form action="{{ route('company_update', ['id' => $company->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            {{--  Modification des caractéristiques d'une entreprise  --}}
+
+            {{-- Nom de l'entreprise --}}
+            {{-- Numéro de téléphone --}}
+            {{-- Email --}}
+            {{-- Numéro de téléphone --}}
+            {{-- Description --}}
+            {{-- Adresse --}}
+            {{-- Ville --}}
+            {{-- Secteurs --}}
+            {{-- Logo de l'entreprise --}}
             <div class="mb-4">
                 <label class="block font-bold">Nom de l'entreprise :</label>
                 <input type="text" name="name" value="{{ old('name', $company->name) }}"
@@ -124,6 +135,7 @@
                 @enderror
             </div>
 
+            {{-- Bouton de soumission --}}
             <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">
                 Modifier
             </button>
