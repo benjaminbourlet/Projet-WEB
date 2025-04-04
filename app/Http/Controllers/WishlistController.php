@@ -61,14 +61,19 @@ class WishlistController extends Controller
 
     public function search(Request $request, $user_id)
     {
+        // Vérifie si l'utilisateur a la permission de rechercher une offre
         $this->authorize('search_offer');
 
+        // Récupère l'utilisateur correspondant à l'ID fourni, ou renvoie une erreur 404 s'il n'existe pas
         $user = User::findOrFail($user_id);
+
+        // Récupère les ID des offres enregistrées dans la liste de souhaits de l'utilisateur
         $wishlistOfferIds = $user->wishlists()->pluck('offers.id')->toArray();
 
+        // Initialise la requête avec les offres correspondant aux ID de la liste de souhaits
         $query = Offer::whereIn('id', $wishlistOfferIds);
 
-        // Filtres
+        // Applique les filtres de recherche en fonction des paramètres de la requête
         $this->applySearchFilter($query, $request);
         $this->applySalaryFilter($query, $request);
         $this->applyDurationFilter($query, $request);
@@ -77,20 +82,23 @@ class WishlistController extends Controller
         $this->applyCityFilter($query, $request);
         $this->applyRegionFilter($query, $request);
 
+        // Récupère les offres paginées (9 offres par page) en conservant les paramètres de la requête
         $offers = $query->paginate(9)->appends($request->all());
 
+        // Récupère les listes d'entreprises, de villes et de régions pour les filtres
         $companies = Company::orderBy('name')->get();
         $cities = City::orderBy('name')->get();
         $regions = Region::orderBy('name')->get();
 
-        // Récupérer les offres avec pagination
+        // Répétition inutile : les offres sont déjà paginées dans $offers
         $wishlists = $query->paginate(9);
-    
         $wishlists->appends($request->all());
 
+        // Retourne la vue avec les offres et les informations nécessaires pour l'affichage
         return view('wishlists.list', compact('offers', 'companies', 'cities', 'regions', 'wishlists', 'user'));
     }
 
+    // Applique un filtre de recherche sur le titre et la description des offres
     protected function applySearchFilter($query, Request $request)
     {
         if ($request->filled('search')) {
@@ -101,6 +109,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Applique un filtre sur le salaire minimum et maximum
     protected function applySalaryFilter($query, Request $request)
     {
         if ($request->filled('min_salaire')) {
@@ -111,6 +120,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Applique un filtre sur la durée du contrat
     protected function applyDurationFilter($query, Request $request)
     {
         if ($request->filled('duration_min')) {
@@ -121,6 +131,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Applique un filtre sur la date de début du contrat
     protected function applyStartDateFilter($query, Request $request)
     {
         if ($request->filled('start_date')) {
@@ -128,6 +139,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Filtre les offres par entreprise
     protected function applyCompanyFilter($query, Request $request)
     {
         if ($request->filled('company')) {
@@ -135,6 +147,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Filtre les offres par ville de l'entreprise
     protected function applyCityFilter($query, Request $request)
     {
         if ($request->filled('city')) {
@@ -144,6 +157,7 @@ class WishlistController extends Controller
         }
     }
 
+    // Filtre les offres par région de la ville de l'entreprise
     protected function applyRegionFilter($query, Request $request)
     {
         if ($request->filled('region')) {
@@ -152,16 +166,5 @@ class WishlistController extends Controller
             });
         }
     }
-
-    public function showOfferRegister()
-    {
-
-        $this->authorize('create_offer');
-        $companies = Company::all();
-        $skills = Skill::all();
-        $departments = Department::all();
-        return view('offers.create', compact('companies', 'skills', 'departments'));
-    }
-
 
 }
