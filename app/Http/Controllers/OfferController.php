@@ -11,7 +11,9 @@ use App\Models\Sector;
 use App\Models\Offer;
 use App\Models\Skill;
 use App\Models\Department;
+use App\Models\Region;
 use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -24,20 +26,22 @@ class OfferController extends Controller
     {
         $companies = Company::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
+        $regions = Region::orderBy('name', 'asc')->get();
     
         $this->authorize('search_offer');
     
         // Récupérer les offres avec pagination
         $offers = Offer::paginate(9);
         
-        return view('offers.list', compact('offers', 'cities', 'companies'));
+        return view('offers.list', compact('offers', 'cities', 'companies', 'regions'));
     }
     
     public function search(Request $request)
     {
         $companies = Company::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
-    
+        $regions = Region::orderBy('name', 'asc')->get();
+
         $this->authorize('search_offer');
     
         $query = Offer::query();
@@ -49,13 +53,14 @@ class OfferController extends Controller
         $this->applyStartDateFilter($query, $request);
         $this->applyCompanyFilter($query, $request);
         $this->applyCityFilter($query, $request);
+        $this->applyRegionFilter($query, $request);
     
         // Récupérer les offres avec pagination
         $offers = $query->paginate(9);
     
         $offers->appends($request->all());
 
-        return view('offers.list', compact('offers', 'companies', 'cities'));
+        return view('offers.list', compact('offers', 'companies', 'cities', 'regions'));
     }
 
     protected function applySearchFilter($query, Request $request)
@@ -107,6 +112,15 @@ class OfferController extends Controller
         if ($request->filled('city')) {
             $query->whereHas('company.city', function ($q) use ($request) {
                 $q->where('id', $request->city);
+            });
+        }
+    }
+
+    protected function applyRegionFilter($query, Request $request)
+    {
+        if ($request->filled('region')) {
+            $query->whereHas('company.city.region', function ($q) use ($request) {
+                $q->where('id', $request->region);
             });
         }
     }
