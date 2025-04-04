@@ -4,6 +4,8 @@
 
 
 @section('content')
+
+{{-- Page d'erreur 404 --}}
 <main class="container mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 max-w-3xl text-center">
     <img src="{{ asset('storage/images/404.png') }}" alt="Erreur 404" class="mx-auto w-64">
     <h1 class="text-3xl font-bold mt-6">Oups... Cette page a pris un stage ailleurs !</h1>

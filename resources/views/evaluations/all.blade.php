@@ -12,7 +12,7 @@
         </h1>
     </div>
 
-
+    {{-- Liste des avis --}}
     <div class="container mx-auto px-4 py-8">
 
         <div class="space-y-6">
@@ -59,10 +59,12 @@
                 </div>
             </a>
             @empty
+            {{-- verification si il y a des avis --}}
             <p class="text-gray-500">Aucun avis disponible.</p>
             @endforelse
         </div>
-
+        {{-- Pagination --}}
+        {{-- Si il y a plus d'une page d'avis, on affiche la pagination --}}
         @if ($evaluations->hasPages())
         <div class="mt-8">
             {{ $evaluations->links() }}
