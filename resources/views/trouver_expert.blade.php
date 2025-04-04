@@ -58,7 +58,7 @@
           <footer class="text-right text-sm mt-2">– Orange cyberdéfense</footer>
         </blockquote>
         <blockquote class="border-l-4 border-blue-500 pl-4 text-gray-700 italic">
-          <p>"Benji et Maxime nous a aidés à repenser notre stratégie digitale. Des vrai professionnels !"</p>
+          <p>"Benji et Maxime nous ont aidés à repenser notre stratégie digitale. Des vrai professionnels !"</p>
           <footer class="text-right text-sm mt-2">– Airbus</footer>
         </blockquote>
       </div>

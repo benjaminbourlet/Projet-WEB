@@ -55,6 +55,13 @@
                                     {{ $city->name }}</option>
                             @endforeach
                         </select>
+                        <select name="region" class="border p-2 rounded-md m-2 w-min h-min">
+                            <option value="">Toutes les régions</option>
+                            @foreach ($regions as $region)
+                                <option value="{{ $region->id }}" {{ request('region') == $region->id ? 'selected' : '' }}>
+                                    {{ $region->name }}</option>
+                            @endforeach
+                        </select>
                         <input type="hidden" name="sector" id="sector-input">
                         <select name="sort" class="border p-2 rounded-md m-2 ml-auto w-min">
                             <option value="">Trier par</option>

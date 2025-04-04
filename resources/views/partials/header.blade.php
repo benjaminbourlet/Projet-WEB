@@ -127,10 +127,10 @@
                             <li><a href="{{ route('wishlists_list', ['user_id' => Auth::user()->id]) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ma wishlist</a>
                             </li>
+                            @endrole
                             <li><a href="{{ route('evaluations_user_list', ['user_id' => Auth::user()->id]) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes Avis</a>
                             </li>
-                            @endrole
 
                             <hr class="border-gray-200">
                             <li>

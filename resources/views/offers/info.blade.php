@@ -3,7 +3,7 @@
 @section('title', 'Informations sur ' . $offer->title)
 
 @section('content')
-<div class="flex gap-6 px-2">
+<div class="flex gap-6 px-2 mt-4">
     <div class="bg-[#5A8E95] shadow-md rounded-2xl flex flex-col justify-between items-center border border-[#5A8E95] gap-2 p-2 mb-4 max-w-3/4 mx-auto">
 
         <div class="flex items-center">
