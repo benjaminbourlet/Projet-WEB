@@ -172,7 +172,7 @@ class UserController extends Controller
     
         // Affecte l'ID de la classe uniquement si l'utilisateur est un étudiant
         $data['classe_id'] = $role === 'Etudiant' ? optional($classe)->id : null;
-    
+
         // Gestion de la photo de profil (stockage dans le dossier "images" du disque public)
         $data['pp_path'] = $request->file('pp')
             ? $request->file('pp')->store('images', 'public')
