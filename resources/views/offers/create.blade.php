@@ -22,6 +22,7 @@
             <form method="POST" action="{{ route('offerRegister') }}" enctype="multipart/form-data">
                 @csrf
 
+                <!-- Titre de l'offre -->
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700">Titre de l'offre :</label>
                     <input type="text" id="title" name="title" value="{{ old('title') }}" required
@@ -31,6 +32,7 @@
                     @enderror
                 </div>
 
+                <!-- Sélection du salaire -->
                 <div class="mb-4">
                     <label for="salary" class="block text-gray-700">Salaire</label>
                     <input type="text" id="salary" name="salary" value="{{ old('salary') }}"
@@ -40,6 +42,7 @@
                     @enderror
                 </div>
 
+                <!-- Description de l'offre -->
                 <div class="mb-4">
                     <label for="description" class="block text-gray-700">Description</label>
                     <textarea id="description" name="description" rows="4"
@@ -49,6 +52,7 @@
                     @enderror
                 </div>
 
+                <!-- Sélection de la date de début -->
                 <div class="mb-4">
                     <label for="start_date" class="block text-gray-700">Date de début</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required
@@ -57,6 +61,7 @@
                 </div>
 
                 <div class="mb-4">
+                    <!-- Sélection de la date de fin -->
                     <label for="end_date" class="block text-gray-700">Date de fin</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required
                         class="w-full mt-1 p-2 border rounded-md">
@@ -64,7 +69,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
 
-
+                    <!-- Sélection de l'entreprise -->
                     <div>
                         <label for="company_id" class="block text-sm font-medium text-gray-700">Entreprise</label>
                         <select id="company_id" name="company_id"
@@ -80,6 +85,7 @@
                         @enderror
                     </div>
 
+                    <!-- Sélection des départements -->
                     <div class="mb-4">
                         <label for="departments" class="block text-sm font-medium text-gray-700">Departements</label>
                         <select id="departments" name="departments[]"
@@ -94,6 +100,7 @@
                         @enderror
                     </div>
 
+                    <!-- Sélection des compétences -->
                     <div class="mb-4">
                         <label for="skills" class="block text-sm font-medium text-gray-700">Compétences</label>
                         <select id="skills" name="skills[]"
@@ -108,6 +115,7 @@
                         @enderror
                     </div>
 
+                    <!-- Bouton pour confirmer la création de l'offre -->
                     <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mt-4">
                         Créer l'offre
                     </button>

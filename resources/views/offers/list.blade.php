@@ -126,11 +126,14 @@
                 <div>
                     <div class="mb-4 flex justify-between items-center">
                         <h1 class="text-2xl font-bold">Offres</h1>
+
+                        <!-- Boutons pour voir les statistiques des offres -->
                         <a href="{{ route('offer_dashboard') }}">
                             <button class="bg-blue-700 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">
                                 Statistiques des offres
                             </button>
                         </a>
+                        <!-- Bouton pour ajouter une offre -->
                         @role('Admin|Pilote')
                         <a href="{{ route('offer_register') }}">
                             <button class="bg-blue-700 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">
@@ -147,6 +150,7 @@
                                 @click.away="selectedOffer = null" @click.stop>
                                 <div class="flex items-center">
                                     
+                                    <!-- Icône pour la wishlist -->
                                     @if (auth()->user()->wishlists->contains($offer->id))
                                         <form
                                             action="{{ route('wishlist_remove', ['user_id' => auth()->id(), 'offer_id' => $offer->id]) }}"
@@ -183,7 +187,7 @@
                                     </h4>
                                 </div>
                                 <div class="flex flex-row items-center justify-between">
-                                    <!-- Première partie -->
+                                    <!-- Nom de l'entreprise -->
                                     <h6 class="text-gray-500 text-center flex-1">
                                         {{ $offer->company->name }}
                                     </h6>
@@ -191,7 +195,7 @@
                                     <!-- Séparateur vertical -->
                                     <span class="mx-2 w-[1px] bg-gray-400 self-stretch"></span>
 
-                                    <!-- Deuxième partie -->
+                                    <!-- Date du stage -->
                                     <p class="text-gray-500 mx-2 text-center flex-1">
                                         {{ \Carbon\Carbon::parse($offer->start_date)->translatedFormat('d F Y') }} to
                                         {{ \Carbon\Carbon::parse($offer->end_date)->translatedFormat('d F Y') }}
